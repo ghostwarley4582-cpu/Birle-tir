@@ -1,23 +1,253 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 
 <head>
+
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>BİRLEŞTİR</title>
+    <title>BİRLEŞTİR — Karar Vermek Artık Daha Kolay</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0b0f;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 10px 40px;
+        }
+
+        .logo {
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 18px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .hero h2 {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: #999;
+            font-size: 16px;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .category {
+            background: #15151c;
+            border: 1px solid #272733;
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .category:hover {
+            transform: translateY(-3px);
+            border-color: #555;
+        }
+
+        .icon {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .category h3 {
+            font-size: 19px;
+            margin-bottom: 7px;
+        }
+
+        .category p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            margin-top: 60px;
+            padding-bottom: 30px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 500px) {
+
+            .categories {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 34px;
+            }
+
+            .hero h2 {
+                font-size: 25px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-    <h1>BİRLEŞTİR</h1>
+    <div class="container">
 
-    <p>Karar vermek artık daha kolay.</p>
+        <header>
 
-    <h2>🚗 Araba mı, toplu taşıma mı?</h2>
+            <div class="logo">
+                BİRLEŞTİR
+            </div>
 
-    <p>Yakında senin için hesaplayacağız.</p>
+            <div class="subtitle">
+                Karar vermek artık daha kolay.
+            </div>
+
+        </header>
+
+
+        <section class="hero">
+
+            <h2>Neye karar vermek istiyorsun?</h2>
+
+            <p>
+                Seçimini yap. Rakamları karşılaştıralım.
+            </p>
+
+        </section>
+
+
+        <section class="categories">
+
+
+            <div class="category">
+
+                <div class="icon">🚗</div>
+
+                <h3>Ulaşım</h3>
+
+                <p>
+                    Araba mı, toplu taşıma mı?
+                </p>
+
+            </div>
+
+
+            <div class="category">
+
+                <div class="icon">🏠</div>
+
+                <h3>Ev</h3>
+
+                <p>
+                    Almak mı, kiralamak mı?
+                </p>
+
+            </div>
+
+
+            <div class="category">
+
+                <div class="icon">💰</div>
+
+                <h3>Para</h3>
+
+                <p>
+                    Nakit mi, taksit mi?
+                </p>
+
+            </div>
+
+
+            <div class="category">
+
+                <div class="icon">🛒</div>
+
+                <h3>Alışveriş</h3>
+
+                <p>
+                    Hangisini almalıyım?
+                </p>
+
+            </div>
+
+
+            <div class="category">
+
+                <div class="icon">✈️</div>
+
+                <h3>Seyahat</h3>
+
+                <p>
+                    En mantıklı seçeneği bul.
+                </p>
+
+            </div>
+
+
+            <div class="category">
+
+                <div class="icon">⚡</div>
+
+                <h3>Enerji</h3>
+
+                <p>
+                    Hangi seçenek daha ekonomik?
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+        <footer>
+
+            BİRLEŞTİR © 2026
+
+        </footer>
+
+    </div>
 
 </body>
 
