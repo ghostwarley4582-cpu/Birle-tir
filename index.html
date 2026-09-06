@@ -205,7 +205,11 @@ footer{padding:35px 0 50px;border-top:1px solid rgba(255,255,255,.06);color:var(
      <div><h2 style="font-size:21px">Sayısal değerlendirme</h2><p id="metricIntro">Kategoriye özel 5 ölçümü gir.</p></div>
     </div>
     <div class="matrix" id="ratingsBox"></div>
-    <div class="small muted" style="margin-top:8px">Fiyat gibi alanlar 0'dan başlar. 450 yazdığında baştaki 0 otomatik silinir. “↑” yüksek değer, “↓” düşük değer daha avantajlıdır.</div>
+    <div class="helper" style="margin-top:10px">
+  <b>💡 Veriyi olduğu gibi gir.</b><br>
+  TARTI fiyat, maaş, süre ve benzeri sayısal değerlerde üst sınır koymaz. 1.000.000 gibi büyük değerler de kullanılabilir. 
+  1–10 sınırı yalnızca puan türündeki kriterler içindir. TARTI, farklı birimleri sonuç hesaplanırken karşılaştırılabilir skorlara dönüştürür.
+</div>
    </div>
   </div>
 
@@ -259,9 +263,7 @@ footer{padding:35px 0 50px;border-top:1px solid rgba(255,255,255,.06);color:var(
    <div class="premium-item"><b>Karar Değişim Eşiği</b><span>Liderin değişmesi için gereken kritik noktayı arar.</span></div>
   </div>
   <div class="helper"><b>TARTI PREMIUM:</b> 20 ana kategori × 8 özel değerlendirme. Premium analizde her kategori kendi ölçüm setiyle çalışır; tek bir genel şablona zorlanmaz.</div>
-  <div class="premium-category-grid">
-   ${PREMIUM_CATEGORIES.map(c=>`<div class="premium-category"><b>${c[1]} ${c[0]}</b><div class="premium-sub">${c[2].map(x=>`<span>${x}</span>`).join("")}</div></div>`).join("")}
-  </div>
+  <div class="premium-category-grid" id="premiumCategoryGrid"></div>
  </div>
 </div>
 </section>
@@ -440,7 +442,12 @@ const categoryPlaceholders={
  diger:["Örn: Hangi seçeneği seçmeliyim?","Örn: Benim için önemli olan şartları birlikte değerlendirmek istiyorum."]
 };
 
-function renderAll(){renderCategories();renderSelect();renderAlternatives();renderWeights();renderMatrix();renderTitleSuggestions(currentCategory)}
+function renderAll(){renderCategories();renderSelect();renderAlternatives();renderWeights();renderMatrix();renderTitleSuggestions(currentCategory);renderPremiumCategories()}
+function renderPremiumCategories(){
+ const box=document.getElementById("premiumCategoryGrid");
+ if(!box)return;
+ box.innerHTML=PREMIUM_CATEGORIES.map(c=>`<div class="premium-category"><b>${esc(c[1]+" "+c[0])}</b><div class="premium-sub">${c[2].map(x=>`<span>${esc(x)}</span>`).join("")}</div></div>`).join("");
+}
 function renderTitleSuggestions(key){
  const list=TITLE_SUGGESTIONS[key]||TITLE_SUGGESTIONS.diger;
  const box=document.getElementById("titleSuggestions");
@@ -469,7 +476,7 @@ function renderMatrix(){
  s+="</tr></thead><tbody>";
  c.metrics.forEach(([key,name,unit,type,better])=>{
   s+=`<tr><td><span class="metric-name">${name}</span><span class="metric-unit">${unit} · ${better==="high"?"↑":"↓"}</span></td>`;
-  ns.forEach((n,i)=>{let v=values[key]?.[i]??defaultValue(key,type);s+=`<td><input type="text" inputmode="${type==="rating"||type==="number"?"decimal":"decimal"}" value="${esc(v)}" min="0" ${type==="rating"?'maxlength="2"':''} oninput="setValue('${key}',${i},this.value,this)" aria-label="${esc(name)} ${esc(n)}"></td>`});
+  ns.forEach((n,i)=>{let v=values[key]?.[i]??defaultValue(key,type);s+=`<td><input type="text" inputmode="${type==="rating"||type==="number"?"decimal":"decimal"}" value="${esc(v)}" min="0" oninput="setValue('${key}',${i},this.value,this)" aria-label="${esc(name)} ${esc(n)}"></td>`});
   s+="</tr>";
  });
  s+="</tbody></table>";
@@ -481,7 +488,11 @@ function setValue(key,i,v,el){
  if(clean.length>1 && clean.startsWith("0") && clean[1]!==".")clean=clean.replace(/^0+/,"");
  if(clean==="")clean="0";
  const type=CATEGORIES[currentCategory].metrics.find(m=>m[0]===key)[3];
- if(type==="rating"){let n=Number(clean);if(n>10)clean="10";if(n<1&&clean!=="")clean="1"}
+ if(type==="rating"){
+   let n=Number(clean);
+   if(n>10)clean="10";
+   if(n<1 && clean!=="")clean="1";
+ }
  values[key][i]=clean;el.value=clean;
 }
 function numeric(v){const n=Number(String(v).replace(",","."));return Number.isFinite(n)?n:0}
