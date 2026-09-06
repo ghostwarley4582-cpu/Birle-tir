@@ -32,7 +32,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(7,9,16,.88);backdrop-fil
 .hero{padding:76px 0 44px;text-align:center}
 .pill{display:inline-flex;padding:8px 13px;border:1px solid rgba(125,92,255,.28);background:rgba(125,92,255,.09);border-radius:99px;color:#c9c1ff;font-size:13px}
 .hero h1{font-size:clamp(45px,8vw,78px);line-height:.98;letter-spacing:-3px;margin:18px 0}
-.gradient{background:linear-gradient(90deg,#fff,#a28fff,#4edcc7);color:transparent;background-clip:text;-webkit-background-clip:text}
+.gradient{background:linear-gradient(90deg,#fff,#a28fff,#4edcc7);color:transparent;background-clip:text;-webkit-background-clip:text}.tart-word{color:var(--purple2)}
 .hero p{max-width:760px;margin:auto;color:var(--muted);font-size:17px;line-height:1.75}
 .hero-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:25px}
 .section{padding:30px 0}.title{margin-bottom:18px}.title h2{font-size:29px;margin:0}.title p{color:var(--muted);line-height:1.6;margin:7px 0 0}
@@ -56,9 +56,9 @@ textarea{min-height:90px;resize:vertical}.muted{color:var(--muted)}.small{font-s
 .criteria{display:grid;gap:13px}.criterion{padding:15px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.02)}
 .criterion-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}.criterion-top strong{font-size:15px}
 .weight-badge{font-size:12px;color:#c9c1ff;border:1px solid rgba(125,92,255,.25);background:rgba(125,92,255,.08);padding:5px 8px;border-radius:99px}
-.weight-controls{display:grid;grid-template-columns:1fr 85px;gap:8px;margin-bottom:10px}.range{accent-color:var(--purple);width:100%}
+.weight-controls{display:grid;grid-template-columns:1fr 85px;gap:8px;margin-bottom:10px}.range{width:100%}
 .rating-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.rating{padding:11px;background:#090c14;border:1px solid var(--line);border-radius:13px}.rating input[type=number]{padding:11px;font-size:16px;font-weight:700}.rating-name{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:5px}.rating-name b{color:#fff;font-size:18px}
+.rating{padding:11px;background:#090c14;border:1px solid var(--line);border-radius:13px}.rating input[type=number]{padding:13px;font-size:17px;font-weight:750;min-height:48px}.rating-name{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:5px}.rating-name b{color:#fff;font-size:18px}
 .sumline{display:flex;justify-content:space-between;align-items:center;padding:11px 0;color:#cbd2e2}.sumline strong{color:#fff}
 .result{display:none;margin-top:18px}.result.show{display:block}
 .rank-grid{display:grid;gap:10px}.rank{display:grid;grid-template-columns:48px 1fr 95px;gap:12px;align-items:center;padding:15px;border:1px solid var(--line);border-radius:15px;background:#0c1019}
@@ -96,7 +96,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:35px 0;text-alig
 <section class="hero">
 <div class="container">
   <div class="pill">⚖️ Kararları görünür hale getir</div>
-  <h1>Seçeneklerini<br><span class="gradient">TARTI.</span></h1>
+  <h1>Seçeneklerini<br><span class="tart-word">TART.</span></h1>
   <p>
     TARTI tek bir “doğru cevap” uydurmaz. Kararını parçalara ayırır;
     alternatiflerini, kriterlerini ve önceliklerini birlikte değerlendirir.
@@ -184,7 +184,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:35px 0;text-alig
 <div class="step">
 <div class="num">5</div>
 <div style="width:100%">
-  <h3 style="margin:0 0 5px">Puanlama</h3>
+  <h3 style="margin:0 0 5px">Sayısal değerlendirme</h3>
   <p class="small muted">
     Her alternatif için her kriteri 1–10 arasında değerlendir.
     TARTI farklı birimleri karşılaştırılabilir skora dönüştürür; 1–10 alanlarda doğrudan puanı kullanır.
@@ -619,8 +619,7 @@ function renderCriteria(){
      <span class="weight-badge" id="wb_${key}">Ağırlık ${weights[key].toFixed(1)}%</span>
    </div>
    <div class="weight-controls">
-     <input class="range" id="wr_${key}" type="range" min="0" max="100" step="1" value="${Math.round(weights[key])}" oninput="setWeight('${key}',this.value)">
-     <input type="number" min="0" max="100" step="1" value="${Math.round(weights[key])}" id="wn_${key}" oninput="setWeight('${key}',this.value)">
+     <input type="number" min="0" max="100" step="1" value="${Math.round(weights[key])}" id="wn_${key}" oninput="setWeight('${key}',this.value)" placeholder="Örn. 20">
    </div>
    <div class="small muted">${help} · ${better==="high"?"Yüksek değer avantajlı":"Düşük değer avantajlı"} · Birim: ${unit}</div>
  </div>`).join("");
@@ -646,8 +645,8 @@ function updateWeightUI(){
  let total=0;
  Object.keys(weights).forEach(k=>{
    const v=Number(weights[k]);total+=v;
-   const r=document.getElementById("wr_"+k),n=document.getElementById("wn_"+k),b=document.getElementById("wb_"+k);
-   if(r)r.value=Math.round(v);
+   const n=document.getElementById("wn_"+k),b=document.getElementById("wb_"+k);
+   
    if(n)n.value=Math.round(v);
    if(b)b.textContent="Ağırlık "+v.toFixed(1)+"%";
  });
