@@ -12,6 +12,65 @@
     <title>BİRLEŞTİR — Karar Vermek Artık Daha Kolay</title>
 
     <style>
+        .calculator {
+    margin-top: 20px;
+}
+
+.calculator label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.calculator input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #30303a;
+    border-radius: 12px;
+    background: #0f0f14;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.calculator input:focus {
+    border-color: #777;
+}
+
+.calculator button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background: white;
+    color: #111;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#sonuc {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 15px;
+    background: #1b1b23;
+    border: 1px solid #30303a;
+    color: white;
+}
+
+#sonuc h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+#sonuc p {
+    margin-top: 10px;
+    color: #bbb;
+}
 a {
     text-decoration: none;
     color: inherit;
@@ -311,7 +370,7 @@ a {
     </div>
 
 
-    <div class="card">
+    <div class="card calculator">
 
         <label>Arabanın aylık yakıt masrafı</label>
 
@@ -386,12 +445,16 @@ function hesapla() {
 
 
     if (
-        yakit < 0 ||
-        otopark < 0 ||
-        bakim < 0 ||
-        topluTasima < 0
-    ) {
+    document.getElementById("yakit").value === "" ||
+    document.getElementById("otopark").value === "" ||
+    document.getElementById("bakim").value === "" ||
+    document.getElementById("topluTasima").value === ""
+) {
 
+    alert("Lütfen bütün alanları doldur.");
+
+    return;
+}
         alert("Lütfen geçerli değerler gir.");
 
         return;
