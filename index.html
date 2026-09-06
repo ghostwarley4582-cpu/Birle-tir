@@ -48,11 +48,20 @@ input,textarea,select{width:100%;border:1px solid var(--line);background:#080b13
 input:focus,textarea:focus,select:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,99,255,.12)}
 textarea{min-height:100px;resize:vertical}
 .small{font-size:12px}.muted{color:var(--muted)}
-.category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.cat{background:#0e121d;border:1px solid var(--line);color:var(--text);border-radius:15px;padding:14px;text-align:left}
+.category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.cat{background:#0e121d;border:1px solid var(--line);color:var(--text);border-radius:14px;padding:11px;text-align:left;min-height:82px}
+.cat strong{font-size:14px;line-height:1.25}
 .cat.active{border-color:var(--purple);background:#191532;box-shadow:0 0 0 2px rgba(139,99,255,.1)}
 .cat strong{display:block}.cat span{display:block;color:var(--muted);font-size:11px;margin-top:4px}
-.alt-list{display:grid;gap:10px}
+.title-suggestions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.title-chip{border:1px solid #37304f;background:#11101b;color:#bcb3da;border-radius:999px;padding:7px 10px;font-size:11px}
+.title-chip:hover{border-color:#7655dc;color:#eee8ff}
+.premium-category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:15px}
+.premium-category{border:1px solid #40351e;border-radius:14px;background:#12110d;padding:12px}
+.premium-category b{display:block;color:#f3d477;font-size:13px}
+.premium-sub{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.premium-sub span{font-size:10px;color:#aaa38e;border:1px solid #332d1e;border-radius:7px;padding:4px 6px}
+@media(max-width:720px){.premium-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}.alt-list{display:grid;gap:10px}
 .alt-row{display:grid;grid-template-columns:38px 1fr 42px;gap:8px;align-items:center}
 .alt-key{height:42px;border-radius:12px;background:#211a46;border:1px solid #4e3a9b;display:grid;place-items:center;font-weight:900;color:#d5caff}
 .remove{height:42px;border-radius:12px;background:#15101a;color:#ff9cab;border:1px solid #492532;font-size:22px}
@@ -95,15 +104,20 @@ textarea{min-height:100px;resize:vertical}
 .tabs{display:flex;gap:5px;background:#0a0d15;padding:4px;border-radius:12px;margin-bottom:15px}.tabs button{flex:1;padding:9px;border:0;background:transparent;color:var(--muted);border-radius:9px}.tabs button.active{background:#24203c;color:#fff}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;z-index:200;background:#f4f5fb;color:#090b12;padding:11px 16px;border-radius:12px;font-weight:800;font-size:13px;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .premium{border-color:#66511d;background:linear-gradient(135deg,#171525,#17130d)}
-.premium-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.premium-item{padding:14px;border:1px solid #4c4022;border-radius:14px;background:#15130e}.premium-item b{display:block;color:#f4d77c}.premium-item span{font-size:12px;color:#aaa38e}
+.premium-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.premium-item{padding:14px;border:1px solid #4c4022;border-radius:14px;background:#15130e}.premium-item b{display:block;color:#f4d77c}.premium-item span{font-size:12px;color:#aaa38e}
 footer{padding:35px 0 50px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);text-align:center;font-size:12px}
 .footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:12px}.footer-links a{color:#a78bfa}
 @media(max-width:720px){
  .container{width:min(100% - 18px,680px)}.nav{height:76px}.logo{font-size:25px;letter-spacing:6px}.nav-actions .btn{padding:10px 12px;font-size:13px}
  .hero{padding:48px 0 30px}.hero p{font-size:15px}.card{padding:16px;border-radius:18px}
- .category-grid{grid-template-columns:repeat(2,1fr)}.score-grid,.analysis-grid,.premium-grid{grid-template-columns:1fr}
+ .category-grid{grid-template-columns:repeat(2,1fr)}.score-grid,.analysis-grid{grid-template-columns:1fr}.premium-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  .breakdown-row{grid-template-columns:1fr 75px 75px}.matrix th,.matrix td{font-size:10px;padding:7px 3px}.matrix th:first-child,.matrix td:first-child{width:30%}
  .matrix td input{height:38px;font-size:13px}.step{grid-template-columns:35px 1fr;gap:10px;padding:16px 0}.num{width:35px;height:35px;font-size:13px}
+}
+@media print{
+ .header,.hero,.premium,.auth,.toast,.action-bar,.footer-links{display:none!important}
+ body{background:#fff;color:#111}.card,.winner,.score,.analysis,.breakdown{box-shadow:none;border-color:#ccc;background:#fff;color:#111}
+ .muted,.analysis span{color:#444}.result{display:block!important}
 }
 </style>
 </head>
@@ -127,6 +141,7 @@ footer{padding:35px 0 50px;border-top:1px solid rgba(255,255,255,.06);color:var(
   <p>Alternatiflerini, gerçek verilerini ve önceliklerini gir. TARTI seçeneklerini aynı matematiksel sistemde karşılaştırıp kararını görünür hale getirir.</p>
   <div class="action-bar" style="justify-content:center">
    <button class="btn btn-primary" onclick="document.getElementById('decision').scrollIntoView({behavior:'smooth'})">Kararını Oluştur →</button>
+   <button class="btn" onclick="document.getElementById('community').scrollIntoView({behavior:'smooth'})">⭐ Kullanıcı Değerlendirmeleri</button>
   </div>
  </div>
 </section>
@@ -153,6 +168,8 @@ footer{padding:35px 0 50px;border-top:1px solid rgba(255,255,255,.06);color:var(
    <div>
     <label for="decisionTitle">Kararının başlığı</label>
     <input id="decisionTitle" placeholder="Örn: Hangi telefonu almalıyım?">
+    <div class="small muted" style="margin-top:8px">Bu kategoriye uygun başlık örnekleri:</div>
+    <div class="title-suggestions" id="titleSuggestions"></div>
     <label for="goal" style="margin-top:12px">Kararının amacı <span class="muted">(isteğe bağlı)</span></label>
     <textarea id="goal" placeholder="Örn: Bütçeme uygun, uzun ömürlü bir telefon istiyorum."></textarea>
    </div>
@@ -219,7 +236,7 @@ footer{padding:35px 0 50px;border-top:1px solid rgba(255,255,255,.06);color:var(
 <div class="container">
  <div class="card">
   <div class="section-title">
-   <div><h2>Topluluğun TARTI değerlendirmeleri</h2><p>Gerçek kullanıcıların deneyimleri.</p></div>
+   <div><h2>⭐ TARTI kullanıcı değerlendirmeleri</h2><p>Siteyi kullananların verdiği puanları ve yorumları yıldız seviyesine göre incele.</p></div>
   </div>
   <div class="rating-filters" id="ratingFilters"></div>
   <div id="communitySummary" class="helper">Değerlendirmeler yükleniyor...</div>
@@ -236,12 +253,14 @@ footer{padding:35px 0 50px;border-top:1px solid rgba(255,255,255,.06);color:var(
    <button class="btn btn-gold" onclick="openPremium()">Premium'u İncele</button>
   </div>
   <div class="premium-grid">
-   <div class="premium-item"><b>Derin Karar Analizi</b><span>Sonucun nedenini daha ayrıntılı açıklar.</span></div>
-   <div class="premium-item"><b>Senaryo Simülatörü</b><span>Bir değer değiştiğinde kararın nasıl değiştiğini gösterir.</span></div>
+   <div class="premium-item"><b>Derin Karar Analizi</b><span>Sonucun nedenini kriter kriter açıklar.</span></div>
+   <div class="premium-item"><b>Senaryo Simülatörü</b><span>Bir değer değiştiğinde liderin nasıl değiştiğini gösterir.</span></div>
    <div class="premium-item"><b>Karar Güven Skoru</b><span>Sonucun ne kadar güçlü olduğunu ölçer.</span></div>
-   <div class="premium-item"><b>Fırsat Maliyeti</b><span>Seçilmeyen alternatifin göreceli etkisini açıklar.</span></div>
-   <div class="premium-item"><b>Kararı Değiştiren Eşik</b><span>Hangi koşulda liderin değişebileceğini arar.</span></div>
-   <div class="premium-item"><b>8 Premium Kategori</b><span>Teknoloji, ev, finans, kariyer, eğitim, seyahat, alışveriş ve girişim için gelişmiş analiz.</span></div>
+   <div class="premium-item"><b>Karar Değişim Eşiği</b><span>Liderin değişmesi için gereken kritik noktayı arar.</span></div>
+  </div>
+  <div class="helper"><b>TARTI PREMIUM:</b> 20 ana kategori × 8 özel değerlendirme. Premium analizde her kategori kendi ölçüm setiyle çalışır; tek bir genel şablona zorlanmaz.</div>
+  <div class="premium-category-grid">
+   ${PREMIUM_CATEGORIES.map(c=>`<div class="premium-category"><b>${c[1]} ${c[0]}</b><div class="premium-sub">${c[2].map(x=>`<span>${x}</span>`).join("")}</div></div>`).join("")}
   </div>
  </div>
 </div>
@@ -340,6 +359,47 @@ const CATEGORIES={
  ]}
 };
 
+
+const PREMIUM_CATEGORIES=[
+["Teknoloji & Cihaz","💻",["Fiyat","Garanti","Dayanıklılık","Ömür","Performans","Kamera","Batarya","Güncelleme"]],
+["Ev & Gayrimenkul","🏠",["Fiyat","Net Alan","Bina Yaşı","Aidat","Konum","Ulaşım","Deprem Güvenliği","Yatırım Potansiyeli"]],
+["Otomobil","🚗",["Fiyat","Yakıt/Tüketim","Güvenlik","Bakım Maliyeti","Performans","Konfor","İkinci El","Garanti"]],
+["Kariyer","💼",["Net Gelir","Çalışma Saati","İş Güvencesi","Kariyer Gelişimi","Terfi","Uzaktan Çalışma","Stres","Yaşam Dengesi"]],
+["Para & Yatırım","💰",["Sermaye","Getiri","Risk","Likidite","Maliyet","Vade","Vergi","Çeşitlendirme"]],
+["Eğitim","🎓",["Maliyet","Kalite","Süre","Kariyer Fırsatı","Eğitmen","Prestij","Esneklik","Kişisel Uyum"]],
+["Seyahat","✈️",["Bütçe","Süre","Konaklama","Ulaşım","Güvenlik","Konfor","Deneyim","Mevsim Uyumu"]],
+["Alışveriş","🛒",["Fiyat","Kalite","Garanti","Ömür","Performans","Marka Güveni","Teslimat","Servis"]],
+["İş & Girişim","🏢",["Başlangıç Sermayesi","Gelir Potansiyeli","Talep","Risk","Kârlılık","Büyüme","Rekabet","Operasyon"]],
+["Şehir & Yaşam","🌆",["Kira","Gelir İmkanı","Ulaşım","Güvenlik","Sosyal Hayat","Sağlık Hizmeti","Eğitim","Yaşam Uyumu"]],
+["İlişki","❤️",["Güven","İletişim","Değer Uyumu","Gelecek Uyumu","Emek","Saygı","Çatışma Yönetimi","Mutluluk"]],
+["Sağlık & Yaşam","🏃",["Maliyet","Zaman","Beklenen Fayda","Sürdürülebilirlik","Uyum","Erişilebilirlik","Düzen","Motivasyon"]],
+["Spor","🏋️",["Ücret","Zaman","Ekipman","Koçluk","Erişim","Gelişim","Sürdürülebilirlik","Motivasyon"]],
+["Ulaşım","🚆",["Aylık Maliyet","Süre","Güvenlik","Konfor","Güvenilirlik","Bakım","Erişim","Esneklik"]],
+["Finansal Planlama","📊",["Gelir","Gider","Tasarruf","Borç","Acil Fon","Yatırım","Risk","Hedef Uyumu"]],
+["Konut Finansmanı","🏦",["Peşinat","Aylık Ödeme","Faiz","Vade","Toplam Maliyet","Gelir Oranı","Erken Kapama","Esneklik"]],
+["Freelance & Hizmet","🧑‍💻",["Saatlik Gelir","Müşteri Talebi","Süreklilik","Platform Kesintisi","Teslim Süresi","Risk","Ölçek","Özgürlük"]],
+["Dijital Ürün","📱",["Üretim Maliyeti","Satış Fiyatı","Talep","Dönüşüm","Kâr Marjı","İade Riski","Ölçek","Tekrarlanabilirlik"]],
+["E-ticaret","📦",["Ürün Maliyeti","Satış Fiyatı","Reklam Maliyeti","Kargo","Talep","Kâr Marjı","İade","Stok Riski"]],
+["Kişisel Karar","🧭",["Maliyet","Zaman","Fayda","Risk","Uyum","Gelecek Etkisi","Geri Dönüş","İç Huzur"]]
+];
+
+const TITLE_SUGGESTIONS={
+ teknoloji:["Hangi telefonu almalıyım?","Hangi bilgisayarı seçmeliyim?","Bu iki teknoloji ürününden hangisi daha mantıklı?"],
+ ev:["Hangi evi almalıyım?","Hangi dairede yaşamalıyım?","Bu iki konut yatırımından hangisi daha mantıklı?"],
+ kariyer:["Hangi işi kabul etmeliyim?","Hangi kariyer yolunu seçmeliyim?","İki iş teklifinden hangisi daha iyi?"],
+ para:["Paramı hangi seçenekte değerlendirmeliyim?","Hangi yatırım bana daha uygun?","Bu iki yatırım arasında hangisini seçmeliyim?"],
+ iliski:["İlişkim için hangi kararı vermeliyim?","Devam etmek mi ara vermek mi?","İki seçenek arasında hangisi benim için daha sağlıklı?"],
+ yasam:["Hangi şehirde yaşamalıyım?","Taşınmak için hangi şehri seçmeliyim?","Bu şehirlerden hangisi bana daha uygun?"],
+ egitim:["Hangi bölümü seçmeliyim?","Hangi üniversite daha uygun?","Bu eğitim seçeneklerinden hangisini seçmeliyim?"],
+ seyahat:["Hangi destinasyona gitmeliyim?","Bu tatil seçeneklerinden hangisi daha mantıklı?","Bütçeme göre nereye gitmeliyim?"],
+ alisveris:["Hangi ürünü almalıyım?","Fiyatına göre hangisi daha iyi?","Bu ürünlerden hangisi daha uzun ömürlü?"],
+ is:["Hangi iş fikrine başlamalıyım?","Hangi girişim daha mantıklı?","Sermayemi hangi işe ayırmalıyım?"],
+ ulasim:["Hangi ulaşım seçeneğini kullanmalıyım?","Hangi aracı almalıyım?","Günlük ulaşımım için hangisi daha mantıklı?"],
+ egitim:["Hangi eğitim seçeneğini seçmeliyim?","Hangi kurs bana daha uygun?","Bu eğitimlerden hangisi daha iyi yatırım?"],
+ saglik:["Hangi yaşam rutinini seçmeliyim?","Hangi spor seçeneği bana daha uygun?","Günlük rutinim için hangisi daha sürdürülebilir?"],
+ diger:["Hangi seçeneği seçmeliyim?","Bu iki seçenekten hangisi daha mantıklı?","Kararımı nasıl netleştirebilirim?"]
+};
+
 let currentCategory="teknoloji";
 let alternatives=[];
 let weights={};
@@ -362,6 +422,7 @@ function applyCategory(key){
  renderAll();
  document.getElementById("decisionTitle").placeholder=categoryPlaceholders[key]?.[0]||"Örn: Hangi seçeneği seçmeliyim?";
  document.getElementById("goal").placeholder=categoryPlaceholders[key]?.[1]||"Örn: Benim için en uygun seçeneği bulmak istiyorum.";
+ renderTitleSuggestions(key);
 }
 const categoryPlaceholders={
  teknoloji:["Örn: Hangi telefonu almalıyım?","Örn: Bütçeme uygun, uzun ömürlü ve performanslı bir telefon istiyorum."],
@@ -379,7 +440,13 @@ const categoryPlaceholders={
  diger:["Örn: Hangi seçeneği seçmeliyim?","Örn: Benim için önemli olan şartları birlikte değerlendirmek istiyorum."]
 };
 
-function renderAll(){renderCategories();renderSelect();renderAlternatives();renderWeights();renderMatrix()}
+function renderAll(){renderCategories();renderSelect();renderAlternatives();renderWeights();renderMatrix();renderTitleSuggestions(currentCategory)}
+function renderTitleSuggestions(key){
+ const list=TITLE_SUGGESTIONS[key]||TITLE_SUGGESTIONS.diger;
+ const box=document.getElementById("titleSuggestions");
+ if(!box)return;
+ box.innerHTML=list.map(x=>`<button type="button" class="title-chip" onclick="document.getElementById('decisionTitle').value='${esc(x).replace(/'/g,"\\'")}'>${esc(x)}</button>`).join("");
+}
 function renderCategories(){
  document.getElementById("categoryGrid").innerHTML=Object.entries(CATEGORIES).map(([k,c])=>`<button class="cat ${k===currentCategory?"active":""}" onclick="applyCategory('${k}')"><strong>${c.icon} ${c.name}</strong><span>${c.desc}</span></button>`).join("");
 }
