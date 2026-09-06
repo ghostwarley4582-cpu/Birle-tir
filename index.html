@@ -3,566 +3,244 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#090b14">
-<meta name="description" content="TARTI — Akıllı karar verme platformu. Seçeneklerini tart, daha iyi kararlar ver.">
-<title>TARTI — Akıllı Karar Asistanı</title>
+<meta name="theme-color" content="#080a12">
+<meta name="description" content="TARTI — Seçeneklerini tart. Kriterlerini değerlendir. Daha bilinçli karar ver.">
+<title>TARTI — Akıllı Karar Platformu</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#080a12;
+  --bg:#070910;
+  --bg2:#0b0e18;
   --card:#111522;
   --card2:#171b2a;
-  --border:#292f45;
-  --text:#f4f6ff;
-  --muted:#9da5bb;
-  --primary:#7c5cff;
-  --primary2:#9b84ff;
-  --success:#35d39a;
-  --danger:#ff667d;
-  --gold:#f3c969;
+  --card3:#0d101a;
+  --border:#282e43;
+  --text:#f5f7ff;
+  --muted:#9ca5bc;
+  --purple:#7c5cff;
+  --purple2:#a38fff;
+  --teal:#42d9c0;
+  --green:#35d39a;
+  --red:#ff667d;
+  --gold:#f2c861;
+  --blue:#5da9ff;
 }
-
-html{
-  scroll-behavior:smooth;
-}
-
+html{scroll-behavior:smooth}
 body{
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:Inter,Arial,Helvetica,sans-serif;
   background:
-    radial-gradient(circle at top right,#20183d 0%,transparent 32%),
-    radial-gradient(circle at bottom left,#102c35 0%,transparent 28%),
+    radial-gradient(circle at 90% 0%,rgba(124,92,255,.18),transparent 30%),
+    radial-gradient(circle at 0% 70%,rgba(66,217,192,.10),transparent 28%),
     var(--bg);
   color:var(--text);
   min-height:100vh;
 }
-
-button,input,textarea,select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.container{
-  width:min(1100px,92%);
-  margin:auto;
-}
-
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.container{width:min(1120px,92%);margin:auto}
 header{
-  position:sticky;
-  top:0;
-  z-index:50;
-  backdrop-filter:blur(18px);
-  background:rgba(8,10,18,.88);
-  border-bottom:1px solid rgba(255,255,255,.06);
+  position:sticky;top:0;z-index:50;
+  background:rgba(7,9,16,.86);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.07)
 }
-
-.nav{
-  min-height:70px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-}
-
-.logo{
-  font-size:25px;
-  font-weight:900;
-  letter-spacing:3px;
-}
-
-.logo span{
-  color:var(--primary2);
-}
-
-.nav-actions{
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-
+.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.logo{font-size:26px;font-weight:950;letter-spacing:4px}
+.logo em{font-style:normal;color:var(--purple2)}
+.nav-actions{display:flex;gap:8px;align-items:center}
 .btn{
-  border:0;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:#fff;
   border-radius:12px;
   padding:11px 16px;
-  color:white;
-  background:var(--card2);
-  border:1px solid var(--border);
   transition:.2s;
 }
-
-.btn:hover{
-  transform:translateY(-1px);
-  border-color:var(--primary);
-}
-
+.btn:hover{transform:translateY(-1px);border-color:var(--purple)}
 .btn-primary{
-  background:linear-gradient(135deg,var(--primary),#5540d9);
+  background:linear-gradient(135deg,var(--purple),#5540d9);
   border-color:transparent;
 }
-
 .btn-gold{
-  background:linear-gradient(135deg,#c99832,#f0cb68);
-  color:#17120a;
-  border:0;
+  background:linear-gradient(135deg,#c9952d,#f3cf6d);
+  color:#17120a;border:0
 }
-
-.hero{
-  padding:75px 0 40px;
-  text-align:center;
-}
-
+.btn-danger{border-color:rgba(255,102,125,.35);color:#ff9bad}
+.hero{padding:80px 0 45px;text-align:center}
 .badge{
-  display:inline-flex;
-  padding:7px 12px;
-  border-radius:999px;
-  background:rgba(124,92,255,.12);
-  color:#bcaeff;
-  border:1px solid rgba(124,92,255,.3);
-  font-size:13px;
-  margin-bottom:18px;
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 13px;border-radius:999px;
+  color:#c9c0ff;background:rgba(124,92,255,.11);
+  border:1px solid rgba(124,92,255,.28);
+  font-size:13px;margin-bottom:20px
 }
-
-.hero h1{
-  font-size:clamp(42px,8vw,76px);
-  line-height:1;
-  margin-bottom:18px;
-}
-
+.hero h1{font-size:clamp(42px,8vw,78px);line-height:.98;letter-spacing:-2px}
 .gradient{
-  background:linear-gradient(90deg,#fff,#9d89ff,#58dfca);
-  -webkit-background-clip:text;
-  color:transparent;
+  background:linear-gradient(90deg,#fff,#a58fff,#55ddc8);
+  -webkit-background-clip:text;background-clip:text;color:transparent
 }
-
-.hero p{
-  max-width:680px;
-  margin:auto;
-  color:var(--muted);
-  line-height:1.7;
-  font-size:16px;
-}
-
-.section{
-  padding:28px 0;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
-
+.hero p{max-width:720px;margin:22px auto 0;color:var(--muted);font-size:17px;line-height:1.75}
+.hero-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:28px}
+.section{padding:28px 0}
+.section-title{margin-bottom:18px}
+.section-title h2{font-size:29px;letter-spacing:-.5px}
+.section-title p{color:var(--muted);margin-top:7px;line-height:1.6}
 .card{
-  background:linear-gradient(145deg,rgba(23,27,42,.95),rgba(13,16,27,.95));
+  background:linear-gradient(145deg,rgba(19,23,36,.97),rgba(11,14,24,.97));
   border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 15px 40px rgba(0,0,0,.2);
+  border-radius:20px;padding:22px;
+  box-shadow:0 18px 55px rgba(0,0,0,.20)
 }
-
-.card h3{
-  margin-bottom:9px;
-}
-
-.card p{
-  color:var(--muted);
-  line-height:1.6;
-}
-
-.icon{
-  font-size:30px;
-  margin-bottom:12px;
-}
-
-.section-title{
-  margin-bottom:18px;
-}
-
-.section-title h2{
-  font-size:28px;
-}
-
-.section-title p{
-  color:var(--muted);
-  margin-top:6px;
-}
-
-.category-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
-
+.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .category{
-  padding:15px;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:14px;
-  color:white;
-  text-align:left;
+  border:1px solid var(--border);background:var(--card);
+  color:#fff;border-radius:14px;padding:15px;text-align:left;
+  transition:.2s
 }
-
-.category:hover,
-.category.active{
-  border-color:var(--primary);
-  background:#18172a;
+.category:hover,.category.active{border-color:var(--purple);background:#18172a}
+.decision-wrap{max-width:930px;margin:auto}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;color:#dce1ef;font-size:14px;margin-bottom:7px}
+input,textarea,select{
+  width:100%;background:#090c15;color:#fff;
+  border:1px solid var(--border);border-radius:12px;
+  padding:14px;outline:none;margin-bottom:14px
 }
-
-.decision-box{
-  max-width:800px;
-  margin:auto;
+input:focus,textarea:focus,select:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,92,255,.10)}
+textarea{min-height:100px;resize:vertical}
+.step{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06)
 }
-
-label{
-  display:block;
-  margin-bottom:7px;
-  color:#dce0ee;
-  font-size:14px;
+.step:last-child{border-bottom:0}
+.step-num{
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(124,92,255,.18);border:1px solid rgba(124,92,255,.35);
+  display:grid;place-items:center;color:#c9c0ff;font-weight:800;flex:none
 }
-
-input,
-textarea,
-select{
-  width:100%;
-  padding:14px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:#0b0e18;
-  color:white;
-  outline:none;
-  margin-bottom:15px;
+.criteria{display:grid;gap:12px;margin-top:10px}
+.criterion{
+  padding:16px;border:1px solid var(--border);
+  background:rgba(255,255,255,.025);border-radius:16px
 }
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:var(--primary);
+.criterion-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}
+.criterion-name{font-weight:800}
+.weight{
+  color:#bdb5ff;font-size:12px;
+  background:rgba(124,92,255,.10);
+  border:1px solid rgba(124,92,255,.22);
+  padding:5px 8px;border-radius:999px
 }
-
-textarea{
-  min-height:100px;
-  resize:vertical;
+.rating-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rating-box{background:#090c15;border:1px solid var(--border);border-radius:13px;padding:12px}
+.rating-title{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:8px}
+.rating-title strong{color:#fff;font-size:18px}
+.range{width:100%;accent-color:var(--purple);margin:4px 0 0}
+.weight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.weight-item{background:#0b0e17;border:1px solid var(--border);border-radius:13px;padding:11px}
+.weight-item span{display:flex;justify-content:space-between;color:#cdd2e0;font-size:12px;margin-bottom:5px}
+.weight-input{margin:0!important;padding:9px!important}
+.helper{font-size:12px;color:#777f95;line-height:1.5}
+.total-weight{margin-top:10px;color:#cfd4e3;font-size:13px}
+.total-weight strong{color:#fff}
+.result{display:none;margin-top:20px}
+.result.show{display:block}
+.result-top{display:grid;grid-template-columns:1.1fr .9fr;gap:15px}
+.winner-card{padding:24px;border-radius:18px;border:1px solid rgba(53,211,154,.28);background:linear-gradient(145deg,rgba(53,211,154,.09),rgba(53,211,154,.025))}
+.winner-label{color:#8be6c5;font-size:12px;text-transform:uppercase;letter-spacing:1.4px}
+.winner{font-size:32px;font-weight:900;margin:8px 0}
+.result-summary{color:#c7ccda;line-height:1.7}
+.score-card{padding:22px;border-radius:18px;border:1px solid var(--border);background:rgba(255,255,255,.025)}
+.score-row{margin-bottom:18px}
+.score-row:last-child{margin-bottom:0}
+.score-head{display:flex;justify-content:space-between;margin-bottom:7px}
+.score-head span{color:#cbd0df}
+.score-head strong{font-size:21px}
+.bar{height:10px;border-radius:20px;background:#252a3b;overflow:hidden}
+.bar div{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--purple),var(--teal))}
+.verdict{margin-top:15px;padding:16px;border-radius:14px;background:rgba(124,92,255,.07);border:1px solid rgba(124,92,255,.18);line-height:1.7;color:#cbd0df}
+.analysis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:15px}
+.insight{padding:16px;border-radius:15px;background:#0c101a;border:1px solid var(--border)}
+.insight .icon{font-size:23px;margin-bottom:8px}
+.insight h4{margin-bottom:6px}
+.insight p{color:var(--muted);line-height:1.55;font-size:14px}
+.breakdown{margin-top:15px}
+.break-row{display:grid;grid-template-columns:1fr 90px 90px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.break-row:last-child{border-bottom:0}
+.mini-bar{height:7px;background:#252a3b;border-radius:10px;overflow:hidden}
+.mini-bar div{height:100%;background:var(--purple)}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.pro-banner{
+  margin-top:18px;padding:18px;border-radius:16px;
+  border:1px solid rgba(242,200,97,.25);
+  background:linear-gradient(145deg,rgba(242,200,97,.08),rgba(124,92,255,.04))
 }
-
-.options{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
+.pro-banner h3{color:#f5d77d;margin-bottom:7px}
+.pro-banner p{color:var(--muted);line-height:1.6}
+.pro-section{margin-top:15px;display:none}
+.pro-section.show{display:block}
+.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.scenario{
+  padding:16px;border:1px solid var(--border);border-radius:15px;background:#0c1019
 }
-
-.priority{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  margin-bottom:15px;
+.scenario h4{margin-bottom:8px}
+.scenario p{color:var(--muted);line-height:1.55;font-size:14px}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.price-card{padding:24px 18px;text-align:center;border:1px solid var(--border);border-radius:19px;background:var(--card)}
+.price-card.featured{border-color:var(--purple2);box-shadow:0 0 35px rgba(124,92,255,.10)}
+.price{font-size:31px;font-weight:900;margin:14px 0 5px}
+.price small{font-size:12px;color:var(--muted);font-weight:400}
+.feature-list{list-style:none;text-align:left;margin:18px 0}
+.feature-list li{padding:8px 0;color:#cbd0df;font-size:14px}
+.feature-list li:before{content:"✓";color:var(--green);margin-right:8px}
+.community{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.comment{padding:13px 0;border-bottom:1px solid var(--border)}
+.comment:last-child{border-bottom:0}
+.comment p{color:#cbd0df;line-height:1.5;margin-top:5px}
+.comment small{color:#727b91}
+footer{margin-top:60px;padding:38px 0;border-top:1px solid var(--border);text-align:center;color:var(--muted)}
+.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:18px;font-size:13px}
+.footer-links a{color:#a99aff;text-decoration:none}
+.footer-links a:hover{text-decoration:underline}
+.modal{
+  position:fixed;inset:0;z-index:100;display:none;
+  align-items:center;justify-content:center;padding:18px;
+  background:rgba(0,0,0,.78);backdrop-filter:blur(8px)
 }
-
-.priority button{
-  padding:10px 5px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:var(--card2);
-  color:white;
-}
-
-.priority button.active{
-  background:rgba(124,92,255,.25);
-  border-color:var(--primary);
-}
-
-.result{
-  margin-top:20px;
-  display:none;
-  padding:22px;
-  border-radius:18px;
-  border:1px solid rgba(53,211,154,.3);
-  background:rgba(53,211,154,.06);
-}
-
-.result.show{
-  display:block;
-}
-
-.winner{
-  font-size:25px;
-  font-weight:bold;
-  color:var(--success);
-  margin-bottom:10px;
-}
-
-.score-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin:18px 0;
-}
-
-.score{
-  padding:15px;
-  background:rgba(255,255,255,.04);
-  border-radius:12px;
-}
-
-.score strong{
-  display:block;
-  font-size:22px;
-  margin-top:5px;
-}
-
-.progress{
-  height:8px;
-  background:#24293a;
-  border-radius:10px;
-  overflow:hidden;
-  margin-top:8px;
-}
-
-.progress div{
-  height:100%;
-  background:linear-gradient(90deg,var(--primary),var(--success));
-}
-
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-  margin-top:15px;
-}
-
-.premium{
-  position:relative;
-  overflow:hidden;
-}
-
-.premium::before{
-  content:"PRO";
-  position:absolute;
-  top:15px;
-  right:-30px;
-  transform:rotate(40deg);
-  background:var(--gold);
-  color:#17120a;
-  padding:5px 38px;
-  font-size:10px;
-  font-weight:bold;
-}
-
-.premium h3{
-  color:#f5d77d;
-}
-
-.price-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-}
-
-.price-card{
-  text-align:center;
-  padding:25px 18px;
-  border:1px solid var(--border);
-  border-radius:18px;
-  background:var(--card);
-}
-
-.price-card.featured{
-  border-color:#9b84ff;
-  transform:translateY(-5px);
-}
-
-.price{
-  font-size:31px;
-  font-weight:bold;
-  margin:15px 0;
-}
-
-.price small{
-  font-size:13px;
-  color:var(--muted);
-  font-weight:normal;
-}
-
-.feature-list{
-  list-style:none;
-  text-align:left;
-  margin:18px 0;
-}
-
-.feature-list li{
-  padding:8px 0;
-  color:#cbd0df;
-}
-
-.feature-list li::before{
-  content:"✓";
-  color:var(--success);
-  margin-right:8px;
-}
-
-.community{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-
-.comment{
-  padding:14px;
-  border-bottom:1px solid var(--border);
-}
-
-.comment:last-child{
-  border-bottom:0;
-}
-
-.comment small{
-  color:var(--muted);
-}
-
-.auth-modal,
-.premium-modal{
-  position:fixed;
-  inset:0;
-  z-index:100;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:rgba(0,0,0,.75);
-  backdrop-filter:blur(8px);
-}
-
-.modal-box{
-  width:min(600px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:#111522;
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:25px;
-}
-
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:18px;
-}
-
-.close{
-  background:none;
-  border:0;
-  color:white;
-  font-size:25px;
-}
-
-.status{
-  min-height:22px;
-  margin:10px 0;
-  color:var(--muted);
-}
-
+.modal.show{display:flex}
+.modal-box{width:min(650px,100%);max-height:90vh;overflow:auto;background:#111522;border:1px solid var(--border);border-radius:21px;padding:24px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.close{border:0;background:none;color:#fff;font-size:28px}
+.status{min-height:20px;color:var(--muted);font-size:13px;margin:4px 0 10px}
 .toast{
-  position:fixed;
-  left:50%;
-  bottom:20px;
-  transform:translateX(-50%);
-  background:#171b2a;
-  border:1px solid var(--border);
-  padding:13px 18px;
-  border-radius:12px;
-  z-index:200;
-  display:none;
-  width:min(90%,500px);
-  text-align:center;
+  position:fixed;left:50%;bottom:20px;transform:translateX(-50%);
+  width:min(92%,520px);z-index:200;display:none;
+  background:#171b2a;border:1px solid var(--border);padding:13px 17px;
+  border-radius:12px;text-align:center
 }
-
-.toast.show{
-  display:block;
+.toast.show{display:block}
+.empty{color:var(--muted);font-size:14px;padding:10px 0}
+@media(max-width:850px){
+  .category-grid{grid-template-columns:repeat(2,1fr)}
+  .form-grid,.rating-grid,.result-top,.scenario-grid{grid-template-columns:1fr}
+  .analysis-grid{grid-template-columns:1fr}
+  .price-grid{grid-template-columns:1fr}
+  .community{grid-template-columns:1fr}
+  .weight-grid{grid-template-columns:1fr 1fr}
 }
-
-footer{
-  margin-top:60px;
-  padding:35px 0;
-  border-top:1px solid var(--border);
-  color:var(--muted);
-  text-align:center;
-}
-
-.footer-links{
-  margin-top:20px;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-  font-size:13px;
-}
-
-.footer-links a{
-  color:#9b84ff;
-  text-decoration:none;
-}
-
-.footer-links a:hover{
-  text-decoration:underline;
-}
-
-.pro-box{
-  margin-top:18px;
-  padding:18px;
-  border:1px solid rgba(243,201,105,.3);
-  border-radius:15px;
-  background:rgba(243,201,105,.05);
-}
-
-.pro-box p{
-  margin-top:8px;
-}
-
-@media(max-width:800px){
-
-  .grid,
-  .price-grid{
-    grid-template-columns:1fr;
-  }
-
-  .category-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .community{
-    grid-template-columns:1fr;
-  }
-
-  .options{
-    grid-template-columns:1fr;
-  }
-
-  .priority{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .nav .btn{
-    padding:9px 10px;
-    font-size:12px;
-  }
-
-  .hero{
-    padding-top:55px;
-  }
-
-  .price-card.featured{
-    transform:none;
-  }
+@media(max-width:520px){
+  .nav{min-height:66px}
+  .logo{font-size:22px}
+  .nav .btn{padding:9px 10px;font-size:12px}
+  .hero{padding-top:55px}
+  .hero h1{font-size:48px}
+  .category-grid{grid-template-columns:1fr 1fr}
+  .weight-grid{grid-template-columns:1fr}
+  .break-row{grid-template-columns:1fr 70px 70px}
 }
 </style>
 </head>
@@ -571,2174 +249,1103 @@ footer{
 
 <header>
   <div class="container nav">
-
-    <div class="logo">TARTI</div>
-
+    <div class="logo">TART<em>I</em></div>
     <div class="nav-actions">
-
-      <button class="btn btn-gold" onclick="openPremium()">
-        ✦ TARTI PRO
-      </button>
-
-      <button class="btn" id="authButton" onclick="openAuth()">
-        Giriş Yap
-      </button>
-
+      <button class="btn btn-gold" onclick="openPremium()">✦ TARTI PRO</button>
+      <button class="btn" id="authButton" onclick="openAuth()">Giriş Yap</button>
     </div>
-
   </div>
 </header>
-
 
 <main>
 
 <section class="hero">
-
   <div class="container">
-
-    <div class="badge">
-      🧠 Akıllı Karar Sistemi
-    </div>
-
-    <h1>
-      Kararlarını<br>
-      <span class="gradient">TARTI.</span>
-    </h1>
-
+    <div class="badge">🧠 Akıllı Karar Platformu</div>
+    <h1>Seçeneklerini<br><span class="gradient">TARTI.</span></h1>
     <p>
-      İki seçenek arasında kaldığında duyguların yerine
-      kriterlerini kullan. TARTI seçeneklerini analiz eder,
-      puanlar ve daha bilinçli karar vermene yardımcı olur.
+      Kararını sadece hislerinle değil, kriterlerinle değerlendir.
+      İki seçeneği puanla, önem ağırlıklarını belirle ve TARTI'nın
+      şeffaf hesaplamasıyla hangi seçeneğin neden öne çıktığını gör.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="scrollToDecision()">Karar Vermeye Başla →</button>
+      <button class="btn" onclick="openPremium()">TARTI PRO'yu İncele</button>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>Ne hakkında karar veriyorsun?</h2>
+      <p>Kategori seçerek kararını daha kolay başlat.</p>
+    </div>
+    <div class="category-grid">
+      <button class="category" onclick="selectCategory('💰 Para')">💰 Para</button>
+      <button class="category" onclick="selectCategory('💼 Kariyer')">💼 Kariyer</button>
+      <button class="category" onclick="selectCategory('❤️ İlişki')">❤️ İlişki</button>
+      <button class="category" onclick="selectCategory('🏠 Yaşam')">🏠 Yaşam</button>
+      <button class="category" onclick="selectCategory('🚗 Ulaşım')">🚗 Ulaşım</button>
+      <button class="category" onclick="selectCategory('🎓 Eğitim')">🎓 Eğitim</button>
+      <button class="category" onclick="selectCategory('✈️ Seyahat')">✈️ Seyahat</button>
+      <button class="category" onclick="selectCategory('🛒 Alışveriş')">🛒 Alışveriş</button>
+      <button class="category" onclick="selectCategory('💻 Teknoloji')">💻 Teknoloji</button>
+      <button class="category" onclick="selectCategory('🏋️ Sağlık')">🏋️ Sağlık</button>
+      <button class="category" onclick="selectCategory('🎮 Eğlence')">🎮 Eğlence</button>
+      <button class="category" onclick="selectCategory('🏢 İş')">🏢 İş</button>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="decisionSection">
+<div class="container decision-wrap">
+
+<div class="section-title">
+  <h2>🧠 Kararını TARTI</h2>
+  <p>Önce kararını tanımla. Sonra iki seçeneği kriterlere göre 1–10 arasında değerlendir.</p>
+</div>
+
+<div class="card">
+
+<div class="step">
+  <div class="step-num">1</div>
+  <div style="width:100%">
+    <label>Kategori</label>
+    <select id="category">
+      <option value="">Kategori seç</option>
+      <option>💰 Para</option><option>💼 Kariyer</option><option>❤️ İlişki</option>
+      <option>🏠 Yaşam</option><option>🚗 Ulaşım</option><option>🎓 Eğitim</option>
+      <option>✈️ Seyahat</option><option>🛒 Alışveriş</option><option>💻 Teknoloji</option>
+      <option>🏋️ Sağlık</option><option>🎮 Eğlence</option><option>🏢 İş</option>
+    </select>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">2</div>
+  <div style="width:100%">
+    <label>Kararın ne?</label>
+    <input id="decisionTitle" placeholder="Örn: İstanbul'da mı İzmir'de mi yaşamalıyım?">
+    <div class="form-grid">
+      <div>
+        <label>Seçenek A</label>
+        <input id="optionA" placeholder="Örn: İstanbul">
+      </div>
+      <div>
+        <label>Seçenek B</label>
+        <input id="optionB" placeholder="Örn: İzmir">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">3</div>
+  <div style="width:100%">
+    <label>Kriterlerin önemini belirle</label>
+    <p class="helper">
+      Bu oranlar herkes için açıktır. Toplam ağırlık otomatik olarak %100'e normalize edilir.
+      Böylece sonuç sadece bir kelimeye değil, senin önceliklerine dayanır.
     </p>
 
-    <div class="actions"
-         style="justify-content:center;margin-top:25px">
+    <div class="weight-grid">
+      <div class="weight-item"><span>Maliyet <b id="wCostVal">20%</b></span><input class="weight-input" id="wCost" type="number" min="0" max="100" value="20" oninput="updateWeightLabel()"></div>
+      <div class="weight-item"><span>Zaman <b id="wTimeVal">15%</b></span><input class="weight-input" id="wTime" type="number" min="0" max="100" value="15" oninput="updateWeightLabel()"></div>
+      <div class="weight-item"><span>Kalite <b id="wQualityVal">20%</b></span><input class="weight-input" id="wQuality" type="number" min="0" max="100" value="20" oninput="updateWeightLabel()"></div>
+      <div class="weight-item"><span>Güven <b id="wSafetyVal">15%</b></span><input class="weight-input" id="wSafety" type="number" min="0" max="100" value="15" oninput="updateWeightLabel()"></div>
+      <div class="weight-item"><span>Kişisel Uyum <b id="wFitVal">15%</b></span><input class="weight-input" id="wFit" type="number" min="0" max="100" value="15" oninput="updateWeightLabel()"></div>
+      <div class="weight-item"><span>Gelecek Etkisi <b id="wFutureVal">15%</b></span><input class="weight-input" id="wFuture" type="number" min="0" max="100" value="15" oninput="updateWeightLabel()"></div>
+    </div>
+    <div class="total-weight">Toplam girilen ağırlık: <strong id="totalWeight">100%</strong></div>
+  </div>
+</div>
 
-      <button class="btn btn-primary"
-              onclick="scrollToDecision()">
-        Karar Vermeye Başla →
-      </button>
+<div class="step">
+  <div class="step-num">4</div>
+  <div style="width:100%">
+    <label>Seçeneklerini 1–10 arasında puanla</label>
+    <p class="helper">
+      1 = çok zayıf, 5 = orta, 10 = çok güçlü. Bu puanlar senin değerlendirmendir;
+      TARTI bunları ağırlıklarla matematiksel olarak birleştirir.
+    </p>
 
-      <button class="btn"
-              onclick="openPremium()">
-        TARTI PRO'yu İncele
-      </button>
+    <div class="criteria">
 
+      <div class="criterion">
+        <div class="criterion-head"><span class="criterion-name">💰 Maliyet</span><span class="weight" id="displayCostWeight">Ağırlık %20</span></div>
+        <div class="rating-grid">
+          <div class="rating-box"><div class="rating-title"><span id="aNameCost">Seçenek A</span><strong id="costAVal">5</strong></div><input class="range" id="costA" type="range" min="1" max="10" value="5" oninput="syncRating('costA','costAVal')"></div>
+          <div class="rating-box"><div class="rating-title"><span id="bNameCost">Seçenek B</span><strong id="costBVal">5</strong></div><input class="range" id="costB" type="range" min="1" max="10" value="5" oninput="syncRating('costB','costBVal')"></div>
+        </div>
+      </div>
+
+      <div class="criterion">
+        <div class="criterion-head"><span class="criterion-name">⏱️ Zaman</span><span class="weight" id="displayTimeWeight">Ağırlık %15</span></div>
+        <div class="rating-grid">
+          <div class="rating-box"><div class="rating-title"><span id="aNameTime">Seçenek A</span><strong id="timeAVal">5</strong></div><input class="range" id="timeA" type="range" min="1" max="10" value="5" oninput="syncRating('timeA','timeAVal')"></div>
+          <div class="rating-box"><div class="rating-title"><span id="bNameTime">Seçenek B</span><strong id="timeBVal">5</strong></div><input class="range" id="timeB" type="range" min="1" max="10" value="5" oninput="syncRating('timeB','timeBVal')"></div>
+        </div>
+      </div>
+
+      <div class="criterion">
+        <div class="criterion-head"><span class="criterion-name">⭐ Kalite</span><span class="weight" id="displayQualityWeight">Ağırlık %20</span></div>
+        <div class="rating-grid">
+          <div class="rating-box"><div class="rating-title"><span id="aNameQuality">Seçenek A</span><strong id="qualityAVal">5</strong></div><input class="range" id="qualityA" type="range" min="1" max="10" value="5" oninput="syncRating('qualityA','qualityAVal')"></div>
+          <div class="rating-box"><div class="rating-title"><span id="bNameQuality">Seçenek B</span><strong id="qualityBVal">5</strong></div><input class="range" id="qualityB" type="range" min="1" max="10" value="5" oninput="syncRating('qualityB','qualityBVal')"></div>
+        </div>
+      </div>
+
+      <div class="criterion">
+        <div class="criterion-head"><span class="criterion-name">🛡️ Güven / Risk</span><span class="weight" id="displaySafetyWeight">Ağırlık %15</span></div>
+        <div class="rating-grid">
+          <div class="rating-box"><div class="rating-title"><span id="aNameSafety">Seçenek A</span><strong id="safetyAVal">5</strong></div><input class="range" id="safetyA" type="range" min="1" max="10" value="5" oninput="syncRating('safetyA','safetyAVal')"></div>
+          <div class="rating-box"><div class="rating-title"><span id="bNameSafety">Seçenek B</span><strong id="safetyBVal">5</strong></div><input class="range" id="safetyB" type="range" min="1" max="10" value="5" oninput="syncRating('safetyB','safetyBVal')"></div>
+        </div>
+      </div>
+
+      <div class="criterion">
+        <div class="criterion-head"><span class="criterion-name">❤️ Kişisel Uyum</span><span class="weight" id="displayFitWeight">Ağırlık %15</span></div>
+        <div class="rating-grid">
+          <div class="rating-box"><div class="rating-title"><span id="aNameFit">Seçenek A</span><strong id="fitAVal">5</strong></div><input class="range" id="fitA" type="range" min="1" max="10" value="5" oninput="syncRating('fitA','fitAVal')"></div>
+          <div class="rating-box"><div class="rating-title"><span id="bNameFit">Seçenek B</span><strong id="fitBVal">5</strong></div><input class="range" id="fitB" type="range" min="1" max="10" value="5" oninput="syncRating('fitB','fitBVal')"></div>
+        </div>
+      </div>
+
+      <div class="criterion">
+        <div class="criterion-head"><span class="criterion-name">🔮 Gelecek Etkisi</span><span class="weight" id="displayFutureWeight">Ağırlık %15</span></div>
+        <div class="rating-grid">
+          <div class="rating-box"><div class="rating-title"><span id="aNameFuture">Seçenek A</span><strong id="futureAVal">5</strong></div><input class="range" id="futureA" type="range" min="1" max="10" value="5" oninput="syncRating('futureA','futureAVal')"></div>
+          <div class="rating-box"><div class="rating-title"><span id="bNameFuture">Seçenek B</span><strong id="futureBVal">5</strong></div><input class="range" id="futureB" type="range" min="1" max="10" value="5" oninput="syncRating('futureB','futureBVal')"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">5</div>
+  <div style="width:100%">
+    <label>Ek bilgi <span style="color:#777">(isteğe bağlı)</span></label>
+    <textarea id="extraInfo" placeholder="Kararı etkileyen bütçe, süre, özel durum veya başka bir ayrıntı yazabilirsin..."></textarea>
+    <button class="btn btn-primary" style="width:100%;padding:15px" onclick="calculateDecision()">
+      ⚖️ TARTI Hesapla
+    </button>
+  </div>
+</div>
+
+<div class="result" id="result">
+
+  <div class="result-top">
+
+    <div class="winner-card">
+      <div class="winner-label">TARTI ÖNERİSİ</div>
+      <div class="winner" id="winner">—</div>
+      <div class="result-summary" id="summary"></div>
+      <div class="verdict" id="verdict"></div>
+    </div>
+
+    <div class="score-card">
+      <div class="score-row">
+        <div class="score-head"><span id="resultAName">Seçenek A</span><strong id="resultAScore">0</strong></div>
+        <div class="bar"><div id="resultABar" style="width:0%"></div></div>
+      </div>
+      <div class="score-row">
+        <div class="score-head"><span id="resultBName">Seçenek B</span><strong id="resultBScore">0</strong></div>
+        <div class="bar"><div id="resultBBar" style="width:0%"></div></div>
+      </div>
+      <div class="helper">Skorlar 0–100 ölçeğine dönüştürülmüş ağırlıklı puanlardır.</div>
     </div>
 
   </div>
 
+  <div class="analysis-grid">
+    <div class="insight">
+      <div class="icon">📊</div>
+      <h4>Puan Farkı</h4>
+      <p id="gapInsight">—</p>
+    </div>
+    <div class="insight">
+      <div class="icon">🎯</div>
+      <h4>Karar Gücü</h4>
+      <p id="confidenceInsight">—</p>
+    </div>
+    <div class="insight">
+      <div class="icon">🔄</div>
+      <h4>Kararı Değiştirebilecek Nokta</h4>
+      <p id="changeInsight">—</p>
+    </div>
+  </div>
+
+  <div class="card breakdown">
+    <h3>🔍 Kriter Bazlı Katkı</h3>
+    <p class="helper" style="margin-top:6px">Her kriterin toplam sonuca etkisini görebilirsin.</p>
+    <div id="breakdownRows"></div>
+  </div>
+
+  <div class="pro-banner">
+    <h3>✦ TARTI PRO</h3>
+    <p>
+      Temel skorların tamamı ücretsizdir. PRO; temel sonucu gizlemek yerine
+      onun üzerine senaryo simülasyonu, hassasiyet analizi, fırsat maliyeti,
+      ağırlık değişim testi ve detaylı karar raporu ekler.
+    </p>
+    <div class="actions">
+      <button class="btn btn-gold" onclick="runPremiumFeature()">✦ PRO Analizi Aç</button>
+      <button class="btn" onclick="shareResult()">↗ Sonucu Paylaş</button>
+      <button class="btn" onclick="saveDecision()">💾 Kararı Kaydet</button>
+      <button class="btn" onclick="newDecision()">＋ Yeni Karar</button>
+    </div>
+  </div>
+
+  <div class="pro-section" id="proSection">
+    <div class="card" style="margin-top:15px">
+      <div class="section-title">
+        <h2>✦ TARTI PRO Gelişmiş Rapor</h2>
+        <p>Sonucunun hangi koşullarda değişebileceğini incele.</p>
+      </div>
+      <div class="scenario-grid">
+        <div class="scenario">
+          <h4>🎯 Hassasiyet Analizi</h4>
+          <p id="sensitivityText">—</p>
+        </div>
+        <div class="scenario">
+          <h4>💰 Fırsat Maliyeti</h4>
+          <p id="opportunityText">—</p>
+        </div>
+        <div class="scenario">
+          <h4>⚖️ Ağırlık Değişim Testi</h4>
+          <p id="weightTestText">—</p>
+        </div>
+        <div class="scenario">
+          <h4>🔮 Senaryo</h4>
+          <p id="scenarioText">—</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+</div>
 </section>
 
 
 <section class="section">
-
 <div class="container">
+  <div class="section-title">
+    <h2>✦ TARTI PRO</h2>
+    <p>Ücretsiz sonuçları kapatmaz; karar analizini derinleştirir.</p>
+  </div>
 
-<div class="section-title">
+  <div class="grid">
+    <div class="card"><h3>🎯 Hassasiyet Analizi</h3><p>Sonucun hangi kriter değişimlerinde tersine dönebileceğini incele.</p></div>
+    <div class="card"><h3>🔮 Senaryo Simülatörü</h3><p>Bir kriterin yükselmesi veya düşmesi durumunda sonucu tekrar hesapla.</p></div>
+    <div class="card"><h3>💰 Fırsat Maliyeti</h3><p>Seçilmeyen seçeneğin göreceli avantajını görünür hale getir.</p></div>
+    <div class="card"><h3>⚖️ Ağırlık Testi</h3><p>Önceliklerin değiştiğinde kararının ne kadar sağlam kaldığını gör.</p></div>
+    <div class="card"><h3>📄 Detaylı Rapor</h3><p>Karar, skorlar, kriterler ve kritik noktaları tek raporda birleştir.</p></div>
+    <div class="card"><h3>🧠 Karar Gücü</h3><p>Sonucun ne kadar net, dengeli veya kırılgan olduğunu ölç.</p></div>
+  </div>
 
-<h2>Ne hakkında karar veriyorsun?</h2>
-
-<p>
-Bir kategori seç veya doğrudan kararını yaz.
-</p>
-
+  <div style="text-align:center;margin-top:24px">
+    <button class="btn btn-gold" onclick="openPremium()">✦ Paketleri Gör</button>
+  </div>
 </div>
-
-
-<div class="category-grid">
-
-<button class="category"
-onclick="selectCategory('💰 Para')">
-💰 Para
-</button>
-
-<button class="category"
-onclick="selectCategory('💼 Kariyer')">
-💼 Kariyer
-</button>
-
-<button class="category"
-onclick="selectCategory('❤️ İlişki')">
-❤️ İlişki
-</button>
-
-<button class="category"
-onclick="selectCategory('🏠 Yaşam')">
-🏠 Yaşam
-</button>
-
-<button class="category"
-onclick="selectCategory('🚗 Ulaşım')">
-🚗 Ulaşım
-</button>
-
-<button class="category"
-onclick="selectCategory('🎓 Eğitim')">
-🎓 Eğitim
-</button>
-
-<button class="category"
-onclick="selectCategory('✈️ Seyahat')">
-✈️ Seyahat
-</button>
-
-<button class="category"
-onclick="selectCategory('🛒 Alışveriş')">
-🛒 Alışveriş
-</button>
-
-<button class="category"
-onclick="selectCategory('💻 Teknoloji')">
-💻 Teknoloji
-</button>
-
-<button class="category"
-onclick="selectCategory('🏋️ Sağlık')">
-🏋️ Sağlık
-</button>
-
-<button class="category"
-onclick="selectCategory('🎮 Eğlence')">
-🎮 Eğlence
-</button>
-
-<button class="category"
-onclick="selectCategory('🏢 İş')">
-🏢 İş
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section"
-id="decisionSection">
-
-<div class="container">
-
-<div class="card decision-box">
-
-<div class="section-title">
-
-<h2>🧠 TARTI Karar Asistanı</h2>
-
-<p>
-İki seçeneği yaz. Önceliğini seç. TARTI analiz etsin.
-</p>
-
-</div>
-
-
-<label>Kategori</label>
-
-<select id="category">
-
-<option value="">
-Kategori seç
-</option>
-
-<option>💰 Para</option>
-<option>💼 Kariyer</option>
-<option>❤️ İlişki</option>
-<option>🏠 Yaşam</option>
-<option>🚗 Ulaşım</option>
-<option>🎓 Eğitim</option>
-<option>✈️ Seyahat</option>
-<option>🛒 Alışveriş</option>
-<option>💻 Teknoloji</option>
-<option>🏋️ Sağlık</option>
-<option>🎮 Eğlence</option>
-<option>🏢 İş</option>
-
-</select>
-
-
-<label>Kararın ne?</label>
-
-<input
-id="decisionTitle"
-placeholder="Örn: Yeni telefon almalı mıyım?"
->
-
-
-<div class="options">
-
-<div>
-
-<label>Seçenek A</label>
-
-<input
-id="optionA"
-placeholder="Örn: iPhone"
->
-
-</div>
-
-
-<div>
-
-<label>Seçenek B</label>
-
-<input
-id="optionB"
-placeholder="Örn: Samsung"
->
-
-</div>
-
-</div>
-
-
-<label>En önemli önceliğin</label>
-
-
-<div class="priority">
-
-<button
-onclick="setPriority(this,'money')">
-💰 Para
-</button>
-
-<button
-onclick="setPriority(this,'time')">
-⏱️ Zaman
-</button>
-
-<button
-onclick="setPriority(this,'quality')">
-⭐ Kalite
-</button>
-
-<button
-onclick="setPriority(this,'trust')">
-🛡️ Güven
-</button>
-
-<button
-class="active"
-onclick="setPriority(this,'balanced')">
-⚖️ Dengeli
-</button>
-
-</div>
-
-
-<label>
-Ek bilgi
-<span style="color:#777">
-(isteğe bağlı)
-</span>
-</label>
-
-<textarea
-id="extraInfo"
-placeholder="Kararını etkileyen başka bir şey varsa buraya yaz..."
-></textarea>
-
-
-<button
-class="btn btn-primary"
-style="width:100%"
-onclick="analyzeDecision(false)"
->
-🧠 Kararı Analiz Et
-</button>
-
-
-<div class="result"
-id="result">
-
-<div
-class="winner"
-id="winner">
-</div>
-
-<div id="resultText"></div>
-
-
-<div class="score-grid">
-
-<div class="score">
-
-Seçenek A
-
-<strong id="scoreA">
-0
-</strong>
-
-<div class="progress">
-<div
-id="barA"
-style="width:0%">
-</div>
-</div>
-
-</div>
-
-
-<div class="score">
-
-Seçenek B
-
-<strong id="scoreB">
-0
-</strong>
-
-<div class="progress">
-<div
-id="barB"
-style="width:0%">
-</div>
-</div>
-
-</div>
-
-</div>
-
-
-<div id="resultReasons"></div>
-
-
-<div class="actions">
-
-<button
-class="btn"
-onclick="shareResult()">
-↗ Paylaş
-</button>
-
-<button
-class="btn"
-onclick="saveDecision()">
-💾 Kaydet
-</button>
-
-<button
-class="btn"
-onclick="newDecision()">
-＋ Yeni Karar
-</button>
-
-<button
-class="btn btn-gold"
-onclick="analyzeDecision(true)">
-✦ PRO Analiz
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 </section>
 
 
 <section class="section">
-
 <div class="container">
-
-<div class="section-title">
-
-<h2>✦ TARTI PRO</h2>
-
-<p>
-Basit karşılaştırmanın ötesine geç.
-</p>
-
+  <div class="section-title">
+    <h2>🌍 Topluluk</h2>
+    <p>Paylaşılan kararları incele.</p>
+  </div>
+  <div class="community">
+    <div class="card">
+      <h3>Son Kararlar</h3>
+      <div id="communityDecisions"><div class="empty">Kararlar yükleniyor...</div></div>
+    </div>
+    <div class="card">
+      <h3>Yorumlar</h3>
+      <div id="communityComments"><div class="empty">Henüz yorum bulunmuyor.</div></div>
+    </div>
+  </div>
 </div>
-
-
-<div class="grid">
-
-<div class="card premium">
-
-<div class="icon">🧠</div>
-
-<h3>Gelişmiş Analiz</h3>
-
-<p>
-Para, zaman, kalite, güven, stres ve gelecek etkisini
-aynı anda değerlendir.
-</p>
-
-</div>
-
-
-<div class="card premium">
-
-<div class="icon">🔮</div>
-
-<h3>Senaryo Simülatörü</h3>
-
-<p>
-Gelir, bütçe, zaman veya koşullar değiştiğinde
-kararın nasıl etkilendiğini incele.
-</p>
-
-</div>
-
-
-<div class="card premium">
-
-<div class="icon">🎯</div>
-
-<h3>Karar Güven Skoru</h3>
-
-<p>
-Seçimin ne kadar güçlü olduğunu ve hangi faktörlerin
-kararı etkilediğini gör.
-</p>
-
-</div>
-
-
-<div class="card premium">
-
-<div class="icon">💰</div>
-
-<h3>Fırsat Maliyeti</h3>
-
-<p>
-Bir seçeneğin sadece fiyatını değil, kaybettirdiği
-zaman ve fırsatları da hesaba kat.
-</p>
-
-</div>
-
-
-<div class="card premium">
-
-<div class="icon">⚠️</div>
-
-<h3>Risk Analizi</h3>
-
-<p>
-Kararın güçlü ve zayıf taraflarını ayrı ayrı incele.
-</p>
-
-</div>
-
-
-<div class="card premium">
-
-<div class="icon">🔄</div>
-
-<h3>Kararı Değiştiren Faktör</h3>
-
-<p>
-Hangi koşul değişirse diğer seçeneğin öne geçeceğini keşfet.
-</p>
-
-</div>
-
-
-<div class="card premium">
-
-<div class="icon">🤖</div>
-
-<h3>Senin İçin Karar Ver</h3>
-
-<p>
-Önceliklerini ve risklerini değerlendirerek
-daha net bir öneri oluştur.
-</p>
-
-</div>
-
-
-<div class="card premium">
-
-<div class="icon">📊</div>
-
-<h3>Detaylı Karar Raporu</h3>
-
-<p>
-Kararının nedenlerini, risklerini ve değiştirebilecek
-faktörleri tek ekranda gör.
-</p>
-
-</div>
-
-
-<div class="card premium">
-
-<div class="icon">⏳</div>
-
-<h3>Zaman Değeri</h3>
-
-<p>
-Bir kararın sana kazandırdığı veya kaybettirdiği
-zamanı değerlendirmene yardımcı olur.
-</p>
-
-</div>
-
-</div>
-
-
-<div style="text-align:center;margin-top:25px">
-
-<button
-class="btn btn-gold"
-onclick="openPremium()">
-✦ TARTI PRO Paketlerini Gör
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-
-<section class="section">
-
-<div class="container">
-
-<div class="section-title">
-
-<h2>🌍 Topluluk</h2>
-
-<p>
-Kararlarını paylaş, insanların fikirlerini gör.
-</p>
-
-</div>
-
-
-<div class="community">
-
-<div class="card">
-
-<h3>Son Kararlar</h3>
-
-<div id="communityDecisions">
-
-<p style="color:#9da5bb">
-Kararlar yükleniyor...
-</p>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>Yorumlar</h3>
-
-<div id="communityComments">
-
-<p style="color:#9da5bb">
-Henüz yorum bulunmuyor.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 </section>
 
 </main>
 
 
 <footer>
-
 <div class="container">
-
-<strong>TARTI</strong>
-
-<p style="margin-top:8px">
-Daha iyi kararlar. Daha az pişmanlık.
-</p>
-
-
-<div class="footer-links">
-
-<a href="./hakkimizda.html">
-Hakkımızda
-</a>
-
-<a href="./iletisim.html">
-İletişim
-</a>
-
-<a href="./gizlilik.html">
-Gizlilik Politikası
-</a>
-
-<a href="./kvkk.html">
-KVKK
-</a>
-
-<a href="./mesafeli-satis.html">
-Mesafeli Satış
-</a>
-
-<a href="./iade-iptal.html">
-İade / İptal
-</a>
-
+  <strong style="font-size:20px;letter-spacing:3px">TARTI</strong>
+  <p style="margin-top:8px">Seçeneklerini tart. Daha bilinçli kararlar ver.</p>
+  <div class="footer-links">
+    <a href="./hakkimizda.html">Hakkımızda</a>
+    <a href="./iletisim.html">İletişim</a>
+    <a href="./gizlilik.html">Gizlilik Politikası</a>
+    <a href="./kvkk.html">KVKK</a>
+    <a href="./mesafeli-satis.html">Mesafeli Satış</a>
+    <a href="./iade-iptal.html">İade / İptal</a>
+  </div>
 </div>
-
-</div>
-
 </footer>
 
 
-<!-- GİRİŞ -->
-
-<div
-class="auth-modal"
-id="authModal">
-
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
 <div class="modal-box">
-
-<div class="modal-head">
-
-<h2 id="authTitle">
-Giriş Yap
-</h2>
-
-<button
-class="close"
-onclick="closeAuth()">
-×
-</button>
-
+  <div class="modal-head">
+    <h2 id="authTitle">Giriş Yap</h2>
+    <button class="close" onclick="closeAuth()">×</button>
+  </div>
+  <input id="authEmail" type="email" placeholder="E-posta">
+  <input id="authPassword" type="password" placeholder="Şifre (en az 6 karakter)">
+  <div class="status" id="authStatus"></div>
+  <button class="btn btn-primary" style="width:100%" onclick="submitAuth()">Devam Et</button>
+  <button class="btn" style="width:100%;margin-top:10px" id="authToggle" onclick="toggleAuthMode()">Hesap oluştur</button>
+</div>
 </div>
 
 
-<input
-id="authEmail"
-type="email"
-placeholder="E-posta"
->
-
-
-<input
-id="authPassword"
-type="password"
-placeholder="Şifre"
->
-
-
-<div
-class="status"
-id="authStatus">
-</div>
-
-
-<button
-class="btn btn-primary"
-style="width:100%"
-onclick="submitAuth()">
-Devam Et
-</button>
-
-
-<button
-class="btn"
-style="width:100%;margin-top:10px"
-onclick="toggleAuthMode()"
-id="authToggle">
-Hesap oluştur
-</button>
-
-</div>
-
-</div>
-
-
-<!-- TARTI PRO -->
-
-<div
-class="premium-modal"
-id="premiumModal">
-
+<!-- PREMIUM MODAL -->
+<div class="modal" id="premiumModal">
 <div class="modal-box">
+  <div class="modal-head">
+    <h2>✦ TARTI PRO</h2>
+    <button class="close" onclick="closePremium()">×</button>
+  </div>
 
-<div class="modal-head">
+  <p style="color:var(--muted);line-height:1.6;margin-bottom:18px">
+    Temel karar skorları herkes için ücretsizdir. PRO, bu skorların üzerine
+    gelişmiş karar araçları ekler.
+  </p>
 
-<h2>
-✦ TARTI PRO
-</h2>
+  <div class="price-grid">
 
-<button
-class="close"
-onclick="closePremium()">
-×
-</button>
+    <div class="price-card">
+      <h3>Haftalık</h3>
+      <div class="price">59,90 TL</div>
+      <small>7 gün</small>
+      <ul class="feature-list">
+        <li>Gelişmiş karar raporu</li>
+        <li>Senaryo simülasyonu</li>
+        <li>Hassasiyet analizi</li>
+        <li>Fırsat maliyeti</li>
+      </ul>
+      <button class="btn btn-gold" style="width:100%" onclick="paymentComingSoon('weekly')">PRO'ya Geç</button>
+    </div>
 
+    <div class="price-card featured">
+      <h3>⭐ Aylık</h3>
+      <div class="price">179,90 TL</div>
+      <small>30 gün</small>
+      <ul class="feature-list">
+        <li>Tüm PRO özellikleri</li>
+        <li>Sınırsız gelişmiş analiz</li>
+        <li>Ağırlık değişim testi</li>
+        <li>Detaylı karar raporu</li>
+      </ul>
+      <button class="btn btn-gold" style="width:100%" onclick="paymentComingSoon('monthly')">PRO'ya Geç</button>
+    </div>
+
+    <div class="price-card">
+      <h3>Yıllık</h3>
+      <div class="price">1.499 TL</div>
+      <small>365 gün</small>
+      <ul class="feature-list">
+        <li>Tüm PRO özellikleri</li>
+        <li>Sınırsız gelişmiş analiz</li>
+        <li>Senaryo ve hassasiyet</li>
+        <li>Detaylı raporlar</li>
+      </ul>
+      <button class="btn btn-gold" style="width:100%" onclick="paymentComingSoon('yearly')">PRO'ya Geç</button>
+    </div>
+
+  </div>
+
+  <div class="pro-banner">
+    <h3>🔐 Ödeme</h3>
+    <p>PayTR entegrasyonu tamamlandığında paket butonları gerçek ödeme akışına bağlanacaktır.</p>
+  </div>
+</div>
 </div>
 
 
-<p
-style="color:#9da5bb;margin-bottom:20px">
-Daha derin analizler ve gelişmiş karar araçları.
-</p>
-
-
-<div class="price-grid">
-
-
-<div class="price-card">
-
-<h3>
-Haftalık
-</h3>
-
-<div class="price">
-59,90 TL
-</div>
-
-<p>
-7 gün
-</p>
-
-<ul class="feature-list">
-
-<li>
-Tüm PRO özellikler
-</li>
-
-<li>
-Gelişmiş karar analizi
-</li>
-
-<li>
-Senaryo simülasyonu
-</li>
-
-<li>
-Risk analizi
-</li>
-
-</ul>
-
-
-<button
-class="btn btn-gold"
-style="width:100%"
-onclick="paymentComingSoon('weekly')">
-PRO'ya Geç
-</button>
-
-</div>
-
-
-<div class="price-card featured">
-
-<h3>
-⭐ Aylık
-</h3>
-
-<div class="price">
-179,90 TL
-</div>
-
-<p>
-30 gün
-</p>
-
-<ul class="feature-list">
-
-<li>
-Tüm PRO özellikler
-</li>
-
-<li>
-Gelişmiş karar analizi
-</li>
-
-<li>
-Risk analizi
-</li>
-
-<li>
-Karar güven skoru
-</li>
-
-<li>
-Senaryo simülatörü
-</li>
-
-</ul>
-
-
-<button
-class="btn btn-gold"
-style="width:100%"
-onclick="paymentComingSoon('monthly')">
-PRO'ya Geç
-</button>
-
-</div>
-
-
-<div class="price-card">
-
-<h3>
-Yıllık
-</h3>
-
-<div class="price">
-1.499 TL
-</div>
-
-<p>
-365 gün
-</p>
-
-<ul class="feature-list">
-
-<li>
-Tüm PRO özellikler
-</li>
-
-<li>
-Sınırsız gelişmiş analiz
-</li>
-
-<li>
-Senaryo simülasyonu
-</li>
-
-<li>
-Detaylı karar raporları
-</li>
-
-<li>
-Fırsat maliyeti
-</li>
-
-</ul>
-
-
-<button
-class="btn btn-gold"
-style="width:100%"
-onclick="paymentComingSoon('yearly')">
-PRO'ya Geç
-</button>
-
-</div>
-
-</div>
-
-
-<div class="pro-box">
-
-<strong>
-🔐 Ödeme altyapısı
-</strong>
-
-<p>
-TARTI PRO ödeme sistemi PayTR entegrasyonu
-tamamlandığında aktif olacaktır.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div
-class="toast"
-id="toast">
-</div>
+<div class="toast" id="toast"></div>
 
 
 <script>
-
-/* =========================
+/* ============================
    SUPABASE
-========================= */
+============================ */
+const SUPABASE_URL="https://ccsmdgeytthszsemplzf.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_ymUk0_RRlGoQH28sMTrkRg_jlBgHGyx";
 
-const SUPABASE_URL =
-"https://ccsmdgeytthszsemplzf.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_ymUk0_RRlGoQH28sMTrkRg_jlBgHGyx";
-
-const supabaseClient =
-window.supabase.createClient(
+const supabaseClient=window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
 
+/* ============================
+   STATE
+============================ */
+let currentUser=null;
+let authMode="login";
+let lastResult=null;
 
-/* =========================
-   DEĞİŞKENLER
-========================= */
+/* ============================
+   INIT
+============================ */
+document.addEventListener("DOMContentLoaded",async()=>{
+  updateWeightLabel();
+  updateOptionNames();
 
-let currentUser = null;
-
-let authMode = "login";
-
-let selectedPriority = "balanced";
-
-let lastResult = null;
-
-
-/* =========================
-   BAŞLANGIÇ
-========================= */
-
-document.addEventListener(
-"DOMContentLoaded",
-async () => {
-
-  const {data} =
-    await supabaseClient.auth.getSession();
-
-  currentUser =
-    data.session?.user || null;
-
+  const {data}=await supabaseClient.auth.getSession();
+  currentUser=data.session?.user||null;
   updateAuthUI();
-
   await loadCommunity();
-
 });
 
-
-supabaseClient.auth.onAuthStateChange(
-async (_event,session) => {
-
-  currentUser =
-    session?.user || null;
-
+supabaseClient.auth.onAuthStateChange(async(_event,session)=>{
+  currentUser=session?.user||null;
   updateAuthUI();
-
   await loadCommunity();
-
 });
 
-
-/* =========================
+/* ============================
    AUTH
-========================= */
-
+============================ */
 function updateAuthUI(){
-
-  const button =
-    document.getElementById("authButton");
+  const button=document.getElementById("authButton");
 
   if(currentUser){
-
-    button.textContent =
-      "Hesabım";
-
-    button.onclick = () => {
-
-      showToast(
-        "Giriş yaptın: " +
-        (currentUser.email || "")
-      );
-
+    button.textContent="Hesabım";
+    button.onclick=()=>{
+      showToast("Giriş yaptın: "+(currentUser.email||""));
     };
-
   }else{
-
-    button.textContent =
-      "Giriş Yap";
-
-    button.onclick =
-      openAuth;
-
+    button.textContent="Giriş Yap";
+    button.onclick=openAuth;
   }
-
 }
-
 
 function openAuth(){
-
-  document.getElementById("authModal")
-    .style.display = "flex";
-
-  document.getElementById("authStatus")
-    .textContent = "";
-
+  document.getElementById("authModal").classList.add("show");
+  document.getElementById("authStatus").textContent="";
 }
-
 
 function closeAuth(){
-
-  document.getElementById("authModal")
-    .style.display = "none";
-
+  document.getElementById("authModal").classList.remove("show");
 }
-
 
 function toggleAuthMode(){
+  authMode=authMode==="login"?"signup":"login";
 
-  authMode =
-    authMode === "login"
-    ? "signup"
-    : "login";
+  document.getElementById("authTitle").textContent=
+    authMode==="login"?"Giriş Yap":"Hesap Oluştur";
 
-  document.getElementById("authTitle")
-    .textContent =
-    authMode === "login"
-    ? "Giriş Yap"
-    : "Hesap Oluştur";
-
-  document.getElementById("authToggle")
-    .textContent =
-    authMode === "login"
-    ? "Hesap oluştur"
-    : "Zaten hesabım var";
-
+  document.getElementById("authToggle").textContent=
+    authMode==="login"?"Hesap oluştur":"Zaten hesabım var";
 }
 
-
 async function submitAuth(){
+  const email=document.getElementById("authEmail").value.trim();
+  const password=document.getElementById("authPassword").value;
+  const status=document.getElementById("authStatus");
 
-  const email =
-    document.getElementById("authEmail")
-      .value.trim();
-
-  const password =
-    document.getElementById("authPassword")
-      .value;
-
-  const status =
-    document.getElementById("authStatus");
-
-  if(!email || !password){
-
-    status.textContent =
-      "E-posta ve şifre gerekli.";
-
+  if(!email||!password){
+    status.textContent="E-posta ve şifre gerekli.";
     return;
-
   }
 
-  if(password.length < 6){
-
-    status.textContent =
-      "Şifre en az 6 karakter olmalı.";
-
+  if(password.length<6){
+    status.textContent="Şifre en az 6 karakter olmalı.";
     return;
-
   }
 
-  status.textContent =
-    "İşlem yapılıyor...";
+  status.textContent="İşlem yapılıyor...";
 
   let response;
 
-  if(authMode === "login"){
-
-    response =
-      await supabaseClient.auth
-        .signInWithPassword({
-          email,
-          password
-        });
-
+  if(authMode==="login"){
+    response=await supabaseClient.auth.signInWithPassword({email,password});
   }else{
-
-    response =
-      await supabaseClient.auth
-        .signUp({
-          email,
-          password
-        });
-
+    response=await supabaseClient.auth.signUp({email,password});
   }
 
   if(response.error){
-
-    status.textContent =
-      response.error.message;
-
+    status.textContent=response.error.message;
     return;
-
   }
 
-  if(authMode === "signup"){
-
-    status.textContent =
-      "Hesabın oluşturuldu. E-posta doğrulaması gerekebilir.";
-
+  if(authMode==="signup"){
+    status.textContent="Hesabın oluşturuldu. E-posta doğrulaması gerekebilir.";
   }else{
-
-    status.textContent =
-      "Giriş başarılı.";
-
-    setTimeout(
-      closeAuth,
-      700
-    );
-
+    status.textContent="Giriş başarılı.";
+    setTimeout(closeAuth,700);
   }
-
 }
 
-
-/* =========================
-   KATEGORİ
-========================= */
-
+/* ============================
+   NAVIGATION
+============================ */
 function selectCategory(category){
-
-  document.getElementById("category")
-    .value = category;
-
+  document.getElementById("category").value=category;
   scrollToDecision();
-
 }
-
 
 function scrollToDecision(){
-
-  document.getElementById(
-    "decisionSection"
-  ).scrollIntoView({
-    behavior:"smooth"
+  document.getElementById("decisionSection").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
   });
-
 }
 
-
-/* =========================
-   ÖNCELİK
-========================= */
-
-function setPriority(
-button,
-priority
-){
-
-  selectedPriority =
-    priority;
-
-  document.querySelectorAll(
-    ".priority button"
-  ).forEach(btn => {
-
-    btn.classList.remove(
-      "active"
-    );
-
-  });
-
-  button.classList.add(
-    "active"
-  );
-
-}
-
-
-/* =========================
-   ANALİZ
-========================= */
-
-function analyzeDecision(
-isPremium
-){
-
-  const category =
-    document.getElementById(
-      "category"
-    ).value;
-
-  const title =
-    document.getElementById(
-      "decisionTitle"
-    ).value.trim();
-
-  const a =
-    document.getElementById(
-      "optionA"
-    ).value.trim();
-
-  const b =
-    document.getElementById(
-      "optionB"
-    ).value.trim();
-
-  if(
-    !category ||
-    !title ||
-    !a ||
-    !b
-  ){
-
-    showToast(
-      "Kategori, karar ve iki seçenek gerekli."
-    );
-
-    return;
-
-  }
-
-
-  if(isPremium){
-
-    if(!currentUser){
-
-      showToast(
-        "PRO özellikleri için önce giriş yapmalısın."
-      );
-
-      openAuth();
-
-      return;
-
-    }
-
-    checkPremiumAndRun();
-
-    return;
-
-  }
-
-
-  const scores =
-    calculateScores(
-      a,
-      b,
-      selectedPriority
-    );
-
-  showResult(
-    category,
-    title,
-    a,
-    b,
-    scores
-  );
-
-}
-
-
-/* =========================
-   ÜCRETSİZ KARAR MOTORU
-========================= */
-
-function calculateScores(
-a,
-b,
-priority
-){
-
-  const textA =
-    a.toLowerCase();
-
-  const textB =
-    b.toLowerCase();
-
-  let scoreA = 50;
-  let scoreB = 50;
-
-
-  const positive = [
-    "iyi",
-    "kaliteli",
-    "ucuz",
-    "hızlı",
-    "güvenli",
-    "kolay",
-    "avantaj",
-    "rahat",
-    "güçlü",
-    "uzun",
-    "profesyonel",
-    "uygun"
-  ];
-
-
-  const negative = [
-    "pahalı",
-    "riskli",
-    "zor",
-    "yavaş",
-    "kötü",
-    "sorun",
-    "masraf",
-    "belirsiz",
-    "zayıf"
-  ];
-
-
-  positive.forEach(word => {
-
-    if(textA.includes(word))
-      scoreA += 4;
-
-    if(textB.includes(word))
-      scoreB += 4;
-
-  });
-
-
-  negative.forEach(word => {
-
-    if(textA.includes(word))
-      scoreA -= 4;
-
-    if(textB.includes(word))
-      scoreB -= 4;
-
-  });
-
-
-  const bonus = {
-
-    money:6,
-    time:6,
-    quality:6,
-    trust:6,
-    balanced:3
-
+/* ============================
+   INPUT / WEIGHTS
+============================ */
+function getWeights(){
+  return {
+    cost:Math.max(0,Number(document.getElementById("wCost").value)||0),
+    time:Math.max(0,Number(document.getElementById("wTime").value)||0),
+    quality:Math.max(0,Number(document.getElementById("wQuality").value)||0),
+    safety:Math.max(0,Number(document.getElementById("wSafety").value)||0),
+    fit:Math.max(0,Number(document.getElementById("wFit").value)||0),
+    future:Math.max(0,Number(document.getElementById("wFuture").value)||0)
   };
+}
 
+function updateWeightLabel(){
+  const ids=[
+    ["wCost","wCostVal","displayCostWeight"],
+    ["wTime","wTimeVal","displayTimeWeight"],
+    ["wQuality","wQualityVal","displayQualityWeight"],
+    ["wSafety","wSafetyVal","displaySafetyWeight"],
+    ["wFit","wFitVal","displayFitWeight"],
+    ["wFuture","wFutureVal","displayFutureWeight"]
+  ];
 
-  scoreA +=
-    bonus[priority] || 3;
+  let total=0;
 
-  scoreB +=
-    bonus[priority] || 3;
+  ids.forEach(([input,label,display])=>{
+    const value=Math.max(0,Number(document.getElementById(input).value)||0);
+    total+=value;
+    document.getElementById(label).textContent=value+"%";
+    document.getElementById(display).textContent="Ağırlık %"+value;
+  });
 
+  document.getElementById("totalWeight").textContent=total+"%";
+}
 
-  scoreA =
-    Math.max(
-      1,
-      Math.min(
-        99,
-        scoreA
-      )
-    );
+function syncRating(inputId,valueId){
+  document.getElementById(valueId).textContent=
+    document.getElementById(inputId).value;
+}
 
-  scoreB =
-    Math.max(
-      1,
-      Math.min(
-        99,
-        scoreB
-      )
-    );
+function updateOptionNames(){
+  const a=document.getElementById("optionA").value.trim()||"Seçenek A";
+  const b=document.getElementById("optionB").value.trim()||"Seçenek B";
 
+  ["Cost","Time","Quality","Safety","Fit","Future"].forEach(key=>{
+    const ae=document.getElementById("aName"+key);
+    const be=document.getElementById("bName"+key);
+    if(ae)ae.textContent=a;
+    if(be)be.textContent=b;
+  });
+
+  document.getElementById("resultAName").textContent=a;
+  document.getElementById("resultBName").textContent=b;
+}
+
+document.getElementById("optionA").addEventListener("input",updateOptionNames);
+document.getElementById("optionB").addEventListener("input",updateOptionNames);
+
+/* ============================
+   CALCULATION
+============================ */
+function collectRatings(){
+  return {
+    cost:[Number(document.getElementById("costA").value),Number(document.getElementById("costB").value)],
+    time:[Number(document.getElementById("timeA").value),Number(document.getElementById("timeB").value)],
+    quality:[Number(document.getElementById("qualityA").value),Number(document.getElementById("qualityB").value)],
+    safety:[Number(document.getElementById("safetyA").value),Number(document.getElementById("safetyB").value)],
+    fit:[Number(document.getElementById("fitA").value),Number(document.getElementById("fitB").value)],
+    future:[Number(document.getElementById("futureA").value),Number(document.getElementById("futureB").value)]
+  };
+}
+
+function normalizeWeights(weights){
+  const total=Object.values(weights).reduce((a,b)=>a+b,0);
+  if(total<=0){
+    return {
+      cost:1/6,time:1/6,quality:1/6,
+      safety:1/6,fit:1/6,future:1/6
+    };
+  }
+  const normalized={};
+  Object.keys(weights).forEach(k=>{
+    normalized[k]=weights[k]/total;
+  });
+  return normalized;
+}
+
+function calculateWeighted(weights,ratings){
+  const w=normalizeWeights(weights);
+  let a=0,b=0;
+
+  Object.keys(w).forEach(key=>{
+    a+=(ratings[key][0]/10)*w[key]*100;
+    b+=(ratings[key][1]/10)*w[key]*100;
+  });
 
   return {
-    a:scoreA,
-    b:scoreB
+    a:Number(a.toFixed(1)),
+    b:Number(b.toFixed(1)),
+    weights:w
   };
-
 }
 
+function calculateDecision(){
+  const category=document.getElementById("category").value;
+  const title=document.getElementById("decisionTitle").value.trim();
+  const a=document.getElementById("optionA").value.trim();
+  const b=document.getElementById("optionB").value.trim();
 
-/* =========================
-   SONUÇ
-========================= */
+  if(!category||!title||!a||!b){
+    showToast("Kategori, karar ve iki seçenek gerekli.");
+    return;
+  }
 
-function showResult(
-category,
-title,
-a,
-b,
-scores
-){
+  updateOptionNames();
 
-  const result =
-    document.getElementById(
-      "result"
-    );
+  const weights=getWeights();
+  const total=Object.values(weights).reduce((x,y)=>x+y,0);
 
-  const winner =
-    scores.a >= scores.b
-    ? a
-    : b;
+  if(total<=0){
+    showToast("En az bir kriter için ağırlık vermelisin.");
+    return;
+  }
 
-  const difference =
-    Math.abs(
-      scores.a - scores.b
-    );
+  const ratings=collectRatings();
+  const calc=calculateWeighted(weights,ratings);
 
-  const confidence =
-    Math.min(
-      99,
-      55 + difference * 3
-    );
+  showDecisionResult({
+    category,title,a,b,
+    weights,
+    ratings,
+    scoreA:calc.a,
+    scoreB:calc.b
+  });
+}
 
+function showDecisionResult(data){
+  const {
+    category,title,a,b,weights,ratings,scoreA,scoreB
+  }=data;
 
-  document.getElementById(
-    "winner"
-  ).textContent =
-    "ÖNERİM: " + winner;
+  const gap=Math.abs(scoreA-scoreB);
+  const winner=scoreA>=scoreB?a:b;
+  const loser=scoreA>=scoreB?b:a;
 
+  let strength;
+  if(gap<3) strength="çok düşük — iki seçenek neredeyse eşit";
+  else if(gap<7) strength="düşük — karar hassas";
+  else if(gap<12) strength="orta — belirgin bir avantaj var";
+  else if(gap<20) strength="yüksek — güçlü bir avantaj var";
+  else strength="çok yüksek — sonuç oldukça net";
 
-  document.getElementById(
-    "scoreA"
-  ).textContent =
-    scores.a + "/100";
+  document.getElementById("winner").textContent=winner;
+  document.getElementById("resultAScore").textContent=scoreA.toFixed(1)+"/100";
+  document.getElementById("resultBScore").textContent=scoreB.toFixed(1)+"/100";
+  document.getElementById("resultABar").style.width=scoreA+"%";
+  document.getElementById("resultBBar").style.width=scoreB+"%";
 
+  document.getElementById("summary").innerHTML=
+    `<strong>${escapeHtml(winner)}</strong>, belirlediğin kriter ağırlıkları ve verdiğin puanlara göre ${escapeHtml(loser)} seçeneğinin <strong>${gap.toFixed(1)} puan</strong> önünde.`;
 
-  document.getElementById(
-    "scoreB"
-  ).textContent =
-    scores.b + "/100";
+  document.getElementById("verdict").textContent=
+    `Karar gücü: ${strength}. Bu sonuç, dışarıdan gelen bir "doğru cevap" değil; senin verdiğin değerlendirmelerin şeffaf matematiksel sonucudur.`;
 
+  document.getElementById("gapInsight").textContent=
+    `${gap.toFixed(1)} puan. Fark küçüldükçe karar daha hassas hale gelir.`;
 
-  document.getElementById(
-    "barA"
-  ).style.width =
-    scores.a + "%";
+  document.getElementById("confidenceInsight").textContent=
+    strength.charAt(0).toUpperCase()+strength.slice(1)+".";
 
+  const topCriterion=getTopCriterion(weights,ratings,scoreA>=scoreB?0:1);
 
-  document.getElementById(
-    "barB"
-  ).style.width =
-    scores.b + "%";
+  document.getElementById("changeInsight").textContent=
+    topCriterion
+      ? `${topCriterion.name} kriteri sonucu en fazla etkileyen alanlardan biri.`
+      : "Kriter ağırlıkları veya puanları değişirse sonuç değişebilir.";
 
+  buildBreakdown(weights,ratings,a,b,scoreA,scoreB);
 
-  document.getElementById(
-    "resultText"
-  ).innerHTML = `
-    <p>
-      <strong>${escapeHtml(winner)}</strong>
-      mevcut kriterlere göre öne çıkıyor.
-      Karar güven seviyesi yaklaşık
-      <strong>%${confidence}</strong>.
-    </p>
-  `;
-
-
-  document.getElementById(
-    "resultReasons"
-  ).innerHTML = `
-
-    <div style="margin-top:15px">
-
-      <p>
-        📌 Öncelik:
-        ${escapeHtml(selectedPriority)}
-      </p>
-
-      <p style="margin-top:7px">
-        📊 Puan farkı:
-        ${difference}
-      </p>
-
-      ${
-        difference < 8
-        ? `
-        <p
-        style="margin-top:8px;color:#f3c969">
-        ⚠️ Bu karar birbirine oldukça yakın.
-        Daha detaylı değerlendirme için TARTI PRO kullanılabilir.
-        </p>
-        `
-        : ""
-      }
-
-    </div>
-
-  `;
-
-
-  lastResult = {
-
-    category,
-    title,
-    optionA:a,
-    optionB:b,
-    scoreA:scores.a,
-    scoreB:scores.b,
-    winner
-
+  lastResult={
+    category,title,optionA:a,optionB:b,
+    weights,ratings,scoreA,scoreB,winner
   };
 
+  document.getElementById("result").classList.add("show");
+  document.getElementById("proSection").classList.remove("show");
 
-  result.classList.add(
-    "show"
-  );
-
-
-  result.scrollIntoView({
+  document.getElementById("result").scrollIntoView({
     behavior:"smooth",
     block:"center"
   });
-
 }
 
+function getTopCriterion(weights,ratings,winnerIndex){
+  const names={
+    cost:"Maliyet",
+    time:"Zaman",
+    quality:"Kalite",
+    safety:"Güven / Risk",
+    fit:"Kişisel Uyum",
+    future:"Gelecek Etkisi"
+  };
 
-/* =========================
-   KAYDET
-========================= */
+  const arr=Object.keys(weights).map(key=>{
+    const diff=Math.abs(ratings[key][0]-ratings[key][1]);
+    return {
+      key,
+      name:names[key],
+      impact:diff*weights[key]
+    };
+  });
 
-async function saveDecision(){
+  arr.sort((a,b)=>b.impact-a.impact);
+  return arr[0];
+}
 
+function buildBreakdown(weights,ratings,a,b,scoreA,scoreB){
+  const names={
+    cost:"💰 Maliyet",
+    time:"⏱️ Zaman",
+    quality:"⭐ Kalite",
+    safety:"🛡️ Güven / Risk",
+    fit:"❤️ Kişisel Uyum",
+    future:"🔮 Gelecek Etkisi"
+  };
+
+  const normalized=normalizeWeights(weights);
+  let html="";
+
+  Object.keys(normalized).forEach(key=>{
+    const aContribution=(ratings[key][0]/10)*normalized[key]*100;
+    const bContribution=(ratings[key][1]/10)*normalized[key]*100;
+
+    html+=`
+      <div class="break-row">
+        <div>
+          <strong>${names[key]}</strong>
+          <div class="mini-bar" style="margin-top:6px">
+            <div style="width:${Math.min(100,normalized[key]*100*2)}%"></div>
+          </div>
+        </div>
+        <div style="text-align:right">${aContribution.toFixed(1)}</div>
+        <div style="text-align:right">${bContribution.toFixed(1)}</div>
+      </div>
+    `;
+  });
+
+  html=`
+    <div class="break-row" style="color:#9da5bb;font-size:12px">
+      <div>Kriter</div><div style="text-align:right">${escapeHtml(a)}</div><div style="text-align:right">${escapeHtml(b)}</div>
+    </div>`+html;
+
+  document.getElementById("breakdownRows").innerHTML=html;
+}
+
+/* ============================
+   PREMIUM
+============================ */
+function openPremium(){
+  document.getElementById("premiumModal").classList.add("show");
+}
+
+function closePremium(){
+  document.getElementById("premiumModal").classList.remove("show");
+}
+
+function paymentComingSoon(plan){
+  const names={weekly:"Haftalık",monthly:"Aylık",yearly:"Yıllık"};
+  showToast(names[plan]+" TARTI PRO seçildi. PayTR ödeme bağlantısı henüz aktif değil.");
+}
+
+async function runPremiumFeature(){
   if(!lastResult){
-
-    showToast(
-      "Önce bir karar oluştur."
-    );
-
+    showToast("Önce bir karar hesapla.");
     return;
-
   }
-
 
   if(!currentUser){
-
-    showToast(
-      "Kararı kaydetmek için giriş yapmalısın."
-    );
-
+    showToast("PRO analizi için önce giriş yapmalısın.");
     openAuth();
-
     return;
-
   }
 
-
-  const {error} =
-    await supabaseClient
-      .from("decisions")
-      .insert({
-
-        user_id:
-          currentUser.id,
-
-        category:
-          lastResult.category,
-
-        title:
-          lastResult.title,
-
-        option_a:
-          lastResult.optionA,
-
-        option_b:
-          lastResult.optionB,
-
-        score_a:
-          lastResult.scoreA,
-
-        score_b:
-          lastResult.scoreB,
-
-        result:
-          lastResult.winner,
-
-        is_public:true
-
-      });
-
+  const {data,error}=await supabaseClient
+    .from("premium")
+    .select("*")
+    .eq("user_id",currentUser.id)
+    .maybeSingle();
 
   if(error){
-
-    showToast(
-      "Karar kaydedilemedi."
-    );
-
-    console.error(error);
-
+    showToast("PRO üyelik durumu kontrol edilemedi.");
     return;
-
   }
 
+  if(!data||!data.is_active){
+    showToast("Bu gelişmiş araç TARTI PRO üyeleri içindir.");
+    openPremium();
+    return;
+  }
 
-  showToast(
-    "Kararın başarıyla kaydedildi."
-  );
-
-
-  await loadCommunity();
-
+  generatePremiumAnalysis();
 }
 
+function generatePremiumAnalysis(){
+  const r=lastResult;
+  const winnerIndex=r.scoreA>=r.scoreB?0:1;
+  const loserIndex=winnerIndex===0?1:0;
 
-/* =========================
-   YENİ KARAR
-========================= */
+  const names={
+    cost:"Maliyet",
+    time:"Zaman",
+    quality:"Kalite",
+    safety:"Güven / Risk",
+    fit:"Kişisel Uyum",
+    future:"Gelecek Etkisi"
+  };
 
-function newDecision(){
+  let strongest=null;
+  let weakest=null;
 
-  document.getElementById(
-    "decisionTitle"
-  ).value = "";
+  Object.keys(r.weights).forEach(key=>{
+    const diff=r.ratings[key][winnerIndex]-r.ratings[key][loserIndex];
 
-  document.getElementById(
-    "optionA"
-  ).value = "";
+    if(!strongest||diff>strongest.diff)strongest={key,diff};
+    if(!weakest||diff<weakest.diff)weakest={key,diff};
+  });
 
-  document.getElementById(
-    "optionB"
-  ).value = "";
+  document.getElementById("sensitivityText").textContent=
+    strongest&&strongest.diff>0
+      ? `${names[strongest.key]} kriterinde ${r.winner} belirgin avantaj taşıyor. Bu kriterin ağırlığını düşürmek sonucu daha hassas hale getirebilir.`
+      : "Seçenekler kriterler açısından birbirine yakın; sonuç ağırlık değişimlerine daha duyarlı olabilir.";
 
-  document.getElementById(
-    "extraInfo"
-  ).value = "";
+  document.getElementById("opportunityText").textContent=
+    `${r.optionB===r.winner?r.optionA:r.optionB} seçilmediğinde, diğer seçeneğin göreceli avantajı ${Math.abs(r.scoreA-r.scoreB).toFixed(1)} puanlık fark olarak ortaya çıkıyor. Bu parasal bir kayıp hesabı değildir; göreceli karar farkıdır.`;
 
-  document.getElementById(
-    "result"
-  ).classList.remove(
-    "show"
+  const testWeights={...r.weights};
+  const topKey=strongest?.key||"quality";
+  const original=testWeights[topKey];
+  testWeights[topKey]=Math.max(0,original-0.10);
+  const boosted=normalizeWeights(testWeights);
+  const test=calculateWeighted(
+    Object.fromEntries(Object.keys(boosted).map(k=>[k,boosted[k]])),
+    r.ratings
   );
 
-  scrollToDecision();
+  const newWinner=test.a>=test.b?r.optionA:r.optionB;
 
+  document.getElementById("weightTestText").textContent=
+    `${names[topKey]} ağırlığı yaklaşık 10 puan azaltılarak yeniden normalize edildiğinde öne çıkan seçenek: ${newWinner}. Bu test kararın ne kadar hassas olduğunu gösterir.`;
+
+  document.getElementById("scenarioText").textContent=
+    `En güçlü kriter olan ${names[strongest?.key||"quality"]} üzerinde puan farkı 1–2 puan azalırsa mevcut sonuç yeniden değerlendirilmeye değer.`;
+
+  document.getElementById("proSection").classList.add("show");
+  document.getElementById("proSection").scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
 }
 
-
-/* =========================
-   PAYLAŞ
-========================= */
-
-async function shareResult(){
-
+/* ============================
+   SAVE
+============================ */
+async function saveDecision(){
   if(!lastResult){
-
-    showToast(
-      "Paylaşılacak sonuç yok."
-    );
-
+    showToast("Önce bir karar hesapla.");
     return;
-
   }
 
+  if(!currentUser){
+    showToast("Kararı kaydetmek için giriş yapmalısın.");
+    openAuth();
+    return;
+  }
 
-  const text =
-    `TARTI sonucu:
+  const r=lastResult;
 
-${lastResult.title}
+  const {error}=await supabaseClient
+    .from("decisions")
+    .insert({
+      user_id:currentUser.id,
+      category:r.category,
+      title:r.title,
+      option_a:r.optionA,
+      option_b:r.optionB,
+      score_a:Math.round(r.scoreA),
+      score_b:Math.round(r.scoreB),
+      result:r.winner,
+      is_public:true
+    });
 
-Öneri: ${lastResult.winner}
+  if(error){
+    showToast("Karar kaydedilemedi.");
+    console.error(error);
+    return;
+  }
 
-${lastResult.optionA}: ${lastResult.scoreA}/100
+  showToast("Kararın başarıyla kaydedildi.");
+  await loadCommunity();
+}
 
-${lastResult.optionB}: ${lastResult.scoreB}/100
+/* ============================
+   SHARE
+============================ */
+async function shareResult(){
+  if(!lastResult){
+    showToast("Paylaşılacak sonuç yok.");
+    return;
+  }
+
+  const r=lastResult;
+
+  const text=
+`TARTI sonucu
+
+${r.title}
+
+Öneri: ${r.winner}
+
+${r.optionA}: ${r.scoreA.toFixed(1)}/100
+${r.optionB}: ${r.scoreB.toFixed(1)}/100
 
 https://ghostwarley4582-cpu.github.io/Birle-tir/`;
 
-
   if(navigator.share){
-
     try{
-
       await navigator.share({
-
-        title:
-          "TARTI Karar Sonucu",
-
+        title:"TARTI Karar Sonucu",
         text
-
       });
-
     }catch(e){}
-
   }else{
-
     try{
-
-      await navigator.clipboard
-        .writeText(text);
-
-      showToast(
-        "Sonuç panoya kopyalandı."
-      );
-
+      await navigator.clipboard.writeText(text);
+      showToast("Sonuç panoya kopyalandı.");
     }catch(e){
-
-      showToast(
-        "Paylaşım desteklenmiyor."
-      );
-
+      showToast("Paylaşım desteklenmiyor.");
     }
-
   }
-
 }
 
+/* ============================
+   NEW DECISION
+============================ */
+function newDecision(){
+  document.getElementById("decisionTitle").value="";
+  document.getElementById("optionA").value="";
+  document.getElementById("optionB").value="";
+  document.getElementById("extraInfo").value="";
 
-/* =========================
-   PREMIUM
-========================= */
+  document.getElementById("category").value="";
 
-function openPremium(){
+  document.querySelectorAll(".range").forEach(el=>{
+    el.value=5;
+  });
 
-  document.getElementById(
-    "premiumModal"
-  ).style.display =
-    "flex";
+  document.querySelectorAll("[id$='Val']").forEach(el=>{
+    if(el.id.includes("A")||el.id.includes("B"))el.textContent="5";
+  });
 
+  lastResult=null;
+
+  document.getElementById("result").classList.remove("show");
+  document.getElementById("proSection").classList.remove("show");
+
+  scrollToDecision();
 }
 
-
-function closePremium(){
-
-  document.getElementById(
-    "premiumModal"
-  ).style.display =
-    "none";
-
-}
-
-
-function paymentComingSoon(
-plan
-){
-
-  const names = {
-
-    weekly:"Haftalık",
-
-    monthly:"Aylık",
-
-    yearly:"Yıllık"
-
-  };
-
-
-  showToast(
-    names[plan] +
-    " TARTI PRO seçildi. PayTR ödeme sistemi henüz aktif değil."
-  );
-
-}
-
-
-/* =========================
-   PREMIUM KONTROL
-========================= */
-
-async function checkPremiumAndRun(){
-
-  if(!currentUser){
-
-    openAuth();
-
-    return;
-
-  }
-
-
-  const {data,error} =
-    await supabaseClient
-      .from("premium")
-      .select("*")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .maybeSingle();
-
-
-  if(error){
-
-    showToast(
-      "PRO durumu kontrol edilemedi."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !data ||
-    !data.is_active
-  ){
-
-    showToast(
-      "Bu özellik TARTI PRO üyeleri içindir."
-    );
-
-    openPremium();
-
-    return;
-
-  }
-
-
-  runPremiumAnalysis();
-
-}
-
-
-/* =========================
-   PRO ANALİZ
-========================= */
-
-function runPremiumAnalysis(){
-
-  const category =
-    document.getElementById(
-      "category"
-    ).value;
-
-  const a =
-    document.getElementById(
-      "optionA"
-    ).value.trim();
-
-  const b =
-    document.getElementById(
-      "optionB"
-    ).value.trim();
-
-  const title =
-    document.getElementById(
-      "decisionTitle"
-    ).value.trim();
-
-
-  const base =
-    calculateScores(
-      a,
-      b,
-      selectedPriority
-    );
-
-
-  const gap =
-    Math.abs(
-      base.a -
-      base.b
-    );
-
-
-  const confidence =
-    Math.min(
-      98,
-      60 + gap * 4
-    );
-
-
-  const winner =
-    base.a >= base.b
-    ? a
-    : b;
-
-
-  showResult(
-    category,
-    title,
-    a,
-    b,
-    base
-  );
-
-
-  document.getElementById(
-    "resultReasons"
-  ).innerHTML += `
-
-    <div class="pro-box">
-
-      <h3>
-        ✦ TARTI PRO Gelişmiş Analiz
-      </h3>
-
-      <p>
-        🎯 Karar güveni:
-        <strong>%${confidence}</strong>
-      </p>
-
-      <p>
-        📊 Puan farkı:
-        <strong>${gap}</strong>
-      </p>
-
-      <p>
-        ⚠️ En büyük belirsizlik:
-        Seçenekler hakkında verilen bilginin miktarı.
-      </p>
-
-      <p>
-        💰 Fırsat maliyeti:
-        Diğer seçeneğin sağlayabileceği faydaları
-        kaybetme ihtimali.
-      </p>
-
-      <p>
-        🔄 Kararı değiştirebilecek faktör:
-        Öncelik ağırlıklarının değişmesi.
-      </p>
-
-      <p>
-        🧠 Nihai öneri:
-        <strong>${escapeHtml(winner)}</strong>
-      </p>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================
-   TOPLULUK
-========================= */
-
+/* ============================
+   COMMUNITY
+============================ */
 async function loadCommunity(){
+  const box=document.getElementById("communityDecisions");
+  const commentsBox=document.getElementById("communityComments");
 
-  const box =
-    document.getElementById(
-      "communityDecisions"
-    );
-
-  const commentsBox =
-    document.getElementById(
-      "communityComments"
-    );
-
-
-  const {data,error} =
-    await supabaseClient
-      .from("decisions")
-      .select("*")
-      .eq(
-        "is_public",
-        true
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(10);
-
+  const {data,error}=await supabaseClient
+    .from("decisions")
+    .select("*")
+    .eq("is_public",true)
+    .order("created_at",{ascending:false})
+    .limit(10);
 
   if(error){
-
-    box.innerHTML =
-      `
-      <p style="color:#ff667d">
-        Kararlar yüklenemedi.
-      </p>
-      `;
-
+    box.innerHTML='<div class="empty">Kararlar yüklenemedi.</div>';
     return;
-
   }
 
-
-  if(
-    !data ||
-    data.length === 0
-  ){
-
-    box.innerHTML =
-      `
-      <p style="color:#9da5bb">
-        Henüz paylaşılmış karar yok.
-      </p>
-      `;
-
+  if(!data||!data.length){
+    box.innerHTML='<div class="empty">Henüz paylaşılmış karar yok.</div>';
   }else{
-
-    box.innerHTML =
-      data.map(
-        decision => {
-
-          return `
-
-          <div class="comment">
-
-            <strong>
-              ${escapeHtml(
-                decision.title
-              )}
-            </strong>
-
-            <p style="margin-top:6px;color:#9da5bb">
-
-              ${escapeHtml(
-                decision.option_a
-              )}
-
-              vs
-
-              ${escapeHtml(
-                decision.option_b
-              )}
-
-            </p>
-
-            <p style="margin-top:6px">
-
-              🏆
-              ${escapeHtml(
-                decision.result || "-"
-              )}
-
-            </p>
-
-            <small>
-
-              ${new Date(
-                decision.created_at
-              ).toLocaleDateString(
-                "tr-TR"
-              )}
-
-            </small>
-
-          </div>
-
-          `;
-
-        }
-      ).join("");
-
+    box.innerHTML=data.map(d=>`
+      <div class="comment">
+        <strong>${escapeHtml(d.title)}</strong>
+        <p>${escapeHtml(d.option_a)} vs ${escapeHtml(d.option_b)}</p>
+        <p>🏆 ${escapeHtml(d.result||"-")}</p>
+        <small>${new Date(d.created_at).toLocaleDateString("tr-TR")}</small>
+      </div>
+    `).join("");
   }
 
+  const {data:comments}=await supabaseClient
+    .from("comments")
+    .select("*")
+    .order("created_at",{ascending:false})
+    .limit(10);
 
-  const {data:comments} =
-    await supabaseClient
-      .from("comments")
-      .select("*")
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(10);
-
-
-  if(
-    comments &&
-    comments.length
-  ){
-
-    commentsBox.innerHTML =
-      comments.map(
-        comment => {
-
-          return `
-
-          <div class="comment">
-
-            <p>
-              ${escapeHtml(
-                comment.content
-              )}
-            </p>
-
-            <small>
-
-              ${new Date(
-                comment.created_at
-              ).toLocaleDateString(
-                "tr-TR"
-              )}
-
-            </small>
-
-          </div>
-
-          `;
-
-        }
-      ).join("");
-
+  if(comments&&comments.length){
+    commentsBox.innerHTML=comments.map(c=>`
+      <div class="comment">
+        <p>${escapeHtml(c.content)}</p>
+        <small>${new Date(c.created_at).toLocaleDateString("tr-TR")}</small>
+      </div>
+    `).join("");
+  }else{
+    commentsBox.innerHTML='<div class="empty">Henüz yorum bulunmuyor.</div>';
   }
-
 }
 
-
-/* =========================
-   GÜVENLİ HTML
-========================= */
-
-function escapeHtml(text){
-
-  if(
-    text === null ||
-    text === undefined
-  ){
-
-    return "";
-
-  }
-
-
-  return String(text)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-
+/* ============================
+   HELPERS
+============================ */
+function escapeHtml(value){
+  if(value===null||value===undefined)return "";
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
+function showToast(message){
+  const toast=document.getElementById("toast");
+  toast.textContent=message;
+  toast.classList.add("show");
 
-/* =========================
-   BİLDİRİM
-========================= */
-
-function showToast(
-message
-){
-
-  const toast =
-    document.getElementById(
-      "toast"
-    );
-
-  toast.textContent =
-    message;
-
-  toast.classList.add(
-    "show"
-  );
-
-
-  setTimeout(
-    () => {
-
-      toast.classList.remove(
-        "show"
-      );
-
-    },
-    3500
-  );
-
+  setTimeout(()=>{
+    toast.classList.remove("show");
+  },3500);
 }
-
 </script>
 
 </body>
-  </html>
+</html>
