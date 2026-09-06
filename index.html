@@ -3,275 +3,561 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080a12">
-<meta name="description" content="TARTI — Seçeneklerini gerçek veriler ve şeffaf hesaplamalarla karşılaştır.">
-<title>TARTI — Akıllı Karar Motoru</title>
+<meta name="theme-color" content="#0b0d14">
+<title>TARTI — Seçeneklerini TART.</title>
+<meta name="description" content="TARTI, seçeneklerini ölçülebilir verilerle karşılaştıran akıllı karar platformudur.">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#070910;--panel:#101421;--panel2:#151a29;--line:#293149;--text:#f7f7fb;--muted:#98a1b8;--purple:#7d5cff;--purple2:#a998ff;--teal:#48d8c2;--gold:#efc65e;--green:#35d39a;--red:#ff6a80}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 80% 0%,rgba(125,92,255,.14),transparent 28%),radial-gradient(circle at 0 45%,rgba(72,216,194,.07),transparent 25%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:inherit}.wrap{width:min(1040px,94%);margin:auto}
-header{position:sticky;top:0;z-index:20;background:rgba(7,9,16,.9);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.07)}.nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:10px}.logo{font-size:25px;font-weight:950;letter-spacing:6px}.logo b{color:var(--purple2)}.nav-actions{display:flex;gap:8px}.btn{border:1px solid var(--line);background:var(--panel2);color:#fff;border-radius:12px;padding:10px 14px}.btn:hover{border-color:var(--purple)}.primary{background:linear-gradient(135deg,var(--purple),#5e43dd);border:0}.gold{background:linear-gradient(135deg,#c99830,#f0d070);color:#171209;border:0}.danger{color:#ff9aaa}
-.hero{text-align:center;padding:55px 0 25px}.eyebrow{display:inline-flex;border:1px solid rgba(125,92,255,.35);background:rgba(125,92,255,.09);color:#cec7ff;border-radius:99px;padding:7px 12px;font-size:12px}.hero h1{font-size:clamp(42px,8vw,72px);line-height:1;margin:17px 0 12px;letter-spacing:-3px}.hero .tart{color:var(--purple2)}.hero p{color:var(--muted);max-width:690px;margin:auto;line-height:1.65;font-size:16px}.hero-actions{margin-top:20px;display:flex;justify-content:center;gap:9px;flex-wrap:wrap}
-.section{padding:20px 0}.card{background:rgba(16,20,33,.92);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 15px 50px rgba(0,0,0,.14)}.section-title{margin:0 0 5px;font-size:25px}.muted{color:var(--muted)}.small{font-size:12px;line-height:1.55}
-.step{display:grid;grid-template-columns:42px 1fr;gap:13px;margin-bottom:18px}.stepno{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(125,92,255,.16);border:1px solid rgba(125,92,255,.55);color:#d7d0ff;font-weight:900}.step h3{margin:2px 0 8px;font-size:20px}
-label{display:block;font-size:13px;color:#d9ddec;margin:0 0 6px}.field{width:100%;background:#080b14;border:1px solid #30384f;color:#fff;border-radius:12px;padding:12px 13px;outline:0}.field:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(125,92,255,.12)}textarea.field{min-height:70px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.select-wrap{position:relative}.select-wrap:after{content:"⌄";position:absolute;right:13px;top:10px;color:#bfc5d7;pointer-events:none}.select-wrap select{appearance:none}
-.alt-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.alt-list{display:grid;gap:8px;margin-top:10px}.alt{display:grid;grid-template-columns:34px 1fr 38px;gap:8px;align-items:center}.letter{width:34px;height:34px;border-radius:10px;background:#171d30;border:1px solid #353e59;display:grid;place-items:center;color:#cfc7ff;font-weight:900}.iconbtn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:#151a29;color:#ff8da0;font-size:20px}.example-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{border:1px solid #30384f;background:#0d111c;color:#c8cce0;border-radius:99px;padding:6px 9px;font-size:11px;cursor:pointer}
-.table-box{width:100%;overflow:hidden;border:1px solid var(--line);border-radius:14px}.matrix{width:100%;border-collapse:collapse;table-layout:fixed}.matrix th,.matrix td{border-bottom:1px solid rgba(255,255,255,.07);padding:8px 5px;text-align:center;font-size:11px}.matrix th{background:#171c2b;color:#dfe3ef}.matrix th:first-child,.matrix td:first-child{text-align:left;width:31%;background:#111624}.matrix input{width:100%;min-width:0;background:#080b14;border:1px solid #30384f;border-radius:8px;color:#fff;padding:8px 3px;text-align:center;font-weight:750;font-size:13px}.unit{display:block;color:#7f899f;font-size:9px;margin-top:2px}.dir{font-size:9px;color:#8e97ad}.total{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;background:#0c101a;border:1px solid var(--line);border-radius:11px;margin-top:8px}.total strong{color:#d9d2ff}.weight-note{font-size:11px;color:var(--muted)}
-.result{display:none}.result.show{display:block}.winner{padding:18px;border:1px solid rgba(53,211,154,.3);background:rgba(53,211,154,.07);border-radius:16px;margin:12px 0}.winner .big{font-size:28px;font-weight:950}.score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.score{padding:13px;border:1px solid var(--line);background:#0c101a;border-radius:13px}.score-top{display:flex;justify-content:space-between;gap:8px}.bar{height:7px;background:#20263a;border-radius:99px;overflow:hidden;margin-top:9px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--teal));border-radius:99px}.analysis-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.analysis{padding:13px;border:1px solid var(--line);border-radius:13px;background:#0c101a}.analysis b{display:block;margin-bottom:4px}.breakdown{margin-top:10px}.break-row{display:grid;grid-template-columns:1.2fr 1fr 48px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:11px}.mini-bar{height:6px;background:#20263a;border-radius:99px;overflow:hidden}.mini-bar i{display:block;height:100%;background:var(--purple);border-radius:99px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-footer{padding:35px 0 50px;text-align:center;color:#727c93;font-size:11px}.links{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;margin-bottom:12px}.links a{color:#9d8fff;text-decoration:none}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}.modal.open{display:flex}.modal-card{width:min(470px,100%);background:#101421;border:1px solid #3a4560;border-radius:20px;padding:20px}.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}.plan{padding:11px;border:1px solid var(--line);border-radius:12px;background:#0b0f18}.plan strong{display:block}.plan span{font-size:12px;color:#b8c0d3}.close{float:right;background:transparent;border:0;color:#aeb6ca;font-size:23px}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#161c2b;border:1px solid #3b4662;color:#fff;padding:11px 15px;border-radius:12px;z-index:200;transition:.2s;font-size:13px}.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:650px){.wrap{width:94%}.nav{min-height:62px}.logo{font-size:22px}.nav .btn{padding:9px 10px;font-size:12px}.hero{padding:38px 0 18px}.hero h1{font-size:48px}.card{padding:15px;border-radius:16px}.row,.analysis-grid{grid-template-columns:1fr}.score-grid{grid-template-columns:1fr 1fr}.plans{grid-template-columns:1fr}.step{grid-template-columns:34px 1fr;gap:9px}.stepno{width:32px;height:32px;font-size:13px}.matrix th,.matrix td{font-size:10px;padding:7px 3px}.matrix th:first-child,.matrix td:first-child{width:34%}.matrix input{font-size:12px;padding:8px 1px}}
+:root{
+ --bg:#090b12;--panel:#111522;--panel2:#151a29;--line:#272e43;--text:#f4f5fb;
+ --muted:#949db2;--purple:#8b63ff;--purple2:#a78bfa;--gold:#f0c55c;--green:#56d6b0;
+ --danger:#ff6b81;--radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#1b1634 0,#0b0d14 35%,#090b12 70%);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.container{width:min(980px,calc(100% - 28px));margin:auto}
+.header{position:sticky;top:0;z-index:50;background:rgba(9,11,18,.91);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.07)}
+.nav{height:84px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:30px;font-weight:900;letter-spacing:8px}
+.logo span{color:var(--purple2)}
+.nav-actions{display:flex;gap:10px}
+.btn{border:1px solid var(--line);background:#151a29;color:var(--text);border-radius:15px;padding:12px 17px;font-weight:750;transition:.2s}
+.btn:hover{transform:translateY(-1px);border-color:#4a5270}
+.btn-primary{background:linear-gradient(135deg,#936cff,#6f4bea);border:0}
+.btn-gold{background:linear-gradient(135deg,#f6d06a,#dcae3e);color:#17120a;border:0}
+.btn-danger{color:#ffb5c0;border-color:#542431}
+.hero{padding:72px 0 45px;text-align:center}
+.eyebrow{display:inline-flex;gap:7px;padding:8px 12px;border:1px solid #34275e;background:#151126;color:#c9bcff;border-radius:999px;font-size:12px;font-weight:800}
+h1{font-size:clamp(44px,10vw,82px);line-height:.98;margin:20px 0 18px;letter-spacing:-3px}
+.tart{color:var(--purple2)}
+.hero p{max-width:680px;margin:auto;color:var(--muted);font-size:17px}
+.section{padding:25px 0 65px}
+.card{background:linear-gradient(180deg,rgba(20,24,37,.96),rgba(12,15,24,.96));border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:0 20px 70px rgba(0,0,0,.22)}
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:18px}
+.section-title h2{margin:0;font-size:28px}
+.section-title p{margin:4px 0 0;color:var(--muted)}
+.step{display:grid;grid-template-columns:42px 1fr;gap:15px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.step:last-child{border-bottom:0}
+.num{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#29205a;color:#d8ceff;border:1px solid #6444ca;font-weight:900}
+label{display:block;font-weight:800;margin-bottom:8px}
+input,textarea,select{width:100%;border:1px solid var(--line);background:#080b13;color:var(--text);border-radius:14px;padding:14px 15px;outline:0}
+input:focus,textarea:focus,select:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,99,255,.12)}
+textarea{min-height:100px;resize:vertical}
+.small{font-size:12px}.muted{color:var(--muted)}
+.category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cat{background:#0e121d;border:1px solid var(--line);color:var(--text);border-radius:15px;padding:14px;text-align:left}
+.cat.active{border-color:var(--purple);background:#191532;box-shadow:0 0 0 2px rgba(139,99,255,.1)}
+.cat strong{display:block}.cat span{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.alt-list{display:grid;gap:10px}
+.alt-row{display:grid;grid-template-columns:38px 1fr 42px;gap:8px;align-items:center}
+.alt-key{height:42px;border-radius:12px;background:#211a46;border:1px solid #4e3a9b;display:grid;place-items:center;font-weight:900;color:#d5caff}
+.remove{height:42px;border-radius:12px;background:#15101a;color:#ff9cab;border:1px solid #492532;font-size:22px}
+.helper{padding:13px 15px;border-radius:14px;background:#0c1820;border:1px solid #174b4a;color:#a6e5d9;margin-top:10px}
+.weight-list{display:grid;gap:8px}
+.weight-row{display:grid;grid-template-columns:1fr 100px;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:#0c1019}
+.weight-row .desc{font-size:12px;color:var(--muted)}
+.percent-input{position:relative}
+.percent-input:after{content:"%";position:absolute;right:12px;top:12px;color:var(--muted);pointer-events:none}
+.percent-input input{padding-right:28px;text-align:center}
+.weight-note{margin-top:10px;padding:12px 14px;border-radius:13px;background:#161329;border:1px solid #33275d;color:#bcb3dc;font-size:12px}
+.matrix{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.matrix table{width:100%;border-collapse:collapse;table-layout:fixed}
+.matrix th,.matrix td{padding:9px 6px;border-bottom:1px solid rgba(255,255,255,.06);text-align:center;font-size:11px}
+.matrix th{background:#171c2b;color:#dce1ee}
+.matrix th:first-child,.matrix td:first-child{width:31%;text-align:left;background:#101521}
+.matrix td input{padding:10px 5px;height:42px;text-align:center;font-size:15px;font-weight:800}
+.metric-name{font-weight:800}.metric-unit{display:block;color:var(--muted);font-size:9px;margin-top:2px}
+.alt-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.alt-legend span{font-size:10px;color:var(--muted);padding:4px 7px;border:1px solid var(--line);border-radius:8px}
+.action-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.result{display:none}.result.show{display:block}
+.winner{padding:22px;border-radius:18px;background:linear-gradient(135deg,#1b1538,#121827);border:1px solid #44338a}
+.winner .big{font-size:34px;font-weight:950;color:#ddd3ff}
+.score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+.score{padding:14px;border:1px solid var(--line);border-radius:14px;background:#0c1019}
+.score b{font-size:23px}.bar{height:7px;border-radius:99px;background:#252b3b;margin-top:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#7651e8,#a78bfa);border-radius:99px}
+.analysis-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.analysis{padding:14px;border:1px solid var(--line);border-radius:14px;background:#0c1019}
+.analysis strong{display:block;margin-bottom:5px}.analysis span{color:var(--muted);font-size:13px}
+.breakdown{margin-top:14px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.breakdown-row{display:grid;grid-template-columns:1fr 100px 100px;gap:10px;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px}
+.breakdown-row:last-child{border-bottom:0}.breakdown-head{background:#171c2b;font-weight:800}
+.feedback-box{margin-top:18px;padding:18px;border:1px solid #493d74;background:#121025;border-radius:17px}
+.stars{display:flex;gap:6px;margin:10px 0}.star{font-size:30px;background:none;border:0;color:#42485b;padding:0}.star.active{color:#f2c65c}
+.comment-list{display:grid;gap:10px}.comment{padding:15px;border:1px solid var(--line);border-radius:15px;background:#0d111b}
+.comment-top{display:flex;justify-content:space-between;gap:10px}.comment-stars{color:#f2c65c;letter-spacing:1px}.comment p{margin:8px 0 0;white-space:pre-wrap;word-break:break-word}
+.rating-filters{display:flex;gap:7px;overflow:auto;padding-bottom:5px;margin:12px 0}.filter{white-space:nowrap;padding:8px 11px;border-radius:999px;background:#101521;color:#aeb6c9;border:1px solid var(--line)}.filter.active{color:#e7e0ff;border-color:#6c4fd2;background:#1b1538}
+.auth{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);padding:20px;overflow:auto}.auth.show{display:grid;place-items:center}.modal{width:min(430px,100%);background:#111522;border:1px solid var(--line);border-radius:22px;padding:22px}
+.tabs{display:flex;gap:5px;background:#0a0d15;padding:4px;border-radius:12px;margin-bottom:15px}.tabs button{flex:1;padding:9px;border:0;background:transparent;color:var(--muted);border-radius:9px}.tabs button.active{background:#24203c;color:#fff}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;z-index:200;background:#f4f5fb;color:#090b12;padding:11px 16px;border-radius:12px;font-weight:800;font-size:13px;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.premium{border-color:#66511d;background:linear-gradient(135deg,#171525,#17130d)}
+.premium-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.premium-item{padding:14px;border:1px solid #4c4022;border-radius:14px;background:#15130e}.premium-item b{display:block;color:#f4d77c}.premium-item span{font-size:12px;color:#aaa38e}
+footer{padding:35px 0 50px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);text-align:center;font-size:12px}
+.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:12px}.footer-links a{color:#a78bfa}
+@media(max-width:720px){
+ .container{width:min(100% - 18px,680px)}.nav{height:76px}.logo{font-size:25px;letter-spacing:6px}.nav-actions .btn{padding:10px 12px;font-size:13px}
+ .hero{padding:48px 0 30px}.hero p{font-size:15px}.card{padding:16px;border-radius:18px}
+ .category-grid{grid-template-columns:repeat(2,1fr)}.score-grid,.analysis-grid,.premium-grid{grid-template-columns:1fr}
+ .breakdown-row{grid-template-columns:1fr 75px 75px}.matrix th,.matrix td{font-size:10px;padding:7px 3px}.matrix th:first-child,.matrix td:first-child{width:30%}
+ .matrix td input{height:38px;font-size:13px}.step{grid-template-columns:35px 1fr;gap:10px;padding:16px 0}.num{width:35px;height:35px;font-size:13px}
+}
 </style>
 </head>
 <body>
-<header><div class="wrap nav">
-  <div class="logo">T A R T <b>I</b></div>
-  <div class="nav-actions"><button class="btn gold" onclick="openPremium()">✦ TARTI PRO</button><button class="btn" id="authBtn" onclick="openAuth()">Giriş Yap</button></div>
-</div></header>
 
-<main class="wrap">
+<header class="header">
+ <div class="container nav">
+  <div class="logo">TART<span>I</span></div>
+  <div class="nav-actions">
+   <button class="btn btn-gold" onclick="openPremium()">✦ TARTI PREMIUM</button>
+   <button class="btn" id="authBtn" onclick="openAuth()">Giriş Yap</button>
+  </div>
+ </div>
+</header>
+
+<main>
 <section class="hero">
-  <span class="eyebrow">Akıllı karar motoru</span>
+ <div class="container">
+  <span class="eyebrow">✦ AKILLI KARAR PLATFORMU</span>
   <h1>Seçeneklerini<br><span class="tart">TART.</span></h1>
-  <p>Alternatiflerini gerçek verilerle karşılaştır. TARTI farklı ölçüleri ortak bir skora dönüştürsün ve sonucu nasıl hesapladığını açıkça göstersin.</p>
-  <div class="hero-actions"><button class="btn primary" onclick="document.getElementById('decision').scrollIntoView({behavior:'smooth'})">Kararımı Oluştur</button><button class="btn" onclick="openPremium()">TARTI PRO'yu Gör</button></div>
+  <p>Alternatiflerini, gerçek verilerini ve önceliklerini gir. TARTI seçeneklerini aynı matematiksel sistemde karşılaştırıp kararını görünür hale getirir.</p>
+  <div class="action-bar" style="justify-content:center">
+   <button class="btn btn-primary" onclick="document.getElementById('decision').scrollIntoView({behavior:'smooth'})">Kararını Oluştur →</button>
+  </div>
+ </div>
 </section>
 
 <section class="section" id="decision">
-<div class="card">
-  <div class="step">
-    <div class="stepno">1</div><div>
-      <h3>Kategorini seç</h3>
-      <div class="select-wrap"><select id="category" class="field" onchange="changeCategory(this.value)"></select></div>
-      <div id="categoryHelp" class="small muted" style="margin-top:7px"></div>
-    </div>
+<div class="container">
+ <div class="card">
+  <div class="section-title">
+   <div><h2>Kararını oluştur</h2><p>5 kriter. Gerçek rakamlar. Şeffaf sonuç.</p></div>
   </div>
 
   <div class="step">
-    <div class="stepno">2</div><div>
-      <h3>Kararını tanımla</h3>
-      <div class="row">
-        <div><label>Kararın başlığı</label><input id="title" class="field" placeholder="Örn: Hangi telefonu almalıyım?"></div>
-        <div><label>Ana hedefin <span class="muted">(isteğe bağlı)</span></label><input id="goal" class="field" placeholder="Örn: Fiyat/performans istiyorum."></div>
-      </div>
-    </div>
+   <div class="num">1</div>
+   <div>
+    <label>Kategori</label>
+    <div class="category-grid" id="categoryGrid"></div>
+    <select id="categorySelect" onchange="applyCategory(this.value)" style="margin-top:10px"></select>
+    <div class="helper" id="categoryHelp"></div>
+   </div>
   </div>
 
   <div class="step">
-    <div class="stepno">3</div><div>
-      <div class="alt-head"><h3 style="margin:2px 0 0">Alternatiflerin</h3><button class="btn" onclick="addAlternative()">＋ Alternatif</button></div>
-      <div class="small muted">2–5 seçenek. Her kategori kendi örneklerini getirir.</div>
-      <div id="alternatives" class="alt-list"></div>
-      <div id="examples" class="example-chips"></div>
-    </div>
+   <div class="num">2</div>
+   <div>
+    <label for="decisionTitle">Kararının başlığı</label>
+    <input id="decisionTitle" placeholder="Örn: Hangi telefonu almalıyım?">
+    <label for="goal" style="margin-top:12px">Kararının amacı <span class="muted">(isteğe bağlı)</span></label>
+    <textarea id="goal" placeholder="Örn: Bütçeme uygun, uzun ömürlü bir telefon istiyorum."></textarea>
+   </div>
   </div>
 
   <div class="step">
-    <div class="stepno">4</div><div>
-      <h3>Kriterlerin ve önemleri</h3>
-      <div class="small muted">Önem yüzdesini rakamla yaz. TARTI toplamı otomatik olarak %100'e normalize eder.</div>
-      <div class="table-box" style="margin-top:10px"><table class="matrix"><thead><tr><th>Kriter</th><th>Önem %</th></tr></thead><tbody id="weights"></tbody></table></div>
-      <div class="total"><span>Toplam ağırlık</span><strong id="weightTotal">100%</strong></div>
+   <div class="num">3</div>
+   <div>
+    <div class="section-title" style="margin-bottom:8px">
+     <div><h2 style="font-size:21px">Alternatifler</h2><p>2–5 seçenek ekleyebilirsin.</p></div>
+     <button class="btn" onclick="addAlternative()">＋ Alternatif</button>
     </div>
+    <div class="alt-list" id="alternativeList"></div>
+   </div>
   </div>
 
   <div class="step">
-    <div class="stepno">5</div><div>
-      <h3>Değerlendirmeler</h3>
-      <div class="small muted">Çubuk yok. Değerleri doğrudan rakam olarak gir. Örneğin 45000 TL, 120 m², 2 yıl, 8/10.</div>
-      <div id="metrics" style="margin-top:10px"></div>
+   <div class="num">4</div>
+   <div>
+    <div class="section-title" style="margin-bottom:8px">
+     <div><h2 style="font-size:21px">Önceliklerini belirle</h2><p>Her kriterin önemi birbirinden bağımsızdır.</p></div>
+     <button class="btn" onclick="resetWeights()">↺ Dengeli</button>
     </div>
+    <div class="weight-list" id="criteriaBox"></div>
+    <div class="weight-note"><b>Önemli:</b> Buradaki yüzdeler birbirini sıfırlamaz. Örneğin Maddiyat %100, Kalite %70 olabilir. TARTI bu değerleri yalnızca hesaplama sırasında matematiksel olarak normalize eder; ekranda verdiğin % değerler aynen kalır.</div>
+   </div>
   </div>
 
   <div class="step">
-    <div class="stepno">6</div><div>
-      <h3>Son dokunuş</h3>
-      <textarea id="extra" class="field" placeholder="Kararı etkileyen özel bilgi (isteğe bağlı): bütçe sınırı, kullanım amacı, zaman baskısı vb."></textarea>
+   <div class="num">5</div>
+   <div>
+    <div class="section-title" style="margin-bottom:8px">
+     <div><h2 style="font-size:21px">Sayısal değerlendirme</h2><p id="metricIntro">Kategoriye özel 5 ölçümü gir.</p></div>
     </div>
+    <div class="matrix" id="ratingsBox"></div>
+    <div class="small muted" style="margin-top:8px">Fiyat gibi alanlar 0'dan başlar. 450 yazdığında baştaki 0 otomatik silinir. “↑” yüksek değer, “↓” düşük değer daha avantajlıdır.</div>
+   </div>
   </div>
 
-  <button class="btn primary" style="width:100%;padding:14px;font-weight:850;font-size:16px" onclick="calculate()">TARTI'YI ÇALIŞTIR →</button>
+  <div class="step">
+   <div class="num">6</div>
+   <div>
+    <label for="extraInfo">Kararı etkileyen özel bilgi <span class="muted">(isteğe bağlı)</span></label>
+    <textarea id="extraInfo" placeholder="Varsa bütçe sınırı, özel şart veya dikkate alınmasını istediğin başka bir bilgi..."></textarea>
+    <div class="action-bar">
+     <button class="btn btn-primary" style="flex:1" onclick="calculate()">⚖️ TARTI'YI ÇALIŞTIR</button>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+</section>
+
+<section class="section result" id="result">
+<div class="container">
+ <div class="card">
+  <div class="section-title"><div><h2>Karar sonucu</h2><p>Sonuç, girdiğin verilerin matematiksel karşılaştırmasıdır.</p></div></div>
+  <div id="resultContent"></div>
+ </div>
+</div>
+</section>
+
+<section class="section" id="community">
+<div class="container">
+ <div class="card">
+  <div class="section-title">
+   <div><h2>Topluluğun TARTI değerlendirmeleri</h2><p>Gerçek kullanıcıların deneyimleri.</p></div>
+  </div>
+  <div class="rating-filters" id="ratingFilters"></div>
+  <div id="communitySummary" class="helper">Değerlendirmeler yükleniyor...</div>
+  <div class="comment-list" id="commentList" style="margin-top:12px"></div>
+ </div>
 </div>
 </section>
 
 <section class="section">
-<div id="result" class="card result">
-  <h2 class="section-title">Karar sonucu</h2><div class="muted small">Sonuç, girdiğin veriler ve kriter ağırlıkları üzerinden hesaplandı.</div>
-  <div id="winner" class="winner"></div>
-  <div id="scores" class="score-grid"></div>
-  <div id="analysis" class="analysis-grid"></div>
-  <div class="breakdown"><h3 style="font-size:18px">Kriterlerin sonuca etkisi</h3><div id="breakdown"></div></div>
-  <div class="actions"><button class="btn primary" onclick="printReport()">Raporu Yazdır / PDF</button><button class="btn" onclick="shareResult()">Paylaş</button><button class="btn" onclick="saveDecision()">Hesabı Kaydet</button><button class="btn" onclick="newDecision()">Yeni Karar</button></div>
+<div class="container">
+ <div class="card premium">
+  <div class="section-title">
+   <div><h2>✦ TARTI PREMIUM</h2><p>Temel karar motorunun üzerine daha derin analiz katmanı.</p></div>
+   <button class="btn btn-gold" onclick="openPremium()">Premium'u İncele</button>
+  </div>
+  <div class="premium-grid">
+   <div class="premium-item"><b>Derin Karar Analizi</b><span>Sonucun nedenini daha ayrıntılı açıklar.</span></div>
+   <div class="premium-item"><b>Senaryo Simülatörü</b><span>Bir değer değiştiğinde kararın nasıl değiştiğini gösterir.</span></div>
+   <div class="premium-item"><b>Karar Güven Skoru</b><span>Sonucun ne kadar güçlü olduğunu ölçer.</span></div>
+   <div class="premium-item"><b>Fırsat Maliyeti</b><span>Seçilmeyen alternatifin göreceli etkisini açıklar.</span></div>
+   <div class="premium-item"><b>Kararı Değiştiren Eşik</b><span>Hangi koşulda liderin değişebileceğini arar.</span></div>
+   <div class="premium-item"><b>8 Premium Kategori</b><span>Teknoloji, ev, finans, kariyer, eğitim, seyahat, alışveriş ve girişim için gelişmiş analiz.</span></div>
+  </div>
+ </div>
 </div>
 </section>
 </main>
 
-<footer><div class="wrap"><div class="links">
-<a href="./hakkimizda.html">Hakkımızda</a><a href="./iletisim.html">İletişim</a><a href="./gizlilik.html">Gizlilik</a><a href="./kvkk.html">KVKK</a><a href="./mesafeli-satis.html">Mesafeli Satış</a><a href="./iade-iptal.html">İade / İptal</a>
-</div>© 2026 TARTI · Seçeneklerini tart.</div></footer>
+<footer>
+ <div class="container">
+  <strong style="color:#fff;font-size:16px;letter-spacing:5px">TARTI</strong>
+  <div>Seçeneklerini TART. Daha bilinçli kararlar, daha az pişmanlık.</div>
+  <div class="footer-links">
+   <a href="./hakkimizda.html">Hakkımızda</a>
+   <a href="./iletisim.html">İletişim</a>
+   <a href="./gizlilik.html">Gizlilik Politikası</a>
+   <a href="./kvkk.html">KVKK</a>
+   <a href="./mesafeli-satis.html">Mesafeli Satış</a>
+   <a href="./iade-iptal.html">İade / İptal</a>
+  </div>
+ </div>
+</footer>
 
-<div id="authModal" class="modal"><div class="modal-card"><button class="close" onclick="closeModal('authModal')">×</button><h2 id="authTitle">TARTI'ya giriş</h2><p class="small muted">Kararlarını hesabında saklamak için giriş yap veya hesap oluştur.</p><input id="email" class="field" type="email" placeholder="E-posta" style="margin:6px 0"><input id="password" class="field" type="password" placeholder="Şifre" style="margin:6px 0"><div class="actions"><button class="btn primary" onclick="signIn()">Giriş Yap</button><button class="btn" onclick="signUp()">Hesap Oluştur</button></div></div></div>
+<div class="auth" id="authModal">
+ <div class="modal">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2 id="authTitle" style="margin:0">Giriş Yap</h2><button class="btn" onclick="closeAuth()">×</button></div>
+  <div class="tabs" style="margin-top:15px">
+   <button id="loginTab" class="active" onclick="switchAuth('login')">Giriş Yap</button>
+   <button id="signupTab" onclick="switchAuth('signup')">Kayıt Ol</button>
+  </div>
+  <label>E-posta</label><input id="email" type="email" autocomplete="email">
+  <label style="margin-top:10px">Şifre</label><input id="password" type="password" autocomplete="current-password">
+  <button class="btn btn-primary" style="width:100%;margin-top:14px" onclick="submitAuth()">Devam Et</button>
+  <p class="small muted" id="authMessage"></p>
+ </div>
+</div>
 
-<div id="premiumModal" class="modal"><div class="modal-card"><button class="close" onclick="closeModal('premiumModal')">×</button><span class="eyebrow">✦ TARTI PRO</span><h2>Karar motorunun gelişmiş katmanı</h2><p class="small muted">Temel karar motorundaki tüm hesaplamalar açık. PRO katmanı daha sonra ödeme bağlantısı eklendiğinde gelişmiş raporlama ve ek araçlar için kullanılacak.</p><div class="plans"><div class="plan"><strong>Haftalık</strong><span>59,90 TL</span></div><div class="plan"><strong>Aylık</strong><span>179,90 TL</span></div><div class="plan"><strong>Yıllık</strong><span>1.499 TL</span></div></div><ul class="small muted"><li>Senaryo karşılaştırma</li><li>Fırsat maliyeti analizi</li><li>Karar güveni ve hassasiyet raporu</li><li>Detaylı karar raporu</li></ul><button class="btn gold" style="width:100%" onclick="toast('Ödeme entegrasyonu tamamlandığında burası aktif olacak.')">PRO'yu İncele</button></div></div>
+<div class="auth" id="premiumModal">
+ <div class="modal">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">✦ TARTI PREMIUM</h2><button class="btn" onclick="closePremium()">×</button></div>
+  <p class="muted">Temel karar motoru herkes için açık. Premium, sonucu daha derin yorumlayan analiz katmanıdır.</p>
+  <div class="premium-grid">
+   <div class="premium-item"><b>Haftalık</b><span>59,90 TL · 7 gün</span></div>
+   <div class="premium-item"><b>Aylık</b><span>179,90 TL · 30 gün</span></div>
+   <div class="premium-item"><b>Yıllık</b><span>1.499 TL · 365 gün</span></div>
+   <div class="premium-item"><b>8 gelişmiş kategori</b><span>Teknoloji, ev, finans, kariyer, eğitim, seyahat, alışveriş, girişim.</span></div>
+  </div>
+  <div class="helper" style="margin-top:14px">Ödeme entegrasyonu devreye alınana kadar bu alan gerçek ücret çekmez.</div>
+ </div>
+</div>
 
-<div id="toast" class="toast"></div>
+<div class="toast" id="toast"></div>
 
 <script>
 const SUPABASE_URL="https://ccsmdgeytthszsemplzf.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_ymUk0_RRlGoQH28sMTrkRg_jlBgHGyx";
-const sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY):null;
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
 const CATEGORIES={
- teknoloji:{name:"Teknoloji",icon:"💻",help:"Telefon, bilgisayar ve teknoloji ürünlerini fiyat, performans, kalite ve kullanım ömrüyle karşılaştır.",examples:["iPhone","Samsung Galaxy","Xiaomi"],metrics:[
-  ["price","💰 Fiyat","TL","low"],["performance","⚡ Performans","/10","high"],["quality","⭐ Kalite","/10","high"],["battery","🔋 Pil Süresi","saat","high"],["warranty","🛡️ Garanti","yıl","high"],["updates","🔄 Güncelleme","yıl","high"],["storage","💾 Depolama","GB","high"]]},
- ev:{name:"Ev & Gayrimenkul",icon:"🏠",help:"Daire, rezidans ve villa gibi seçenekleri fiyat, alan, aidat, ulaşım ve güvenlikle karşılaştır.",examples:["Daire","Rezidans","Villa"],metrics:[
-  ["price","💰 Fiyat","TL","low"],["area","📐 Net Alan","m²","high"],["rooms","🛏️ Oda","oda","high"],["age","🏗️ Bina Yaşı","yıl","low"],["dues","💳 Aidat","TL/ay","low"],["distance","🚇 Ulaşım Mesafesi","km","low"],["safety","🛡️ Güvenlik","/10","high"]]},
- kariyer:{name:"Kariyer",icon:"💼",help:"İş seçeneklerini gelir, çalışma süresi, gelişim, güvence ve yaşam dengesiyle karşılaştır.",examples:["Kurumsal Şirket","Startup","Kendi İşim"],metrics:[
-  ["salary","💰 Net Gelir","TL/ay","high"],["hours","⏱️ Çalışma","saat/hafta","low"],["commute","🚗 Ulaşım","dk/gün","low"],["growth","📈 Gelişim","/10","high"],["security","🛡️ Güvence","/10","high"],["balance","🧘 Yaşam Dengesi","/10","high"],["future","🔮 Gelecek","/10","high"]]},
- para:{name:"Para & Finans",icon:"💰",help:"Finansal seçenekleri başlangıç tutarı, getiri, risk, likidite, maliyet ve vade ile karşılaştır.",examples:["Mevduat","Yatırım Fonu","Altın"],metrics:[
-  ["capital","💵 Başlangıç","TL","low"],["return","📈 Yıllık Getiri","%","high"],["risk","⚠️ Risk","/10","low"],["liquidity","💧 Likidite","/10","high"],["fee","💸 Yıllık Maliyet","%","low"],["term","📅 Vade","ay","low"],["control","🧠 Kontrol","/10","high"]]},
- iliski:{name:"İlişki",icon:"❤️",help:"İlişki kararını güven, iletişim, değer uyumu, gelecek ve karşılıklı emek gibi 1–10 değerlendirmelerle tart.",examples:["Devam Etmek","Ara Vermek","Bitirmek"],metrics:[
-  ["trust","🛡️ Güven","/10","high"],["communication","💬 İletişim","/10","high"],["values","🧭 Değer Uyumu","/10","high"],["future","🔮 Gelecek Uyumu","/10","high"],["harmony","❤️ Duygusal Uyum","/10","high"],["conflict","⚡ Çatışma Yönetimi","/10","high"],["effort","🤝 Karşılıklı Emek","/10","high"]]},
- yasam:{name:"Yaşam & Şehir",icon:"🌆",help:"Şehir seçeneklerini kira, gelir fırsatı, ulaşım, güvenlik, sosyal hayat ve kişisel uyumla karşılaştır.",examples:["İstanbul","İzmir","Antalya"],metrics:[
-  ["rent","🏠 Aylık Kira","TL/ay","low"],["income","💰 Gelir İmkanı","TL/ay","high"],["transport","🚇 Ulaşım","dk","low"],["safety","🛡️ Güvenlik","/10","high"],["social","👥 Sosyal Hayat","/10","high"],["nature","🌿 Doğa","/10","high"],["fit","❤️ Kişisel Uyum","/10","high"]]},
- egitim:{name:"Eğitim",icon:"🎓",help:"Eğitim seçeneklerini maliyet, kalite, süre, kariyer fırsatı, network ve kişisel uyumla karşılaştır.",examples:["Üniversite","Bölüm","Kurs"],metrics:[
-  ["cost","💰 Toplam Maliyet","TL","low"],["quality","⭐ Eğitim Kalitesi","/10","high"],["duration","📅 Süre","ay","low"],["career","💼 Kariyer Fırsatı","/10","high"],["network","👥 Network","/10","high"],["location","📍 Konum Uygunluğu","/10","high"],["fit","❤️ İlgi Uyumu","/10","high"]]},
- seyahat:{name:"Seyahat",icon:"✈️",help:"Seyahat seçeneklerini toplam bütçe, süre, ulaşım, konaklama, güvenlik ve deneyimle karşılaştır.",examples:["Antalya","Yunanistan","Gürcistan"],metrics:[
-  ["cost","💰 Toplam Bütçe","TL","low"],["days","📅 Süre","gün","high"],["travelTime","✈️ Ulaşım Süresi","saat","low"],["hotel","🛏️ Konaklama","/10","high"],["safety","🛡️ Güvenlik","/10","high"],["experience","✨ Deneyim","/10","high"],["fit","❤️ Kişisel Uyum","/10","high"]]},
- alisveris:{name:"Alışveriş",icon:"🛒",help:"Ürünleri fiyat, kalite, garanti, kullanım ömrü, performans, servis ve ikinci el değeriyle karşılaştır.",examples:["Ürün A","Ürün B","Ürün C"],metrics:[
-  ["price","💰 Fiyat","TL","low"],["quality","⭐ Kalite","/10","high"],["warranty","🛡️ Garanti","yıl","high"],["life","⏳ Kullanım Ömrü","yıl","high"],["performance","⚡ Performans","/10","high"],["service","🔧 Servis","/10","high"],["resale","🔄 İkinci El","/10","high"]]},
- is:{name:"İş & Girişim",icon:"🏢",help:"İş fikirlerini sermaye, gelir potansiyeli, talep, risk, uygulanabilirlik ve ölçeklenebilirlikle karşılaştır.",examples:["E-ticaret","Dijital Ürün","Hizmet"],metrics:[
-  ["capital","💸 Başlangıç Sermayesi","TL","low"],["income","💰 Gelir Potansiyeli","TL/ay","high"],["demand","📊 Talep","/10","high"],["risk","⚠️ Risk","/10","low"],["execution","⚙️ Uygulanabilirlik","/10","high"],["scale","📈 Ölçeklenebilirlik","/10","high"],["fit","❤️ Kişisel Uyum","/10","high"]]},
- ulasim:{name:"Ulaşım",icon:"🚗",help:"Ulaşım seçeneklerini maliyet, tüketim, süre, güvenlik, konfor, güvenilirlik ve menzille karşılaştır.",examples:["Otomobil","Motosiklet","Toplu Taşıma"],metrics:[
-  ["cost","💰 Maliyet","TL","low"],["fuel","⛽ Tüketim","L/100km","low"],["time","⏱️ Yol Süresi","dk","low"],["safety","🛡️ Güvenlik","/10","high"],["comfort","🛋️ Konfor","/10","high"],["reliability","🔧 Güvenilirlik","/10","high"],["range","🔋 Menzil","km","high"]]},
- saglik:{name:"Yaşam & Sağlık",icon:"🏋️",help:"Bu bölüm tıbbi tanı değildir; günlük yaşam tercihlerini maliyet, zaman, sürdürülebilirlik ve uyumla karşılaştırır.",examples:["Spor Salonu","Evde Spor","Açık Hava"],metrics:[
-  ["cost","💰 Aylık Maliyet","TL/ay","low"],["time","⏱️ Haftalık Zaman","saat","low"],["benefit","✨ Beklenen Fayda","/10","high"],["safety","🛡️ Güvenlik","/10","high"],["sustainability","🔄 Sürdürülebilirlik","/10","high"],["fit","❤️ Kişisel Uyum","/10","high"],["effort","💪 Efor","/10","low"]]},
- diger:{name:"Diğer",icon:"🧩",help:"Her türlü özel kararı kendi ölçülebilir verilerinle kur.",examples:["Seçenek A","Seçenek B","Seçenek C"],metrics:[
-  ["cost","💰 Maliyet","TL","low"],["time","⏱️ Zaman","saat","low"],["quality","⭐ Kalite","/10","high"],["risk","⚠️ Risk","/10","low"],["fit","❤️ Uyum","/10","high"],["future","🔮 Gelecek Etkisi","/10","high"],["importance","🎯 Genel Önem","/10","high"]]}
+ teknoloji:{icon:"💻",name:"Teknoloji",desc:"Telefon, bilgisayar ve teknoloji ürünü.",help:"Ürünleri gerçek fiyat, garanti, ömür ve performans verileriyle karşılaştır.",examples:["iPhone","Samsung Galaxy","Xiaomi"],metrics:[
+  ["price","💰 Fiyat","TL","currency","low"],["warranty","🛡️ Garanti","yıl","number","high"],["durability","🧱 Dayanıklılık","/10","rating","high"],["life","⏳ Ürün Ömrü","yıl","number","high"],["performance","⚡ Performans","/10","rating","high"]
+ ]},
+ ev:{icon:"🏠",name:"Ev & Gayrimenkul",desc:"Daire, rezidans, villa ve konut.",help:"Evleri fiyat, alan, bina yaşı, aidat ve konum verileriyle karşılaştır.",examples:["Daire","Rezidans","Villa"],metrics:[
+  ["price","💰 Fiyat","TL","currency","low"],["area","📐 Net Alan","m²","number","high"],["age","🏗️ Bina Yaşı","yıl","number","low"],["dues","💳 Aidat","TL/ay","currency","low"],["location","📍 Konum Uygunluğu","/10","rating","high"]
+ ]},
+ kariyer:{icon:"💼",name:"Kariyer",desc:"İş ve kariyer seçimi.",help:"Tek bir maaşa bakma; gelir, zaman, güvence, gelişim ve dengeyi birlikte tart.",examples:["Kurumsal İş","Startup","Kendi İşim"],metrics:[
+  ["salary","💰 Net Gelir","TL/ay","currency","high"],["hours","⏱️ Çalışma Süresi","saat/hafta","number","low"],["security","🛡️ İş Güvencesi","/10","rating","high"],["growth","📈 Gelişim","/10","rating","high"],["balance","🧘 Yaşam Dengesi","/10","rating","high"]
+ ]},
+ para:{icon:"💰",name:"Para & Finans",desc:"Tasarruf ve yatırım seçenekleri.",help:"Getiri ile birlikte risk, maliyet, likidite ve vade bilgisini değerlendir.",examples:["Mevduat","Yatırım Fonu","Altın"],metrics:[
+  ["capital","💵 Başlangıç Tutarı","TL","currency","low"],["return","📈 Beklenen Yıllık Getiri","%","percent","high"],["risk","⚠️ Risk","/10","rating","low"],["liquidity","💧 Likidite","/10","rating","high"],["fee","💸 Yıllık Maliyet","%","percent","low"]
+ ]},
+ iliski:{icon:"❤️",name:"İlişki",desc:"İlişki kararları.",help:"Bu bölüm bir hüküm vermez; senin değerlendirmelerini şeffaf bir karşılaştırmaya dönüştürür.",examples:["Devam Etmek","Ara Vermek","Bitirmek"],metrics:[
+  ["trust","🛡️ Güven","/10","rating","high"],["communication","💬 İletişim","/10","rating","high"],["values","🧭 Değer Uyumu","/10","rating","high"],["future","🔮 Gelecek Uyumu","/10","rating","high"],["effort","🤝 Karşılıklı Emek","/10","rating","high"]
+ ]},
+ yasam:{icon:"🌆",name:"Yaşam & Şehir",desc:"Şehir ve yaşam yeri seçimi.",help:"Şehirleri kira, gelir, ulaşım, güvenlik ve yaşam uyumu üzerinden karşılaştır.",examples:["İstanbul","İzmir","Antalya"],metrics:[
+  ["rent","🏠 Aylık Kira","TL/ay","currency","low"],["income","💰 Gelir İmkanı","TL/ay","currency","high"],["transport","🚇 Ulaşım Süresi","dk","number","low"],["safety","🛡️ Güvenlik","/10","rating","high"],["fit","❤️ Yaşam Uyumu","/10","rating","high"]
+ ]},
+ egitim:{icon:"🎓",name:"Eğitim",desc:"Üniversite, bölüm ve kurs seçimi.",help:"Eğitim maliyeti, kalite, süre, kariyer ve kişisel uyumu ölç.",examples:["Üniversite","Bölüm","Kurs"],metrics:[
+  ["cost","💰 Toplam Maliyet","TL","currency","low"],["quality","⭐ Eğitim Kalitesi","/10","rating","high"],["duration","📅 Süre","ay","number","low"],["career","💼 Kariyer Fırsatı","/10","rating","high"],["fit","❤️ İlgi Uyumu","/10","rating","high"]
+ ]},
+ seyahat:{icon:"✈️",name:"Seyahat",desc:"Tatil ve seyahat seçimi.",help:"Seyahatleri bütçe, süre, konfor, güvenlik ve deneyimle karşılaştır.",examples:["Antalya","Yunanistan","Gürcistan"],metrics:[
+  ["cost","💰 Toplam Bütçe","TL","currency","low"],["days","📅 Süre","gün","number","high"],["hotel","🛏️ Konaklama","/10","rating","high"],["safety","🛡️ Güvenlik","/10","rating","high"],["experience","✨ Deneyim","/10","rating","high"]
+ ]},
+ alisveris:{icon:"🛒",name:"Alışveriş",desc:"Ürün ve hizmet satın alma.",help:"Fiyatı kalite, garanti, ömür ve performansla birlikte tart.",examples:["Ürün A","Ürün B","Ürün C"],metrics:[
+  ["price","💰 Fiyat","TL","currency","low"],["quality","⭐ Kalite","/10","rating","high"],["warranty","🛡️ Garanti","yıl","number","high"],["life","⏳ Kullanım Ömrü","yıl","number","high"],["performance","⚡ Performans","/10","rating","high"]
+ ]},
+ is:{icon:"🏢",name:"İş & Girişim",desc:"İş fikri ve girişim seçimi.",help:"Sermaye, gelir, talep, risk ve büyüme potansiyelini birlikte değerlendir.",examples:["E-ticaret","Dijital Ürün","Hizmet"],metrics:[
+  ["capital","💸 Başlangıç Sermayesi","TL","currency","low"],["income","💰 Gelir Potansiyeli","TL/ay","currency","high"],["demand","📊 Talep","/10","rating","high"],["risk","⚠️ Risk","/10","rating","low"],["scale","📈 Ölçeklenebilirlik","/10","rating","high"]
+ ]},
+ ulasim:{icon:"🚗",name:"Ulaşım",desc:"Araç ve ulaşım yöntemi.",help:"Maliyet, süre, güvenlik, konfor ve güvenilirliği karşılaştır.",examples:["Otomobil","Motosiklet","Toplu Taşıma"],metrics:[
+  ["cost","💰 Maliyet","TL/ay","currency","low"],["time","⏱️ Yol Süresi","dk","number","low"],["safety","🛡️ Güvenlik","/10","rating","high"],["comfort","🛋️ Konfor","/10","rating","high"],["reliability","🔧 Güvenilirlik","/10","rating","high"]
+ ]},
+ saglik:{icon:"🏋️",name:"Yaşam & Sağlık",desc:"Spor, rutin ve iyi yaşam tercihi.",help:"Tıbbi tanı koymaz; günlük tercihleri maliyet, zaman, fayda, sürdürülebilirlik ve uyumla karşılaştırır.",examples:["Spor Salonu","Evde Spor","Açık Hava"],metrics:[
+  ["cost","💰 Aylık Maliyet","TL/ay","currency","low"],["time","⏱️ Haftalık Zaman","saat","number","low"],["benefit","✨ Beklenen Fayda","/10","rating","high"],["sustainability","🔄 Sürdürülebilirlik","/10","rating","high"],["fit","❤️ Kişisel Uyum","/10","rating","high"]
+ ]},
+ diger:{icon:"🧩",name:"Diğer",desc:"Özel ve farklı kararlar.",help:"Kendi kararını kur; ölçülebilen alanlara rakam, öznel alanlara 1–10 puan gir.",examples:["Seçenek A","Seçenek B","Seçenek C"],metrics:[
+  ["cost","💰 Maliyet","TL","currency","low"],["time","⏱️ Zaman","saat","number","low"],["quality","⭐ Kalite","/10","rating","high"],["risk","⚠️ Risk","/10","rating","low"],["fit","❤️ Uyum","/10","rating","high"]
+ ]}
 };
 
-let categoryKey="teknoloji", alternatives=[], weights={}, values={}, lastResult=null;
+let currentCategory="teknoloji";
+let alternatives=[];
+let weights={};
+let values={};
+let lastResult=null;
+let authMode="login";
+let selectedSiteRating=0;
+let ratingFilter=0;
 
-const defaults={price:45000,performance:8,quality:8,battery:12,warranty:2,updates:5,storage:256,area:100,rooms:3,age:5,dues:3000,distance:5,safety:8,salary:50000,hours:40,commute:45,growth:8,security:8,balance:7,future:8,capital:10000,return:10,risk:5,liquidity:7,fee:1,term:12,control:7,trust:8,communication:8,values:8,future:8,harmony:8,conflict:7,effort:8,rent:20000,income:45000,transport:40,social:8,nature:8,fit:8,cost:20000,duration:24,career:8,network:7,location:8,days:7,travelTime:4,hotel:8,experience:9,life:5,service:8,resale:7,demand:8,execution:8,scale:8,fuel:7,time:40,comfort:8,reliability:8,range:500,benefit:8,sustainability:8};
-const safe=t=>String(t??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("on");clearTimeout(window._toast);window._toast=setTimeout(()=>x.classList.remove("on"),2300)}
-function openPremium(){document.getElementById("premiumModal").classList.add("open")}
-function openAuth(){document.getElementById("authModal").classList.add("open")}
-function closeModal(id){document.getElementById(id).classList.remove("open")}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove("show"),2600)}
+function names(){return alternatives.map((x,i)=>x.trim()||`Seçenek ${String.fromCharCode(65+i)}`)}
+function defaultValue(key,type){if(type==="rating")return 7; if(key==="price"||key==="cost"||key==="capital"||key==="rent"||key==="salary"||key==="income")return "0"; return 5}
+function applyCategory(key){
+ currentCategory=key;
+ const c=CATEGORIES[key];
+ alternatives=[...c.examples];
+ weights={};values={};
+ c.metrics.forEach(m=>{weights[m[0]]=50;values[m[0]]=alternatives.map((_,i)=>defaultValue(m[0],m[3]))});
+ renderAll();
+ document.getElementById("decisionTitle").placeholder=categoryPlaceholders[key]?.[0]||"Örn: Hangi seçeneği seçmeliyim?";
+ document.getElementById("goal").placeholder=categoryPlaceholders[key]?.[1]||"Örn: Benim için en uygun seçeneği bulmak istiyorum.";
+}
+const categoryPlaceholders={
+ teknoloji:["Örn: Hangi telefonu almalıyım?","Örn: Bütçeme uygun, uzun ömürlü ve performanslı bir telefon istiyorum."],
+ ev:["Örn: Hangi evi seçmeliyim?","Örn: Uygun fiyatlı, geniş ve iyi konumlu bir ev istiyorum."],
+ kariyer:["Örn: Hangi işi seçmeliyim?","Örn: Gelir ile yaşam dengesi arasında iyi bir seçim istiyorum."],
+ para:["Örn: Paramı hangi seçenekte değerlendirmeliyim?","Örn: Riskimi kontrol ederken makul getiri istiyorum."],
+ iliski:["Örn: İlişkimle ilgili hangi kararı vermeliyim?","Örn: Güven ve gelecek açısından seçenekleri değerlendirmek istiyorum."],
+ yasam:["Örn: Hangi şehirde yaşamalıyım?","Örn: Yaşam maliyeti, güvenlik ve sosyal hayatı birlikte değerlendirmek istiyorum."],
+ egitim:["Örn: Hangi eğitim seçeneğini seçmeliyim?","Örn: Bütçeme ve kariyer hedefime uygun olanı bulmak istiyorum."],
+ seyahat:["Örn: Nereye seyahat etmeliyim?","Örn: Bütçeme uygun, güvenli ve iyi bir deneyim istiyorum."],
+ alisveris:["Örn: Hangi ürünü almalıyım?","Örn: Fiyatına göre kaliteli ve uzun ömürlü olanı bulmak istiyorum."],
+ is:["Örn: Hangi iş fikrine odaklanmalıyım?","Örn: Düşük maliyetle başlayıp büyüyebilecek bir seçenek arıyorum."],
+ ulasim:["Örn: Hangi ulaşım seçeneğini kullanmalıyım?","Örn: Zaman ve maliyeti dengeli bir ulaşım istiyorum."],
+ saglik:["Örn: Hangi rutin bana daha uygun?","Örn: Sürdürebileceğim ve günlük hayatıma uyacak bir seçenek istiyorum."],
+ diger:["Örn: Hangi seçeneği seçmeliyim?","Örn: Benim için önemli olan şartları birlikte değerlendirmek istiyorum."]
+};
 
-function init(){
- const s=document.getElementById("category");
- s.innerHTML=Object.entries(CATEGORIES).map(([k,c])=>`<option value="${k}">${c.icon} ${c.name}</option>`).join("");
- s.value=categoryKey; changeCategory(categoryKey);
+function renderAll(){renderCategories();renderSelect();renderAlternatives();renderWeights();renderMatrix()}
+function renderCategories(){
+ document.getElementById("categoryGrid").innerHTML=Object.entries(CATEGORIES).map(([k,c])=>`<button class="cat ${k===currentCategory?"active":""}" onclick="applyCategory('${k}')"><strong>${c.icon} ${c.name}</strong><span>${c.desc}</span></button>`).join("");
 }
-function changeCategory(key){
- categoryKey=key;const c=CATEGORIES[key];
- document.getElementById("categoryHelp").textContent=c.help;
- const placeholder={teknoloji:"Hangi telefonu almalıyım?",ev:"Hangi evi seçmeliyim?",kariyer:"Hangi işi seçmeliyim?",para:"Paramı hangi seçenekte değerlendirmeliyim?",iliski:"İlişkimle ilgili hangi kararı vermeliyim?",yasam:"Hangi şehirde yaşamalıyım?",egitim:"Hangi eğitim seçeneğini seçmeliyim?",seyahat:"Nereye seyahat etmeliyim?",alisveris:"Hangi ürünü almalıyım?",is:"Hangi iş fikrine odaklanmalıyım?",ulasim:"Hangi ulaşım seçeneğini seçmeliyim?",saglik:"Hangi rutin bana daha uygun?",diger:"Hangi seçeneği seçmeliyim?"}[key];
- document.getElementById("title").placeholder="Örn: "+placeholder;
- alternatives=[...c.examples]; setupWeights(); renderAlternatives(); renderExamples(); renderMetrics();
+function renderSelect(){document.getElementById("categorySelect").innerHTML=Object.entries(CATEGORIES).map(([k,c])=>`<option value="${k}">${c.icon} ${c.name}</option>`).join("");document.getElementById("categorySelect").value=currentCategory;document.getElementById("categoryHelp").textContent=CATEGORIES[currentCategory].help}
+function renderAlternatives(){
+ document.getElementById("alternativeList").innerHTML=alternatives.map((a,i)=>`<div class="alt-row"><div class="alt-key">${String.fromCharCode(65+i)}</div><input value="${esc(a)}" oninput="alternatives[${i}]=this.value;renderMatrix()"><button class="remove" ${alternatives.length<=2?"disabled":""} onclick="removeAlternative(${i})">×</button></div>`).join("");
 }
-function setupWeights(){weights={};const n=CATEGORIES[categoryKey].metrics.length;CATEGORIES[categoryKey].metrics.forEach(m=>weights[m[0]]=Math.round(1000/n)/10);normalizeWeights()}
-function normalizeWeights(){let ks=Object.keys(weights),sum=ks.reduce((a,k)=>a+Number(weights[k]||0),0);if(!sum){ks.forEach(k=>weights[k]=100/ks.length)}else{ks.forEach(k=>weights[k]=Number(weights[k]||0)/sum*100)}updateWeightTotal()}
-function updateWeightTotal(){const t=Object.values(weights).reduce((a,b)=>a+Number(b||0),0);document.getElementById("weightTotal").textContent=t.toFixed(1)+"%"}
-function setWeight(k,v){weights[k]=Math.max(0,Number(v)||0);normalizeWeights();renderWeightsOnly()}
-function renderWeightsOnly(){const body=document.getElementById("weights");body.innerHTML=CATEGORIES[categoryKey].metrics.map(([k,n,u,d])=>`<tr><td><strong>${n}</strong><span class="unit">${u} · <span class="dir">${d==="high"?"↑ yüksek":"↓ düşük"}</span></span></td><td><input type="number" min="0" max="100" step="1" value="${Math.round(weights[k])}" oninput="setWeight('${k}',this.value)"></td></tr>`).join("");updateWeightTotal()}
-function renderWeights(){renderWeightsOnly()}
-function renderAlternatives(){document.getElementById("alternatives").innerHTML=alternatives.map((a,i)=>`<div class="alt"><span class="letter">${String.fromCharCode(65+i)}</span><input class="field" value="${safe(a)}" oninput="alternatives[${i}]=this.value" placeholder="Seçenek ${String.fromCharCode(65+i)}"><button class="iconbtn" onclick="removeAlternative(${i})" ${alternatives.length<=2?"disabled":""}>×</button></div>`).join("")}
-function renderExamples(){document.getElementById("examples").innerHTML=CATEGORIES[categoryKey].examples.map((e,i)=>`<span class="chip" onclick="useExample(${i})">${e}</span>`).join("")}
-function useExample(i){alternatives[i]=CATEGORIES[categoryKey].examples[i];renderAlternatives();renderMetrics()}
-function addAlternative(){if(alternatives.length>=5){toast("En fazla 5 alternatif.");return}alternatives.push("Yeni seçenek");renderAlternatives();renderMetrics()}
-function removeAlternative(i){if(alternatives.length<=2)return;alternatives.splice(i,1);renderAlternatives();renderMetrics()}
-function defaultFor(k){return defaults[k]??5}
-function renderMetrics(){
- const ms=CATEGORIES[categoryKey].metrics,names=alternatives.map((a,i)=>a.trim()||`Seçenek ${String.fromCharCode(65+i)}`);
- const old=values;values={};ms.forEach(([k])=>values[k]=alternatives.map((_,i)=>old[k]?.[i]??defaultFor(k)));
- let h=`<div class="table-box"><table class="matrix"><thead><tr><th>Ölçüm</th>${names.map((n,i)=>`<th>${String.fromCharCode(65+i)}</th>`).join("")}</tr></thead><tbody>`;
- ms.forEach(([k,n,u,d])=>{h+=`<tr><td><strong>${n}</strong><span class="unit">${u} · <span class="dir">${d==="high"?"↑":"↓"}</span></span></td>${names.map((_,i)=>`<td><input type="number" min="${u==="/10"?1:0}" ${u==="/10"?'max="10"':''} step="${u==="TL"||u==="TL/ay"||u==="TL/ay"?"100":"0.1"}" value="${values[k][i]}" oninput="setValue('${k}',${i},this.value)"></td>`).join("")}</tr>`});
- h+=`</tbody></table></div><div class="small muted" style="margin-top:6px">A: ${safe(names[0])}${names[1]?` · B: ${safe(names[1])}`:""}${names[2]?` · C: ${safe(names[2])}`:""}${names[3]?` · D: ${safe(names[3])}`:""}${names[4]?` · E: ${safe(names[4])}`:""}</div>`;
- document.getElementById("metrics").innerHTML=h;
+function addAlternative(){if(alternatives.length>=5)return toast("En fazla 5 alternatif ekleyebilirsin.");alternatives.push("Yeni seçenek");const c=CATEGORIES[currentCategory];c.metrics.forEach(m=>values[m[0]].push(defaultValue(m[0],m[3])));renderAlternatives();renderMatrix()}
+function removeAlternative(i){if(alternatives.length<=2)return toast("En az 2 alternatif gerekli.");alternatives.splice(i,1);Object.keys(values).forEach(k=>values[k].splice(i,1));renderAlternatives();renderMatrix()}
+function renderWeights(){
+ const c=CATEGORIES[currentCategory];
+ document.getElementById("criteriaBox").innerHTML=c.metrics.map(([key,name,unit,type,better])=>`<div class="weight-row"><div><div><b>${name}</b></div><div class="desc">${unit} · ${better==="high"?"↑ yüksek daha iyi":"↓ düşük daha iyi"}</div></div><div class="percent-input"><input type="number" min="0" max="100" value="${weights[key]??50}" oninput="setWeight('${key}',this.value)"></div></div>`).join("");
 }
-function setValue(k,i,v){values[k][i]=Number(v)||0}
-
+function setWeight(k,v){weights[k]=Math.max(0,Math.min(100,Number(v)||0))}
+function resetWeights(){const c=CATEGORIES[currentCategory];c.metrics.forEach(m=>weights[m[0]]=50);renderWeights()}
+function renderMatrix(){
+ const c=CATEGORIES[currentCategory],ns=names();
+ let s="<table><thead><tr><th>Ölçüm</th>";
+ ns.forEach((n,i)=>s+=`<th><span class="alt-key" style="display:inline-grid;width:24px;height:24px">${String.fromCharCode(65+i)}</span></th>`);
+ s+="</tr></thead><tbody>";
+ c.metrics.forEach(([key,name,unit,type,better])=>{
+  s+=`<tr><td><span class="metric-name">${name}</span><span class="metric-unit">${unit} · ${better==="high"?"↑":"↓"}</span></td>`;
+  ns.forEach((n,i)=>{let v=values[key]?.[i]??defaultValue(key,type);s+=`<td><input type="text" inputmode="${type==="rating"||type==="number"?"decimal":"decimal"}" value="${esc(v)}" min="0" ${type==="rating"?'maxlength="2"':''} oninput="setValue('${key}',${i},this.value,this)" aria-label="${esc(name)} ${esc(n)}"></td>`});
+  s+="</tr>";
+ });
+ s+="</tbody></table>";
+ document.getElementById("ratingsBox").innerHTML=s;
+}
+function setValue(key,i,v,el){
+ let clean=v.replace(/[^0-9.,-]/g,"").replace(",",".");
+ if(clean.startsWith("-"))clean=clean.slice(1);
+ if(clean.length>1 && clean.startsWith("0") && clean[1]!==".")clean=clean.replace(/^0+/,"");
+ if(clean==="")clean="0";
+ const type=CATEGORIES[currentCategory].metrics.find(m=>m[0]===key)[3];
+ if(type==="rating"){let n=Number(clean);if(n>10)clean="10";if(n<1&&clean!=="")clean="1"}
+ values[key][i]=clean;el.value=clean;
+}
+function numeric(v){const n=Number(String(v).replace(",","."));return Number.isFinite(n)?n:0}
 function calculate(){
- const title=document.getElementById("title").value.trim();
- if(!title){toast("Kararının başlığını yaz.");document.getElementById("title").focus();return}
- if(alternatives.length<2){toast("En az 2 alternatif gerekli.");return}
- alternatives=alternatives.map((a,i)=>a.trim()||`Seçenek ${String.fromCharCode(65+i)}`);
- const ms=CATEGORIES[categoryKey].metrics,n=alternatives.length,scores=Array(n).fill(0),contrib={};
- ms.forEach(([k,,u,d])=>{
-   const arr=values[k].map(Number),min=Math.min(...arr),max=Math.max(...arr);
-   contrib[k]=Array(n).fill(0);
-   arr.forEach((v,i)=>{
-     let norm;
-     if(u==="/10")norm=Math.max(0,Math.min(1,v/10));
-     else if(max===min)norm=.5;
-     else norm=d==="high"?(v-min)/(max-min):(max-v)/(max-min);
-     const c=norm*(weights[k]/100)*100;
-     contrib[k][i]=c;scores[i]+=c;
-   });
+ const title=document.getElementById("decisionTitle").value.trim();
+ if(!title)return toast("Önce kararının başlığını yaz.");
+ const ns=names(),c=CATEGORIES[currentCategory];
+ if(ns.some((n,i)=>!alternatives[i].trim()))return toast("Her alternatifin adını yaz.");
+ const scores=ns.map(()=>0),norm={},contrib={};
+ c.metrics.forEach(([key,name,unit,type,better])=>{
+  const vals=values[key].map(numeric),min=Math.min(...vals),max=Math.max(...vals);
+  norm[key]=[];contrib[key]=[];
+  vals.forEach((v,i)=>{
+   let q;
+   if(type==="rating")q=Math.max(0,Math.min(1,v/10));
+   else if(max===min)q=.5;
+   else q=better==="high"?(v-min)/(max-min):(max-v)/(max-min);
+   norm[key][i]=q;
+  });
  });
- const order=scores.map((s,i)=>({s,i})).sort((a,b)=>b.s-a.s);
- lastResult={category:categoryKey,title,goal:document.getElementById("goal").value.trim(),extra:document.getElementById("extra").value.trim(),alternatives:[...alternatives],weights:{...weights},values:JSON.parse(JSON.stringify(values)),scores,contrib,order,createdAt:new Date().toISOString()};
-renderResult();document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"});
-}
-function renderResult(){
- const r=lastResult,w=r.order[0],second=r.order[1],gap=w.s-second.s;
- document.getElementById("winner").innerHTML=`<div class="small muted">TARTI'nın mevcut verilerle önerisi</div><div class="big">${safe(r.alternatives[w.i])}</div><div class="small">Skor: <strong>${w.s.toFixed(1)}/100</strong> · İkinci seçenek: ${safe(r.alternatives[second.i])} (${second.s.toFixed(1)}) · Fark: ${gap.toFixed(1)} puan</div>`;
- document.getElementById("scores").innerHTML=r.order.map((o,rank)=>`<div class="score"><div class="score-top"><strong>${rank+1}. ${safe(r.alternatives[o.i])}</strong><b>${o.s.toFixed(1)}</b></div><div class="small muted" style="margin-top:5px">${o.s.toFixed(1)} / 100</div></div>`).join("");
- let strongest={k:"",v:-1},mostChange={k:"",v:-1};
- CATEGORIES[r.category].metrics.forEach(([k,n,u,d])=>{
-   const impact=Math.max(...r.contrib[k])-Math.min(...r.contrib[k]);
-   if(impact>strongest.v)strongest={k,v:impact,n};
-   const diff=Math.abs((r.values[k][w.i]??0)-(r.values[k][second.i]??0));
-   if(diff>mostChange.v)mostChange={k,v:diff,n};
- });
- document.getElementById("analysis").innerHTML=[
-  ["Karar gücü",gap<5?"Sınırda — iki seçenek birbirine yakın.":gap<12?"Orta — lider önde ama hassas.":"Yüksek — mevcut verilerde belirgin üstünlük var."],
-  ["En etkili kriter",strongest.n+" · alternatifler arasındaki skor etkisi "+strongest.v.toFixed(1)+" puan."],
-  ["En yakın rakip",r.alternatives[second.i]+" · "+second.s.toFixed(1)+"/100."],
-  ["Kararı değiştirebilecek alan",strongest.n+" değerindeki değişiklik sonucu en çok etkileyebilir."]
- ].map(x=>`<div class="analysis"><b>${x[0]}</b><span class="small muted">${x[1]}</span></div>`).join("");
- const ms=CATEGORIES[r.category].metrics;
- document.getElementById("breakdown").innerHTML=ms.map(([k,n,u,d])=>{
-   const winnerContrib=r.contrib[k][w.i],weight=r.weights[k];
-   return `<div class="break-row"><div><strong>${n}</strong><span class="unit">${weight.toFixed(1)}% ağırlık</span></div><div class="small muted">Kazanana katkı: ${winnerContrib.toFixed(1)} puan</div><b>${winnerContrib.toFixed(1)}</b></div>`;
- }).join("");
+ const weightSum=Object.values(weights).reduce((a,b)=>a+Number(b||0),0);
+ if(weightSum<=0)return toast("En az bir kriterin önemini 0'dan büyük yap.");
+ c.metrics.forEach(([key])=>ns.forEach((_,i)=>{const cc=norm[key][i]*(weights[key]/weightSum)*100;contrib[key][i]=cc;scores[i]+=cc}));
+ const order=scores.map((score,i)=>({score,i})).sort((a,b)=>b.score-a.score);
+ const win=order[0],second=order[1];
+ let strongest={name:"",impact:0};
+ c.metrics.forEach(([key,name])=>{const impact=Math.abs(norm[key][win.i]-norm[key][second.i])*(weights[key]/weightSum);if(impact>strongest.impact)strongest={name,impact}});
+ const confidence=Math.min(99,Math.max(1,50+(win.score-second.score)*4));
+ lastResult={category:currentCategory,title,goal:document.getElementById("goal").value.trim(),extra:document.getElementById("extraInfo").value.trim(),alternatives:ns,weights:{...weights},values:JSON.parse(JSON.stringify(values)),scores:scores.map(x=>+x.toFixed(2)),norm,contrib,createdAt:new Date().toISOString(),winner:win.i,second:second.i,confidence:+confidence.toFixed(0),strongest:strongest.name};
+ renderResult(lastResult);
  document.getElementById("result").classList.add("show");
+ document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"});
 }
-function newDecision(){lastResult=null;document.getElementById("result").classList.remove("show");window.scrollTo({top:document.getElementById("decision").offsetTop-80,behavior:"smooth"})}
-function printReport(){if(!lastResult){return}window.print()}
-async function shareResult(){
- if(!lastResult)return;
- const r=lastResult,w=r.order[0],text=`TARTI sonucu: ${r.title}\nÖneri: ${r.alternatives[w.i]}\nSkor: ${w.s.toFixed(1)}/100`;
- if(navigator.share){try{await navigator.share({title:"TARTI sonucu",text})}catch(e){}}else{try{await navigator.clipboard.writeText(text);toast("Sonuç panoya kopyalandı.")}catch(e){toast(text)}}
+function renderResult(r){
+ const order=r.scores.map((s,i)=>({s,i})).sort((a,b)=>b.s-a.s);
+ const winner=r.alternatives[r.winner],second=r.alternatives[r.second];
+ let html=`<div class="winner"><div class="small muted">TARTI'nın mevcut verilerle sonucu</div><div class="big">🏆 ${esc(winner)}</div><div style="margin-top:7px;color:#bdb5d5">Skor: <b>${r.scores[r.winner]}/100</b> · İkinci: ${esc(second)} (${r.scores[r.second]}/100)</div></div>`;
+ html+=`<div class="score-grid">${order.map((x,pos)=>`<div class="score"><div class="small muted">${pos+1}. sıra · ${esc(r.alternatives[x.i])}</div><b>${x.s.toFixed(1)}</b><span class="muted"> / 100</span><div class="bar"><i style="width:${Math.max(0,Math.min(100,x.s))}%"></i></div></div>`).join("")}</div>`;
+ html+=`<div class="analysis-grid">
+ <div class="analysis"><strong>📊 Karar gücü</strong><span>${r.confidence}% — iki lider arasındaki farka göre hesaplanır.</span></div>
+ <div class="analysis"><strong>🎯 En etkili kriter</strong><span>${esc(r.strongest||"Belirgin bir kriter yok")}</span></div>
+ <div class="analysis"><strong>↔️ Skor farkı</strong><span>${(r.scores[r.winner]-r.scores[r.second]).toFixed(1)} puan.</span></div>
+ <div class="analysis"><strong>🧠 Hesap yöntemi</strong><span>Her kriter kendi yüzdesiyle değerlendirilir; toplam ağırlık yalnızca matematiksel normalizasyonda kullanılır.</span></div>
+ </div>`;
+ html+=`<div class="breakdown"><div class="breakdown-row breakdown-head"><div>Kriter</div><div>Ağırlık</div><div>Katkı</div></div>`;
+ CATEGORIES[r.category].metrics.forEach(([key,name])=>html+=`<div class="breakdown-row"><div>${name}</div><div>${Number(r.weights[key]).toFixed(0)}%</div><div>${r.contrib[key][r.winner].toFixed(1)} puan</div></div>`);
+ html+=`</div>`;
+ html+=`<div class="action-bar"><button class="btn btn-primary" onclick="saveDecision()">💾 Kararı Kaydet</button><button class="btn" onclick="printResult()">🖨️ Rapor</button><button class="btn" onclick="shareResult()">↗ Paylaş</button></div>`;
+ html+=`<div class="feedback-box"><strong>Bu sonucu nasıl buldun?</strong><div class="muted small">Her sonuçtan sonra site değerlendirmesi zorunludur. Yorumunu yalnızca giriş yapmış kullanıcılar gönderebilir.</div><div class="stars" id="resultStars">${[1,2,3,4,5].map(i=>`<button class="star" onclick="selectSiteRating(${i})">★</button>`).join("")}</div><textarea id="resultComment" placeholder="Sonuç hakkında düşüncen..."></textarea><button class="btn btn-primary" style="margin-top:10px" onclick="submitSiteReview()">Değerlendirmeyi Gönder</button><div class="small muted" id="reviewStatus"></div></div>`;
+ document.getElementById("resultContent").innerHTML=html;
+ selectedSiteRating=0;
 }
+function selectSiteRating(n){selectedSiteRating=n;document.querySelectorAll("#resultStars .star").forEach((s,i)=>s.classList.toggle("active",i<n))}
+function getUser(){return supabaseClient.auth.getUser()}
 async function saveDecision(){
- if(!lastResult){toast("Önce karar hesapla.");return}
- if(!sb){toast("Veritabanı bağlantısı hazır değil.");return}
- const {data:{user}}=await sb.auth.getUser();
- if(!user){openAuth();return}
- const r=lastResult,w=r.order[0];
- const {error}=await sb.from("decisions").insert({user_id:user.id,category:r.category,title:r.title,option_a:r.alternatives[0],option_b:r.alternatives[1],score_a:Math.round(r.scores[0]),score_b:Math.round(r.scores[1]),result:`${r.alternatives[w.i]} önerildi. Skor ${w.s.toFixed(1)}/100.`});
- if(error)toast("Kaydedilemedi: "+error.message);else toast("Kararın hesabına kaydedildi.");
+ const {data:{user}}=await getUser();
+ if(!user)return openAuth();
+ if(!lastResult)return;
+ const r=lastResult;
+ const {error}=await supabaseClient.from("decisions").insert({user_id:user.id,category:r.category,title:r.title,option_a:r.alternatives[0],option_b:r.alternatives[1],score_a:r.scores[0],score_b:r.scores[1],result:r.alternatives[r.winner],is_public:true});
+ if(error)toast("Karar kaydedilemedi: "+error.message);else toast("Kararın hesabına kaydedildi.")
 }
-async function signIn(){
- if(!sb)return toast("Supabase bağlantısı bulunamadı.");
+function badWords(){
+ return ["orospu","orosp","sik","siktir","yarrak","amcık","amk","aq","piç","pezevenk","kahpe","şerefsiz","ibne","gerizekalı","salak","aptal","mal","ananı","sikeyim","göt","bok","fuck","shit","bitch","asshole"];
+}
+function containsBadWord(text){const x=text.toLocaleLowerCase("tr-TR").replace(/[\s._\-*]+/g,"");return badWords().some(w=>x.includes(w))}
+async function submitSiteReview(){
+ const {data:{user}}=await getUser();
+ if(!user){openAuth();return toast("Yorum yapmak için önce giriş yapmalısın.")}
+ if(!lastResult)return;
+ if(!selectedSiteRating)return toast("Lütfen 1–5 yıldız arasında bir değerlendirme seç.");
+ const text=document.getElementById("resultComment").value.trim();
+ if(text.length<5)return toast("Lütfen en az 5 karakterlik bir yorum yaz.");
+ if(text.length>800)return toast("Yorum en fazla 800 karakter olabilir.");
+ if(containsBadWord(text))return toast("Yorumunda uygun olmayan bir ifade bulundu.");
+ // Yorum mevcut Supabase şemasındaki decision_id alanına bağlıdır.
+ // Bu nedenle değerlendirme gönderilirken sonuç kararı da güvenli biçimde kaydedilir
+ // ve yorum o karar kaydına bağlanır.
+ const r=lastResult;
+ const {data:decision,error:decisionError}=await supabaseClient.from("decisions").insert({
+  user_id:user.id,category:r.category,title:r.title,
+  option_a:r.alternatives[0],option_b:r.alternatives[1],
+  score_a:r.scores[0],score_b:r.scores[1],
+  result:r.alternatives[r.winner],is_public:true
+ }).select("id").single();
+ if(decisionError){toast("Değerlendirme için karar kaydı oluşturulamadı: "+decisionError.message);return}
+ const {error}=await supabaseClient.from("comments").insert({
+  decision_id:decision.id,user_id:user.id,content:`[${selectedSiteRating}★] ${text}`
+ });
+ if(error){toast("Yorum kaydedilemedi: "+error.message);return}
+ toast("Değerlendirmen yayınlandı.");document.getElementById("resultComment").value="";loadCommunity();
+}
+async function loadCommunity(){
+ const box=document.getElementById("commentList"),summary=document.getElementById("communitySummary");
+ // The existing schema stores comments against decisions, so retrieve public comments with their decision context.
+ const {data,error}=await supabaseClient.from("comments").select("id,content,created_at,decision_id").order("created_at",{ascending:false}).limit(100);
+ if(error){summary.textContent="Topluluk değerlendirmeleri şu anda yüklenemiyor.";box.innerHTML="";return}
+ let rows=(data||[]).map(x=>{
+  const m=String(x.content||"").match(/^\[(\d)★\]\s*(.*)$/s);
+  return {id:x.id,stars:m?Number(m[1]):0,text:m?m[2]:x.content,date:x.created_at};
+ }).filter(x=>x.stars>=1&&x.stars<=5);
+ if(ratingFilter)rows=rows.filter(x=>x.stars===ratingFilter);
+ const all=data||[];
+ const parsed=all.map(x=>{const m=String(x.content||"").match(/^\[(\d)★\]/);return m?Number(m[1]):0}).filter(Boolean);
+ const avg=parsed.length?parsed.reduce((a,b)=>a+b,0)/parsed.length:0;
+ summary.innerHTML=parsed.length?`⭐ Ortalama <b>${avg.toFixed(1)}/5</b> · ${parsed.length} değerlendirme`:"Henüz değerlendirme yok.";
+ box.innerHTML=rows.length?rows.map(x=>`<div class="comment"><div class="comment-top"><span class="comment-stars">${"★".repeat(x.stars)}<span style="color:#3b4150">${"★".repeat(5-x.stars)}</span></span><span class="small muted">${new Date(x.date).toLocaleDateString("tr-TR")}</span></div><p>${esc(x.text)}</p></div>`).join(""):"Bu yıldız seviyesinde henüz yorum yok.";
+ renderRatingFilters(parsed);
+}
+function renderRatingFilters(parsed){
+ const counts=[1,2,3,4,5].map(n=>parsed.filter(x=>x===n).length);
+ document.getElementById("ratingFilters").innerHTML=`<button class="filter ${ratingFilter===0?"active":""}" onclick="setRatingFilter(0)">Tümü</button>`+[1,2,3,4,5].map(n=>`<button class="filter ${ratingFilter===n?"active":""}" onclick="setRatingFilter(${n})">${n} ★ (${counts[n-1]})</button>`).join("");
+}
+function setRatingFilter(n){ratingFilter=n;loadCommunity()}
+function shareResult(){
+ if(!lastResult)return;
+ const text=`TARTI sonucu: ${lastResult.title} → ${lastResult.alternatives[lastResult.winner]} (${lastResult.scores[lastResult.winner]}/100)`;
+ if(navigator.share)navigator.share({title:"TARTI sonucu",text}).catch(()=>{});
+ else{navigator.clipboard?.writeText(text);toast("Sonuç kopyalandı.")}
+}
+function printResult(){window.print()}
+function openAuth(){document.getElementById("authModal").classList.add("show")}
+function closeAuth(){document.getElementById("authModal").classList.remove("show")}
+function switchAuth(mode){authMode=mode;document.getElementById("loginTab").classList.toggle("active",mode==="login");document.getElementById("signupTab").classList.toggle("active",mode==="signup");document.getElementById("authTitle").textContent=mode==="login"?"Giriş Yap":"Kayıt Ol";document.getElementById("authMessage").textContent=""}
+async function submitAuth(){
  const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
- const {error}=await sb.auth.signInWithPassword({email,password});if(error)toast(error.message);else{closeModal("authModal");updateAuth()}
+ if(!email||!password)return toast("E-posta ve şifre gerekli.");
+ let res=authMode==="login"?await supabaseClient.auth.signInWithPassword({email,password}):await supabaseClient.auth.signUp({email,password});
+ if(res.error)return document.getElementById("authMessage").textContent=res.error.message;
+ if(authMode==="signup"&&!res.data.session)return document.getElementById("authMessage").textContent="Kayıt oluşturuldu. E-posta doğrulamasını tamamla.";
+ toast(authMode==="login"?"Giriş başarılı.":"Kayıt başarılı.");closeAuth();updateAuthButton();
 }
-async function signUp(){
- if(!sb)return toast("Supabase bağlantısı bulunamadı.");
- const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
- if(password.length<6)return toast("Şifre en az 6 karakter olmalı.");
- const {error}=await sb.auth.signUp({email,password});if(error)toast(error.message);else toast("Kayıt oluşturuldu. E-posta doğrulaması gerekiyorsa gelen kutunu kontrol et.")
+async function updateAuthButton(){
+ const {data:{user}}=await getUser();document.getElementById("authBtn").textContent=user?"Hesabım":"Giriş Yap";
 }
-async function updateAuth(){
- if(!sb)return;const {data:{user}}=await sb.auth.getUser();const b=document.getElementById("authBtn");b.textContent=user?"Hesabım":"Giriş Yap";
-}
-if(sb)sb.auth.onAuthStateChange(()=>updateAuth());
-init();updateAuth();
+function openPremium(){document.getElementById("premiumModal").classList.add("show")}
+function closePremium(){document.getElementById("premiumModal").classList.remove("show")}
+document.getElementById("authModal").addEventListener("click",e=>{if(e.target.id==="authModal")closeAuth()});
+document.getElementById("premiumModal").addEventListener("click",e=>{if(e.target.id==="premiumModal")closePremium()});
+supabaseClient.auth.onAuthStateChange(()=>updateAuthButton());
+applyCategory("teknoloji");
+updateAuthButton();
+loadCommunity();
 </script>
 </body>
 </html>
