@@ -298,7 +298,67 @@ a {
 
 
     </div>
+<section id="araba" style="margin-top: 70px;">
 
+    <div class="hero">
+
+        <h2>🚗 Araba mı, toplu taşıma mı?</h2>
+
+        <p>
+            Aylık maliyetlerini karşılaştır.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <label>Arabanın aylık yakıt masrafı</label>
+
+        <input
+            type="number"
+            id="yakit"
+            placeholder="Örn: 5000"
+        >
+
+
+        <label>Aylık otopark masrafı</label>
+
+        <input
+            type="number"
+            id="otopark"
+            placeholder="Örn: 1500"
+        >
+
+
+        <label>Aylık bakım ve diğer masraflar</label>
+
+        <input
+            type="number"
+            id="bakim"
+            placeholder="Örn: 2000"
+        >
+
+
+        <label>Aylık toplu taşıma masrafı</label>
+
+        <input
+            type="number"
+            id="topluTasima"
+            placeholder="Örn: 2000"
+        >
+
+
+        <button onclick="hesapla()">
+            KARŞILAŞTIR
+        </button>
+
+
+        <div id="sonuc"></div>
+
+    </div>
+
+</section>
 </section>
 
         <footer>
@@ -308,7 +368,115 @@ a {
         </footer>
 
     </div>
+<script>
 
+function hesapla() {
+
+    const yakit =
+        Number(document.getElementById("yakit").value);
+
+    const otopark =
+        Number(document.getElementById("otopark").value);
+
+    const bakim =
+        Number(document.getElementById("bakim").value);
+
+    const topluTasima =
+        Number(document.getElementById("topluTasima").value);
+
+
+    if (
+        yakit < 0 ||
+        otopark < 0 ||
+        bakim < 0 ||
+        topluTasima < 0
+    ) {
+
+        alert("Lütfen geçerli değerler gir.");
+
+        return;
+    }
+
+
+    const araba =
+        yakit + otopark + bakim;
+
+
+    const fark =
+        araba - topluTasima;
+
+
+    const sonuc =
+        document.getElementById("sonuc");
+
+
+    sonuc.style.display = "block";
+
+
+    if (araba > topluTasima) {
+
+        sonuc.innerHTML = `
+
+            <h2>🚌 Toplu taşıma daha ekonomik.</h2>
+
+            <p>
+                Araba:
+                <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>
+            </p>
+
+            <p>
+                Toplu taşıma:
+                <strong>${topluTasima.toLocaleString("tr-TR")} TL/ay</strong>
+            </p>
+
+            <p>
+                Aylık fark:
+                <strong>${fark.toLocaleString("tr-TR")} TL</strong>
+            </p>
+
+        `;
+
+    } else if (araba < topluTasima) {
+
+        sonuc.innerHTML = `
+
+            <h2>🚗 Araba daha ekonomik.</h2>
+
+            <p>
+                Araba:
+                <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>
+            </p>
+
+            <p>
+                Toplu taşıma:
+                <strong>${topluTasima.toLocaleString("tr-TR")} TL/ay</strong>
+            </p>
+
+            <p>
+                Aylık fark:
+                <strong>${Math.abs(fark).toLocaleString("tr-TR")} TL</strong>
+            </p>
+
+        `;
+
+    } else {
+
+        sonuc.innerHTML = `
+
+            <h2>⚖️ Maliyetler aynı.</h2>
+
+            <p>
+                Her iki seçenek de yaklaşık
+                <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>.
+            </p>
+
+        `;
+
+    }
+
+}
+
+        </script>
 </body>
 
 </html>
