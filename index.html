@@ -1,254 +1,310 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BİRLEŞTİR - Akıllı Karar Ver</title>
+<title>BİRLEŞTİR - Karar Vermek Artık Daha Kolay</title>
 
 <style>
 
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:#09090d;
-    color:white;
-    line-height:1.5;
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #09090d;
+    color: white;
+    line-height: 1.5;
 }
 
-.container{
-    width:92%;
-    max-width:900px;
-    margin:auto;
+.container {
+    width: 92%;
+    max-width: 900px;
+    margin: auto;
 }
 
-header{
-    text-align:center;
-    padding:55px 20px 35px;
+header {
+    text-align: center;
+    padding: 45px 20px 25px;
 }
 
-.logo{
-    font-size:42px;
-    font-weight:900;
-    letter-spacing:2px;
+.logo {
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 2px;
 }
 
-.subtitle{
-    color:#999;
-    margin-top:8px;
-    font-size:16px;
+.subtitle {
+    color: #aaa;
+    margin-top: 8px;
+    font-size: 16px;
 }
 
-.hero{
-    text-align:center;
-    padding:25px 0 35px;
+.hero {
+    text-align: center;
+    padding: 35px 15px;
 }
 
-.hero h1{
-    font-size:32px;
-    margin-bottom:10px;
+.hero h1 {
+    font-size: 32px;
+    margin-bottom: 12px;
 }
 
-.hero p{
-    color:#aaa;
+.hero p {
+    color: #aaa;
+    font-size: 17px;
 }
 
-.categories{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:15px;
-    margin-bottom:30px;
+.categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 35px;
 }
 
-.category{
-    background:#18181f;
-    border:1px solid #303039;
-    border-radius:18px;
-    padding:22px;
-    cursor:pointer;
-    transition:.2s;
+.category {
+    text-decoration: none;
+    color: white;
+    background: #17171e;
+    border: 1px solid #2d2d36;
+    border-radius: 18px;
+    padding: 25px 18px;
+    transition: 0.2s;
 }
 
-.category:hover{
-    transform:translateY(-3px);
-    border-color:#777;
+.category:hover {
+    transform: translateY(-3px);
+    border-color: #777;
 }
 
-.category.active{
-    border-color:white;
+.category .icon {
+    font-size: 35px;
+    margin-bottom: 10px;
 }
 
-.category .icon{
-    font-size:34px;
-    margin-bottom:8px;
+.category h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
 }
 
-.category h3{
-    font-size:20px;
+.category p {
+    color: #999;
+    font-size: 14px;
 }
 
-.category p{
-    color:#999;
-    font-size:14px;
-    margin-top:5px;
+.panel {
+    display: none;
+    background: #14141b;
+    border: 1px solid #30303a;
+    border-radius: 22px;
+    padding: 25px;
+    margin-bottom: 35px;
 }
 
-.tool{
-    display:none;
-    background:#111117;
-    border:1px solid #303039;
-    border-radius:22px;
-    padding:25px;
-    margin-bottom:40px;
+.panel.active {
+    display: block;
 }
 
-.tool.active{
-    display:block;
+.panel h2 {
+    font-size: 27px;
+    margin-bottom: 8px;
 }
 
-.tool-title{
-    font-size:27px;
-    margin-bottom:7px;
+.panel-description {
+    color: #999;
+    margin-bottom: 25px;
 }
 
-.tool-desc{
-    color:#999;
-    margin-bottom:25px;
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-.option-title{
-    font-size:20px;
-    margin:25px 0 15px;
-    color:#fff;
+.option-card {
+    background: #1b1b23;
+    border: 1px solid #30303a;
+    border-radius: 15px;
+    padding: 18px;
 }
 
-label{
-    display:block;
-    margin-top:16px;
-    margin-bottom:7px;
-    font-weight:bold;
-    color:#ddd;
+.option-card h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    color: #ddd;
+    font-weight: bold;
+    margin-top: 14px;
+    margin-bottom: 7px;
 }
 
 input,
-select{
-    width:100%;
-    padding:15px;
-    border-radius:12px;
-    border:1px solid #35353e;
-    background:#0b0b10;
-    color:white;
-    font-size:16px;
-    outline:none;
+select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 11px;
+    border: 1px solid #363640;
+    background: #0e0e13;
+    color: white;
+    font-size: 16px;
+    outline: none;
 }
 
 input:focus,
-select:focus{
-    border-color:#aaa;
+select:focus {
+    border-color: #888;
 }
 
-button{
-    width:100%;
-    border:none;
-    border-radius:13px;
-    padding:17px;
-    margin-top:24px;
-    background:white;
-    color:#111;
-    font-size:16px;
-    font-weight:900;
-    cursor:pointer;
+.priority {
+    margin-top: 20px;
 }
 
-button:hover{
-    opacity:.9;
+.priority label {
+    margin-top: 0;
 }
 
-.result{
-    display:none;
-    margin-top:25px;
-    background:#1b1b23;
-    border:1px solid #383842;
-    border-radius:18px;
-    padding:22px;
+button {
+    width: 100%;
+    padding: 17px;
+    margin-top: 22px;
+    border: none;
+    border-radius: 13px;
+    background: white;
+    color: #111;
+    font-size: 17px;
+    font-weight: 900;
+    cursor: pointer;
 }
 
-.result h2{
-    font-size:25px;
-    margin-bottom:15px;
+button:hover {
+    background: #ddd;
 }
 
-.result p{
-    color:#bbb;
-    margin:11px 0;
-    font-size:16px;
+.back-button {
+    background: #24242c;
+    color: white;
+    margin-top: 10px;
 }
 
-.result strong{
-    color:white;
+.result {
+    display: none;
+    margin-top: 25px;
+    background: #1b1b23;
+    border: 1px solid #35353e;
+    border-radius: 20px;
+    padding: 25px;
 }
 
-hr{
-    border:0;
-    border-top:1px solid #444;
-    margin:20px 0;
+.result.show {
+    display: block;
 }
 
-.score-row{
-    margin:15px 0;
+.result-title {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 20px;
 }
 
-.score-label{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:6px;
+.result-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #303039;
+    color: #bbb;
 }
 
-.bar{
-    width:100%;
-    height:14px;
-    background:#33333b;
-    border-radius:20px;
-    overflow:hidden;
+.result-line strong {
+    color: white;
 }
 
-.fill{
-    height:100%;
-    background:white;
-    border-radius:20px;
+.decision {
+    margin-top: 25px;
+    padding-top: 22px;
+    border-top: 1px solid #444;
 }
 
-footer{
-    text-align:center;
-    padding:30px;
-    color:#555;
-    margin-top:30px;
+.decision h3 {
+    font-size: 25px;
+    margin-bottom: 18px;
 }
 
-@media(max-width:600px){
+.score-row {
+    margin-top: 18px;
+}
 
-    .categories{
-        grid-template-columns:1fr;
+.score-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+}
+
+.score-bar {
+    width: 100%;
+    height: 13px;
+    background: #36363f;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.score-fill {
+    height: 100%;
+    background: white;
+    border-radius: 20px;
+}
+
+.explanation {
+    margin-top: 25px;
+    color: #bbb;
+    font-size: 16px;
+}
+
+.warning {
+    color: #ffcc66;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 35px 15px;
+    color: #666;
+    font-size: 13px;
+}
+
+@media (max-width: 650px) {
+
+    .categories {
+        grid-template-columns: 1fr;
     }
 
-    .logo{
-        font-size:35px;
+    .option-grid {
+        grid-template-columns: 1fr;
     }
 
-    .hero h1{
-        font-size:27px;
+    .hero h1 {
+        font-size: 27px;
     }
 
-    .tool{
-        padding:20px;
+    .logo {
+        font-size: 32px;
+    }
+
+    .panel {
+        padding: 18px;
+    }
+
+    .result-line {
+        flex-direction: column;
+        gap: 3px;
     }
 
 }
@@ -263,7 +319,7 @@ footer{
 
 <header>
 
-<div class="logo">BİRLEŞTİR</div>
+<div class="logo">🧠 BİRLEŞTİR</div>
 
 <div class="subtitle">
 Karar vermek artık daha kolay.
@@ -277,319 +333,431 @@ Karar vermek artık daha kolay.
 <h1>Neye karar vermek istiyorsun?</h1>
 
 <p>
-Seçeneklerini karşılaştır, rakamları değerlendir ve daha mantıklı seçeneği bul.
+Seçeneklerini gir. BİRLEŞTİR senin için karşılaştırsın.
 </p>
 
 </div>
 
 
-<!-- KATEGORİLER -->
-
 <div class="categories">
 
-<div class="category active" onclick="ac('ulasim',this)">
+<a href="#ulasim" class="category" onclick="acPanel('ulasim')">
+
 <div class="icon">🚗</div>
+
 <h3>Ulaşım</h3>
+
 <p>Araba mı, toplu taşıma mı?</p>
-</div>
 
-<div class="category" onclick="ac('ev',this)">
+</a>
+
+
+<a href="#ev" class="category" onclick="acPanel('ev')">
+
 <div class="icon">🏠</div>
+
 <h3>Ev</h3>
+
 <p>Hangi ev daha mantıklı?</p>
-</div>
 
-<div class="category" onclick="ac('alisveris',this)">
+</a>
+
+
+<a href="#alisveris" class="category" onclick="acPanel('alisveris')">
+
 <div class="icon">🛒</div>
+
 <h3>Alışveriş</h3>
-<p>Hangi ürünü almalısın?</p>
-</div>
 
-<div class="category" onclick="ac('para',this)">
+<p>Hangi ürün daha avantajlı?</p>
+
+</a>
+
+
+<a href="#para" class="category" onclick="acPanel('para')">
+
 <div class="icon">💰</div>
-<h3>Para Kararları</h3>
-<p>Peşin mi, taksit mi?</p>
-</div>
 
-<div class="category" onclick="ac('seyahat',this)">
+<h3>Para</h3>
+
+<p>Peşin mi, taksit mi?</p>
+
+</a>
+
+
+<a href="#seyahat" class="category" onclick="acPanel('seyahat')">
+
 <div class="icon">✈️</div>
+
 <h3>Seyahat</h3>
+
 <p>Hangi seyahat seçeneği daha iyi?</p>
-</div>
+
+</a>
 
 </div>
 
 
 <!-- ================= ULAŞIM ================= -->
 
-<section id="ulasim" class="tool active">
+<section id="ulasim" class="panel">
 
-<h2 class="tool-title">🚗 Ulaşım Karşılaştırması</h2>
+<h2>🚗 Ulaşım Karşılaştırması</h2>
 
-<p class="tool-desc">
-Araba ve toplu taşımayı maliyet ve zaman açısından karşılaştır.
+<p class="panel-description">
+Araba ile toplu taşımayı maliyet ve zaman açısından karşılaştır.
 </p>
 
-<label>Arabanın aylık yakıt masrafı</label>
-<input id="u_yakit" type="number" placeholder="Örn: 5000">
+<div class="option-grid">
 
-<label>Aylık otopark masrafı</label>
-<input id="u_otopark" type="number" placeholder="Örn: 1500">
+<div class="option-card">
 
-<label>Aylık bakım ve diğer masraflar</label>
-<input id="u_bakim" type="number" placeholder="Örn: 2000">
+<h3>🚗 Araba</h3>
 
-<label>Aylık toplu taşıma masrafı</label>
-<input id="u_toplu" type="number" placeholder="Örn: 2000">
+<label>Yakıt / ay</label>
+<input type="number" id="u_yakit" placeholder="Örn: 5000">
 
-<label>Arabayla aylık yolculuk süresi (saat)</label>
-<input id="u_arabaZaman" type="number" placeholder="Örn: 20">
+<label>Otopark / ay</label>
+<input type="number" id="u_otopark" placeholder="Örn: 1500">
 
-<label>Toplu taşımayla aylık yolculuk süresi (saat)</label>
-<input id="u_topluZaman" type="number" placeholder="Örn: 35">
+<label>Bakım / ay</label>
+<input type="number" id="u_bakim" placeholder="Örn: 2000">
+
+<label>Aylık yolculuk süresi</label>
+<input type="number" id="u_araba_zaman" placeholder="Örn: 20">
+
+</div>
+
+
+<div class="option-card">
+
+<h3>🚌 Toplu taşıma</h3>
+
+<label>Aylık ulaşım maliyeti</label>
+<input type="number" id="u_toplu" placeholder="Örn: 2000">
+
+<label>Aylık yolculuk süresi</label>
+<input type="number" id="u_toplu_zaman" placeholder="Örn: 35">
+
+</div>
+
+</div>
+
+
+<div class="priority">
 
 <label>Senin için hangisi daha önemli?</label>
 
 <select id="u_oncelik">
+
 <option value="para">💰 Para</option>
 <option value="zaman">⏱️ Zaman</option>
 <option value="denge">⚖️ İkisi de eşit</option>
+
 </select>
 
-<button onclick="ulasimHesapla()">
-KARŞILAŞTIR
+</div>
+
+
+<button onclick="hesaplaUlasim()">
+🚀 ULAŞIMI KARŞILAŞTIR
 </button>
 
-<div id="ulasimSonuc" class="result"></div>
+<div id="u_sonuc" class="result"></div>
 
 </section>
 
 
 <!-- ================= EV ================= -->
 
-<section id="ev" class="tool">
+<section id="ev" class="panel">
 
-<h2 class="tool-title">🏠 Ev Karşılaştırması</h2>
+<h2>🏠 Ev Karşılaştırması</h2>
 
-<p class="tool-desc">
-İki evin gerçek aylık maliyetini ve ulaşım yükünü karşılaştır.
+<p class="panel-description">
+İki evi aylık maliyet, ulaşım ve yaşam avantajları açısından karşılaştır.
 </p>
 
-<h3 class="option-title">🏠 EV A</h3>
+<div class="option-grid">
 
-<label>Kira</label>
-<input id="evA_kira" type="number" placeholder="Örn: 20000">
+<div class="option-card">
 
-<label>Aylık faturalar</label>
-<input id="evA_fatura" type="number" placeholder="Örn: 3000">
+<h3>🏠 Ev A</h3>
 
-<label>Aidat</label>
-<input id="evA_aidat" type="number" placeholder="Örn: 1500">
+<label>Kira / ay</label>
+<input type="number" id="e_a_kira" placeholder="Örn: 20000">
 
-<label>Aylık ulaşım masrafı</label>
-<input id="evA_ulasim" type="number" placeholder="Örn: 2500">
+<label>Faturalar / ay</label>
+<input type="number" id="e_a_fatura" placeholder="Örn: 2500">
 
-<label>Aylık ulaşım süresi (saat)</label>
-<input id="evA_zaman" type="number" placeholder="Örn: 30">
+<label>Ulaşım maliyeti / ay</label>
+<input type="number" id="e_a_ulasim" placeholder="Örn: 3000">
+
+<label>Aylık ulaşım süresi</label>
+<input type="number" id="e_a_zaman" placeholder="Örn: 30">
+
+<label>Ev kalite puanı (1-10)</label>
+<input type="number" id="e_a_kalite" min="1" max="10" placeholder="Örn: 8">
+
+</div>
 
 
-<h3 class="option-title">🏠 EV B</h3>
+<div class="option-card">
 
-<label>Kira</label>
-<input id="evB_kira" type="number" placeholder="Örn: 24000">
+<h3>🏠 Ev B</h3>
 
-<label>Aylık faturalar</label>
-<input id="evB_fatura" type="number" placeholder="Örn: 2500">
+<label>Kira / ay</label>
+<input type="number" id="e_b_kira" placeholder="Örn: 25000">
 
-<label>Aidat</label>
-<input id="evB_aidat" type="number" placeholder="Örn: 500">
+<label>Faturalar / ay</label>
+<input type="number" id="e_b_fatura" placeholder="Örn: 2500">
 
-<label>Aylık ulaşım masrafı</label>
-<input id="evB_ulasim" type="number" placeholder="Örn: 1000">
+<label>Ulaşım maliyeti / ay</label>
+<input type="number" id="e_b_ulasim" placeholder="Örn: 1500">
 
-<label>Aylık ulaşım süresi (saat)</label>
-<input id="evB_zaman" type="number" placeholder="Örn: 15">
+<label>Aylık ulaşım süresi</label>
+<input type="number" id="e_b_zaman" placeholder="Örn: 15">
 
+<label>Ev kalite puanı (1-10)</label>
+<input type="number" id="e_b_kalite" min="1" max="10" placeholder="Örn: 9">
+
+</div>
+
+</div>
+
+
+<div class="priority">
 
 <label>Senin için hangisi daha önemli?</label>
 
-<select id="ev_oncelik">
+<select id="e_oncelik">
+
 <option value="para">💰 Para</option>
 <option value="zaman">⏱️ Zaman</option>
-<option value="denge">⚖️ İkisi de eşit</option>
+<option value="kalite">⭐ Kalite</option>
+<option value="denge">⚖️ Denge</option>
+
 </select>
 
-<button onclick="evHesapla()">
-EVLERİ KARŞILAŞTIR
+</div>
+
+
+<button onclick="hesaplaEv()">
+🏠 EVLERİ KARŞILAŞTIR
 </button>
 
-<div id="evSonuc" class="result"></div>
+<div id="e_sonuc" class="result"></div>
 
 </section>
 
 
 <!-- ================= ALIŞVERİŞ ================= -->
 
-<section id="alisveris" class="tool">
+<section id="alisveris" class="panel">
 
-<h2 class="tool-title">🛒 Alışveriş Karşılaştırması</h2>
+<h2>🛒 Alışveriş Karşılaştırması</h2>
 
-<p class="tool-desc">
-İki ürünü fiyat, kullanım süresi, garanti ve kalite açısından karşılaştır.
+<p class="panel-description">
+İki ürünü fiyat, kalite ve garanti açısından karşılaştır.
 </p>
 
-<h3 class="option-title">🛒 ÜRÜN A</h3>
+<div class="option-grid">
 
-<label>Ürün fiyatı</label>
-<input id="alA_fiyat" type="number" placeholder="Örn: 15000">
+<div class="option-card">
 
-<label>Beklenen kullanım süresi (yıl)</label>
-<input id="alA_sure" type="number" placeholder="Örn: 5">
+<h3>🛒 Ürün A</h3>
 
-<label>Garanti süresi (yıl)</label>
-<input id="alA_garanti" type="number" placeholder="Örn: 2">
+<label>Fiyat</label>
+<input type="number" id="a_fiyat" placeholder="Örn: 15000">
 
-<label>Kalite puanı (1-10)</label>
-<input id="alA_kalite" type="number" min="1" max="10" placeholder="Örn: 8">
+<label>Kalite (1-10)</label>
+<input type="number" id="a_kalite" min="1" max="10" placeholder="Örn: 8">
+
+<label>Garanti (yıl)</label>
+<input type="number" id="a_garanti" placeholder="Örn: 2">
+
+</div>
 
 
-<h3 class="option-title">🛒 ÜRÜN B</h3>
+<div class="option-card">
 
-<label>Ürün fiyatı</label>
-<input id="alB_fiyat" type="number" placeholder="Örn: 19000">
+<h3>🛒 Ürün B</h3>
 
-<label>Beklenen kullanım süresi (yıl)</label>
-<input id="alB_sure" type="number" placeholder="Örn: 7">
+<label>Fiyat</label>
+<input type="number" id="b_fiyat" placeholder="Örn: 19000">
 
-<label>Garanti süresi (yıl)</label>
-<input id="alB_garanti" type="number" placeholder="Örn: 3">
+<label>Kalite (1-10)</label>
+<input type="number" id="b_kalite" min="1" max="10" placeholder="Örn: 9">
 
-<label>Kalite puanı (1-10)</label>
-<input id="alB_kalite" type="number" min="1" max="10" placeholder="Örn: 9">
+<label>Garanti (yıl)</label>
+<input type="number" id="b_garanti" placeholder="Örn: 3">
 
+</div>
+
+</div>
+
+
+<div class="priority">
 
 <label>Senin için hangisi daha önemli?</label>
 
-<select id="al_oncelik">
-<option value="fiyat">💰 Fiyat</option>
+<select id="a_oncelik">
+
+<option value="para">💰 Fiyat</option>
 <option value="kalite">⭐ Kalite</option>
-<option value="denge">⚖️ İkisi de eşit</option>
+<option value="garanti">🛡️ Garanti</option>
+<option value="denge">⚖️ Denge</option>
+
 </select>
 
-<button onclick="alisverisHesapla()">
-ÜRÜNLERİ KARŞILAŞTIR
+</div>
+
+
+<button onclick="hesaplaAlisveris()">
+🛒 ÜRÜNLERİ KARŞILAŞTIR
 </button>
 
-<div id="alisverisSonuc" class="result"></div>
+<div id="a_sonuc" class="result"></div>
 
 </section>
 
 
 <!-- ================= PARA ================= -->
 
-<section id="para" class="tool">
+<section id="para" class="panel">
 
-<h2 class="tool-title">💰 Para Kararları</h2>
+<h2>💰 Para Kararını Ver</h2>
 
-<p class="tool-desc">
-Bir alışverişte peşin ödeme ile taksitli ödemenin toplam maliyetini karşılaştır.
+<p class="panel-description">
+Peşin ödeme ile taksitli ödemeyi gerçek toplam maliyet üzerinden karşılaştır.
 </p>
 
+<div class="option-grid">
+
+<div class="option-card">
+
+<h3>💰 Peşin</h3>
+
 <label>Peşin fiyat</label>
-<input id="p_pesin" type="number" placeholder="Örn: 30000">
+<input type="number" id="p_pesin" placeholder="Örn: 30000">
 
-<label>Taksitli toplam fiyat</label>
-<input id="p_taksitToplam" type="number" placeholder="Örn: 36000">
+</div>
 
-<label>Aylık taksit tutarı</label>
-<input id="p_aylik" type="number" placeholder="Örn: 3000">
+
+<div class="option-card">
+
+<h3>📅 Taksit</h3>
+
+<label>Aylık taksit</label>
+<input type="number" id="p_taksit" placeholder="Örn: 3000">
 
 <label>Taksit sayısı</label>
-<input id="p_sayisi" type="number" placeholder="Örn: 12">
+<input type="number" id="p_sayi" placeholder="Örn: 12">
+
+</div>
+
+</div>
+
+
+<div class="priority">
 
 <label>Senin için hangisi daha önemli?</label>
 
 <select id="p_oncelik">
-<option value="maliyet">💰 En düşük toplam maliyet</option>
-<option value="aylik">📅 Düşük aylık ödeme</option>
-<option value="denge">⚖️ İkisi de önemli</option>
+
+<option value="toplam">💰 Toplam maliyet</option>
+<option value="aylik">📅 Aylık ödeme</option>
+<option value="denge">⚖️ Denge</option>
+
 </select>
 
-<button onclick="paraHesapla()">
-PARA KARARINI VER
+</div>
+
+
+<button onclick="hesaplaPara()">
+💰 PARA KARARINI VER
 </button>
 
-<div id="paraSonuc" class="result"></div>
+<div id="p_sonuc" class="result"></div>
 
 </section>
 
 
 <!-- ================= SEYAHAT ================= -->
 
-<section id="seyahat" class="tool">
+<section id="seyahat" class="panel">
 
-<h2 class="tool-title">✈️ Seyahat Karşılaştırması</h2>
+<h2>✈️ Seyahat Karşılaştırması</h2>
 
-<p class="tool-desc">
-İki seyahat planını toplam maliyet ve süre açısından karşılaştır.
+<p class="panel-description">
+İki seyahat seçeneğini maliyet, süre ve kalite açısından karşılaştır.
 </p>
 
-<h3 class="option-title">✈️ SEYAHAT A</h3>
+<div class="option-grid">
 
-<label>Ulaşım maliyeti</label>
-<input id="sA_ulasim" type="number" placeholder="Örn: 5000">
+<div class="option-card">
 
-<label>Otel maliyeti</label>
-<input id="sA_otel" type="number" placeholder="Örn: 8000">
+<h3>✈️ Seyahat A</h3>
 
-<label>Yemek maliyeti</label>
-<input id="sA_yemek" type="number" placeholder="Örn: 4000">
+<label>Toplam maliyet</label>
+<input type="number" id="s_a_fiyat" placeholder="Örn: 18500">
 
-<label>Şehir içi ulaşım</label>
-<input id="sA_sehir" type="number" placeholder="Örn: 1500">
+<label>Seyahat süresi (gün)</label>
+<input type="number" id="s_a_gun" placeholder="Örn: 5">
 
-<label>Toplam seyahat süresi (gün)</label>
-<input id="sA_gun" type="number" placeholder="Örn: 5">
+<label>Konaklama / kalite puanı (1-10)</label>
+<input type="number" id="s_a_kalite" min="1" max="10" placeholder="Örn: 8">
+
+</div>
 
 
-<h3 class="option-title">✈️ SEYAHAT B</h3>
+<div class="option-card">
 
-<label>Ulaşım maliyeti</label>
-<input id="sB_ulasim" type="number" placeholder="Örn: 7000">
+<h3>✈️ Seyahat B</h3>
 
-<label>Otel maliyeti</label>
-<input id="sB_otel" type="number" placeholder="Örn: 6000">
+<label>Toplam maliyet</label>
+<input type="number" id="s_b_fiyat" placeholder="Örn: 17500">
 
-<label>Yemek maliyeti</label>
-<input id="sB_yemek" type="number" placeholder="Örn: 3500">
+<label>Seyahat süresi (gün)</label>
+<input type="number" id="s_b_gun" placeholder="Örn: 7">
 
-<label>Şehir içi ulaşım</label>
-<input id="sB_sehir" type="number" placeholder="Örn: 1000">
+<label>Konaklama / kalite puanı (1-10)</label>
+<input type="number" id="s_b_kalite" min="1" max="10" placeholder="Örn: 9">
 
-<label>Toplam seyahat süresi (gün)</label>
-<input id="sB_gun" type="number" placeholder="Örn: 7">
+</div>
 
+</div>
+
+
+<div class="priority">
 
 <label>Senin için hangisi daha önemli?</label>
 
 <select id="s_oncelik">
-<option value="maliyet">💰 Para</option>
-<option value="sure">⏱️ Daha uzun tatil</option>
-<option value="denge">⚖️ İkisi de eşit</option>
+
+<option value="para">💰 Para</option>
+<option value="sure">🌴 Süre</option>
+<option value="kalite">⭐ Kalite</option>
+<option value="denge">⚖️ Denge</option>
+
 </select>
 
-<button onclick="seyahatHesapla()">
-SEYAHATLERİ KARŞILAŞTIR
+</div>
+
+
+<button onclick="hesaplaSeyahat()">
+✈️ SEYAHATİ KARŞILAŞTIR
 </button>
 
-<div id="seyahatSonuc" class="result"></div>
+<div id="s_sonuc" class="result"></div>
 
 </section>
 
 
 <footer>
 
-BİRLEŞTİR © 2026
+BİRLEŞTİR © 2026<br><br>
+Karar vermek artık daha kolay.
 
 </footer>
 
@@ -598,703 +766,1080 @@ BİRLEŞTİR © 2026
 
 <script>
 
-/* =========================
-   KATEGORİ DEĞİŞTİR
-========================= */
 
-function ac(id,element){
+/* ================= GENEL ================= */
 
-    document.querySelectorAll(".tool").forEach(function(x){
-        x.classList.remove("active");
-    });
+function acPanel(id) {
 
-    document.querySelectorAll(".category").forEach(function(x){
-        x.classList.remove("active");
+    const paneller = document.querySelectorAll(".panel");
+
+    paneller.forEach(function(panel) {
+        panel.classList.remove("active");
     });
 
     document.getElementById(id).classList.add("active");
 
-    element.classList.add("active");
+    setTimeout(function() {
 
-    window.scrollTo({
-        top:document.getElementById(id).offsetTop - 20,
-        behavior:"smooth"
-    });
+        document.getElementById(id).scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }, 100);
+
 }
 
 
-/* =========================
-   ORTAK YARDIMCI
-========================= */
+function sayi(id) {
 
-function paraFormat(sayi){
+    const value = document.getElementById(id).value;
 
-    return sayi.toLocaleString("tr-TR") + " TL";
+    if (value === "") {
+        return null;
+    }
+
+    return Number(value);
+
 }
 
 
-function hata(kutu){
+function formatTL(number) {
 
-    kutu.style.display="block";
+    return number.toLocaleString("tr-TR") + " TL";
 
-    kutu.innerHTML=`
-        <h2>⚠️ Eksik bilgi</h2>
-        <p>Lütfen bütün alanları doldur.</p>
-    `;
 }
 
 
-function skorBar(ad,puan){
+function temizleSonuc(id) {
+
+    const result = document.getElementById(id);
+
+    result.classList.add("show");
+
+}
+
+
+function skorBar(name, score) {
 
     return `
-        <div class="score-row">
+    
+    <div class="score-row">
 
-            <div class="score-label">
-                <span>${ad}</span>
-                <strong>${puan}/100</strong>
-            </div>
+        <div class="score-head">
 
-            <div class="bar">
+            <span>${name}</span>
 
-                <div
-                    class="fill"
-                    style="width:${puan}%">
-                </div>
+            <strong>${score}/100</strong>
 
+        </div>
+
+        <div class="score-bar">
+
+            <div 
+                class="score-fill"
+                style="width:${score}%">
             </div>
 
         </div>
+
+    </div>
+
     `;
+
 }
 
 
-/* =========================
-   ULAŞIM
-========================= */
+/* ================= ULAŞIM ================= */
 
-function ulasimHesapla(){
+function hesaplaUlasim() {
 
-    const y = Number(document.getElementById("u_yakit").value);
-    const o = Number(document.getElementById("u_otopark").value);
-    const b = Number(document.getElementById("u_bakim").value);
-    const t = Number(document.getElementById("u_toplu").value);
+    const yakit = sayi("u_yakit");
+    const otopark = sayi("u_otopark");
+    const bakim = sayi("u_bakim");
+    const arabaZaman = sayi("u_araba_zaman");
 
-    const az = Number(document.getElementById("u_arabaZaman").value);
-    const tz = Number(document.getElementById("u_topluZaman").value);
+    const toplu = sayi("u_toplu");
+    const topluZaman = sayi("u_toplu_zaman");
 
     const oncelik = document.getElementById("u_oncelik").value;
 
-    const sonuc = document.getElementById("ulasimSonuc");
+    if (
+        yakit === null ||
+        otopark === null ||
+        bakim === null ||
+        arabaZaman === null ||
+        toplu === null ||
+        topluZaman === null
+    ) {
 
-    if(
-        document.getElementById("u_yakit").value==="" ||
-        document.getElementById("u_otopark").value==="" ||
-        document.getElementById("u_bakim").value==="" ||
-        document.getElementById("u_toplu").value==="" ||
-        document.getElementById("u_arabaZaman").value==="" ||
-        document.getElementById("u_topluZaman").value===""
-    ){
-
-        hata(sonuc);
-        return;
-    }
-
-    if(y<0||o<0||b<0||t<0||az<0||tz<0){
-
-        sonuc.style.display="block";
-
-        sonuc.innerHTML=`
-            <h2>⚠️ Geçersiz değer</h2>
-            <p>Negatif değer kullanma.</p>
+        document.getElementById("u_sonuc").innerHTML = `
+        
+        <div class="warning">
+        ⚠️ Lütfen bütün alanları doldur.
+        </div>
+        
         `;
 
+        temizleSonuc("u_sonuc");
+
         return;
     }
 
-    const araba=y+o+b;
 
-    const fark=Math.abs(araba-t);
+    const araba = yakit + otopark + bakim;
 
-    const arabaPara=araba<t?100:araba>t?0:50;
-    const topluPara=100-arabaPara;
+    const maliyetFarki = Math.abs(araba - toplu);
 
-    const arabaZaman=az<tz?100:az>tz?0:50;
-    const topluZaman=100-arabaZaman;
+    const zamanFarki = Math.abs(arabaZaman - topluZaman);
 
-    let aP,tP;
 
-    if(oncelik==="para"){
+    let arabaSkor;
+    let topluSkor;
 
-        aP=arabaPara*.7+arabaZaman*.3;
-        tP=topluPara*.7+topluZaman*.3;
 
-    }else if(oncelik==="zaman"){
+    if (araba === toplu) {
 
-        aP=arabaPara*.3+arabaZaman*.7;
-        tP=topluPara*.3+topluZaman*.7;
+        arabaSkor = 50;
+        topluSkor = 50;
 
-    }else{
+    } else if (araba < toplu) {
 
-        aP=arabaPara*.5+arabaZaman*.5;
-        tP=topluPara*.5+topluZaman*.5;
+        arabaSkor = 70;
+        topluSkor = 30;
+
+    } else {
+
+        arabaSkor = 30;
+        topluSkor = 70;
+
     }
 
-    aP=Math.round(aP);
-    tP=Math.round(tP);
 
-    let karar;
+    if (arabaZaman < topluZaman) {
 
-    if(aP>tP){
-        karar="🚗 ARABA";
-    }else if(tP>aP){
-        karar="🚌 TOPLU TAŞIMA";
-    }else{
-        karar="⚖️ DENGE";
+        arabaSkor += 20;
+        topluSkor -= 20;
+
+    } else if (topluZaman < arabaZaman) {
+
+        topluSkor += 20;
+        arabaSkor -= 20;
+
     }
 
-    sonuc.style.display="block";
 
-    sonuc.innerHTML=`
+    arabaSkor = Math.max(0, Math.min(100, arabaSkor));
+    topluSkor = Math.max(0, Math.min(100, topluSkor));
 
-        <h2>🏆 ${karar}</h2>
 
-        <p>
-            🚗 Araba:
-            <strong>${paraFormat(araba)}/ay</strong>
-        </p>
+    if (oncelik === "para") {
 
-        <p>
-            🚌 Toplu taşıma:
-            <strong>${paraFormat(t)}/ay</strong>
-        </p>
+        if (araba < toplu) {
 
-        <p>
-            💰 Aylık fark:
-            <strong>${paraFormat(fark)}</strong>
-        </p>
+            arabaSkor += 15;
+            topluSkor -= 15;
 
-        <p>
-            📅 Yıllık fark:
-            <strong>${paraFormat(fark*12)}</strong>
-        </p>
+        } else {
 
-        <p>
-            ⏱️ Aylık zaman farkı:
-            <strong>${Math.abs(az-tz)} saat</strong>
-        </p>
+            topluSkor += 15;
+            arabaSkor -= 15;
 
-        <hr>
+        }
 
-        <h2>🧠 BİRLEŞTİR KARARI</h2>
+    }
 
-        ${skorBar("🚗 Araba",aP)}
 
-        ${skorBar("🚌 Toplu taşıma",tP)}
+    if (oncelik === "zaman") {
 
-        <p>
-            💡 ${aP>tP
-            ?"Senin seçtiğin önceliğe göre araba daha avantajlı."
-            :tP>aP
-            ?"Senin seçtiğin önceliğe göre toplu taşıma daha avantajlı."
-            :"Para ve zaman açısından iki seçenek dengede."}
-        </p>
+        if (arabaZaman < topluZaman) {
+
+            arabaSkor += 15;
+            topluSkor -= 15;
+
+        } else {
+
+            topluSkor += 15;
+            arabaSkor -= 15;
+
+        }
+
+    }
+
+
+    arabaSkor = Math.max(0, Math.min(100, arabaSkor));
+    topluSkor = Math.max(0, Math.min(100, topluSkor));
+
+
+    let kazanan;
+
+    if (arabaSkor > topluSkor) {
+
+        kazanan = "🚗 ARABA";
+
+    } else if (topluSkor > arabaSkor) {
+
+        kazanan = "🚌 TOPLU TAŞIMA";
+
+    } else {
+
+        kazanan = "⚖️ DENGE";
+
+    }
+
+
+    let aciklama;
+
+    if (kazanan.includes("ARABA")) {
+
+        aciklama =
+        "Seçtiğin önceliklere göre araba daha avantajlı görünüyor.";
+
+    } else if (kazanan.includes("TOPLU")) {
+
+        aciklama =
+        "Seçtiğin önceliklere göre toplu taşıma daha avantajlı görünüyor.";
+
+    } else {
+
+        aciklama =
+        "İki seçenek birbirine oldukça yakın.";
+
+    }
+
+
+    document.getElementById("u_sonuc").innerHTML = `
+
+    <div class="result-title">
+    🏆 ${kazanan}
+    </div>
+
+    <div class="result-line">
+    <span>🚗 Araba aylık maliyet</span>
+    <strong>${formatTL(araba)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>🚌 Toplu taşıma aylık maliyet</span>
+    <strong>${formatTL(toplu)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>💰 Aylık maliyet farkı</span>
+    <strong>${formatTL(maliyetFarki)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>⏱️ Aylık zaman farkı</span>
+    <strong>${zamanFarki} saat</strong>
+    </div>
+
+    <div class="decision">
+
+    <h3>🧠 BİRLEŞTİR KARARI</h3>
+
+    ${skorBar("🚗 Araba", arabaSkor)}
+
+    ${skorBar("🚌 Toplu taşıma", topluSkor)}
+
+    <div class="explanation">
+    💡 ${aciklama}
+    </div>
+
+    </div>
+
     `;
+
+    temizleSonuc("u_sonuc");
+
 }
 
 
-/* =========================
-   EV
-========================= */
+/* ================= EV ================= */
 
-function evHesapla(){
+function hesaplaEv() {
 
-    const ids=[
-        "evA_kira","evA_fatura","evA_aidat","evA_ulasim","evA_zaman",
-        "evB_kira","evB_fatura","evB_aidat","evB_ulasim","evB_zaman"
-    ];
+    const aKira = sayi("e_a_kira");
+    const aFatura = sayi("e_a_fatura");
+    const aUlasim = sayi("e_a_ulasim");
+    const aZaman = sayi("e_a_zaman");
+    const aKalite = sayi("e_a_kalite");
 
-    const sonuc=document.getElementById("evSonuc");
+    const bKira = sayi("e_b_kira");
+    const bFatura = sayi("e_b_fatura");
+    const bUlasim = sayi("e_b_ulasim");
+    const bZaman = sayi("e_b_zaman");
+    const bKalite = sayi("e_b_kalite");
 
-    for(let id of ids){
-
-        if(document.getElementById(id).value===""){
-
-            hata(sonuc);
-            return;
-        }
-    }
-
-    const A=
-        Number(document.getElementById("evA_kira").value)+
-        Number(document.getElementById("evA_fatura").value)+
-        Number(document.getElementById("evA_aidat").value)+
-        Number(document.getElementById("evA_ulasim").value);
-
-    const B=
-        Number(document.getElementById("evB_kira").value)+
-        Number(document.getElementById("evB_fatura").value)+
-        Number(document.getElementById("evB_aidat").value)+
-        Number(document.getElementById("evB_ulasim").value);
-
-    const Az=Number(document.getElementById("evA_zaman").value);
-    const Bz=Number(document.getElementById("evB_zaman").value);
-
-    const oncelik=document.getElementById("ev_oncelik").value;
-
-    const AP=A<B?100:A>B?0:50;
-    const BP=100-AP;
-
-    const AZ=Az<Bz?100:Az>Bz?0:50;
-    const BZ=100-AZ;
-
-    let aP,bP;
-
-    if(oncelik==="para"){
-
-        aP=AP*.7+AZ*.3;
-        bP=BP*.7+BZ*.3;
-
-    }else if(oncelik==="zaman"){
-
-        aP=AP*.3+AZ*.7;
-        bP=BP*.3+BZ*.7;
-
-    }else{
-
-        aP=AP*.5+AZ*.5;
-        bP=BP*.5+BZ*.5;
-    }
-
-    aP=Math.round(aP);
-    bP=Math.round(bP);
-
-    const kazanan=aP>bP?"🏠 EV A":bP>aP?"🏠 EV B":"⚖️ DENGE";
-
-    sonuc.style.display="block";
-
-    sonuc.innerHTML=`
-
-        <h2>🏆 ${kazanan}</h2>
-
-        <p>
-            🏠 Ev A:
-            <strong>${paraFormat(A)}/ay</strong>
-        </p>
-
-        <p>
-            🏠 Ev B:
-            <strong>${paraFormat(B)}/ay</strong>
-        </p>
-
-        <p>
-            💰 Aylık maliyet farkı:
-            <strong>${paraFormat(Math.abs(A-B))}</strong>
-        </p>
-
-        <p>
-            📅 Yıllık maliyet farkı:
-            <strong>${paraFormat(Math.abs(A-B)*12)}</strong>
-        </p>
-
-        <p>
-            ⏱️ Aylık ulaşım zamanı farkı:
-            <strong>${Math.abs(Az-Bz)} saat</strong>
-        </p>
-
-        <hr>
-
-        <h2>🧠 BİRLEŞTİR KARARI</h2>
-
-        ${skorBar("🏠 Ev A",aP)}
-
-        ${skorBar("🏠 Ev B",bP)}
-
-        <p>
-            💡 ${aP>bP
-            ?"Ev A senin önceliklerine göre daha avantajlı."
-            :bP>aP
-            ?"Ev B senin önceliklerine göre daha avantajlı."
-            :"İki ev senin için dengede."}
-        </p>
-    `;
-}
+    const oncelik = document.getElementById("e_oncelik").value;
 
 
-/* =========================
-   ALIŞVERİŞ
-========================= */
+    if (
+        aKira === null ||
+        aFatura === null ||
+        aUlasim === null ||
+        aZaman === null ||
+        aKalite === null ||
+        bKira === null ||
+        bFatura === null ||
+        bUlasim === null ||
+        bZaman === null ||
+        bKalite === null
+    ) {
 
-function alisverisHesapla(){
-
-    const ids=[
-        "alA_fiyat","alA_sure","alA_garanti","alA_kalite",
-        "alB_fiyat","alB_sure","alB_garanti","alB_kalite"
-    ];
-
-    const sonuc=document.getElementById("alisverisSonuc");
-
-    for(let id of ids){
-
-        if(document.getElementById(id).value===""){
-
-            hata(sonuc);
-            return;
-        }
-    }
-
-    const AF=Number(document.getElementById("alA_fiyat").value);
-    const AS=Number(document.getElementById("alA_sure").value);
-    const AG=Number(document.getElementById("alA_garanti").value);
-    const AK=Number(document.getElementById("alA_kalite").value);
-
-    const BF=Number(document.getElementById("alB_fiyat").value);
-    const BS=Number(document.getElementById("alB_sure").value);
-    const BG=Number(document.getElementById("alB_garanti").value);
-    const BK=Number(document.getElementById("alB_kalite").value);
-
-    const oncelik=document.getElementById("al_oncelik").value;
-
-    if(AK<1||AK>10||BK<1||BK>10){
-
-        sonuc.style.display="block";
-
-        sonuc.innerHTML=`
-            <h2>⚠️ Geçersiz kalite puanı</h2>
-            <p>Kalite puanı 1 ile 10 arasında olmalı.</p>
+        document.getElementById("e_sonuc").innerHTML = `
+        <div class="warning">
+        ⚠️ Lütfen bütün alanları doldur.
+        </div>
         `;
 
+        temizleSonuc("e_sonuc");
+
         return;
+
     }
 
-    const fiyatA=AF<BF?100:AF>BF?0:50;
-    const fiyatB=100-fiyatA;
 
-    const kaliteA=AK>BK?100:AK<BK?0:50;
-    const kaliteB=100-kaliteA;
+    const evA = aKira + aFatura + aUlasim;
+    const evB = bKira + bFatura + bUlasim;
 
-    const garantiA=AG>BG?100:AG<BG?0:50;
-    const garantiB=100-garantiA;
 
-    let aP,bP;
+    let skorA = 50;
+    let skorB = 50;
 
-    if(oncelik==="fiyat"){
 
-        aP=fiyatA*.7+(kaliteA*.2)+(garantiA*.1);
-        bP=fiyatB*.7+(kaliteB*.2)+(garantiB*.1);
+    if (evA < evB) {
 
-    }else if(oncelik==="kalite"){
+        skorA += 20;
+        skorB -= 20;
 
-        aP=kaliteA*.7+fiyatA*.2+garantiA*.1;
-        bP=kaliteB*.7+fiyatB*.2+garantiB*.1;
+    } else if (evB < evA) {
 
-    }else{
+        skorB += 20;
+        skorA -= 20;
 
-        aP=fiyatA*.5+kaliteA*.4+garantiA*.1;
-        bP=fiyatB*.5+kaliteB*.4+garantiB*.1;
     }
 
-    aP=Math.round(aP);
-    bP=Math.round(bP);
 
-    const kazanan=aP>bP?"🛒 ÜRÜN A":bP>aP?"🛒 ÜRÜN B":"⚖️ DENGE";
+    if (aZaman < bZaman) {
 
-    sonuc.style.display="block";
+        skorA += 15;
+        skorB -= 15;
 
-    sonuc.innerHTML=`
+    } else if (bZaman < aZaman) {
 
-        <h2>🏆 ${kazanan}</h2>
+        skorB += 15;
+        skorA -= 15;
 
-        <p>
-            🛒 Ürün A:
-            <strong>${paraFormat(AF)}</strong>
-        </p>
-
-        <p>
-            🛒 Ürün B:
-            <strong>${paraFormat(BF)}</strong>
-        </p>
-
-        <p>
-            ⭐ Ürün A kalite:
-            <strong>${AK}/10</strong>
-        </p>
-
-        <p>
-            ⭐ Ürün B kalite:
-            <strong>${BK}/10</strong>
-        </p>
-
-        <p>
-            🛡️ A garanti:
-            <strong>${AG} yıl</strong>
-        </p>
-
-        <p>
-            🛡️ B garanti:
-            <strong>${BG} yıl</strong>
-        </p>
-
-        <hr>
-
-        <h2>🧠 BİRLEŞTİR KARARI</h2>
-
-        ${skorBar("🛒 Ürün A",aP)}
-
-        ${skorBar("🛒 Ürün B",bP)}
-
-        <p>
-            💡 ${aP>bP
-            ?"Ürün A senin önceliklerine göre daha mantıklı."
-            :bP>aP
-            ?"Ürün B senin önceliklerine göre daha mantıklı."
-            :"İki ürün senin için dengede."}
-        </p>
-    `;
-}
+    }
 
 
-/* =========================
-   PARA
-========================= */
+    if (aKalite > bKalite) {
 
-function paraHesapla(){
+        skorA += 15;
+        skorB -= 15;
 
-    const ids=[
-        "p_pesin",
-        "p_taksitToplam",
-        "p_aylik",
-        "p_sayisi"
-    ];
+    } else if (bKalite > aKalite) {
 
-    const sonuc=document.getElementById("paraSonuc");
+        skorB += 15;
+        skorA -= 15;
 
-    for(let id of ids){
+    }
 
-        if(document.getElementById(id).value===""){
 
-            hata(sonuc);
-            return;
+    if (oncelik === "para") {
+
+        if (evA < evB) {
+
+            skorA += 15;
+            skorB -= 15;
+
+        } else {
+
+            skorB += 15;
+            skorA -= 15;
+
         }
+
     }
 
-    const pesin=Number(document.getElementById("p_pesin").value);
 
-    const toplam=Number(
-        document.getElementById("p_taksitToplam").value
-    );
+    if (oncelik === "zaman") {
 
-    const aylik=Number(
-        document.getElementById("p_aylik").value
-    );
+        if (aZaman < bZaman) {
 
-    const sayi=Number(
-        document.getElementById("p_sayisi").value
-    );
+            skorA += 15;
+            skorB -= 15;
 
-    const oncelik=document.getElementById("p_oncelik").value;
+        } else {
 
-    const hesaplanan=aylik*sayi;
+            skorB += 15;
+            skorA -= 15;
 
-    const gercekToplam=toplam;
-
-    const fark=Math.abs(gercekToplam-pesin);
-
-    let pesinP;
-    let taksitP;
-
-    if(oncelik==="maliyet"){
-
-        pesinP=pesin<gercekToplam?100:0;
-        taksitP=100-pesinP;
-
-    }else if(oncelik==="aylik"){
-
-        pesinP=0;
-        taksitP=100;
-
-    }else{
-
-        pesinP=pesin<gercekToplam?70:30;
-        taksitP=100-pesinP;
-    }
-
-    const kazanan=pesinP>taksitP
-        ?"💰 PEŞİN ÖDEME"
-        :taksitP>pesinP
-        ?"📅 TAKSİT"
-        :"⚖️ DENGE";
-
-    sonuc.style.display="block";
-
-    sonuc.innerHTML=`
-
-        <h2>🏆 ${kazanan}</h2>
-
-        <p>
-            💰 Peşin fiyat:
-            <strong>${paraFormat(pesin)}</strong>
-        </p>
-
-        <p>
-            📅 Taksitli toplam:
-            <strong>${paraFormat(gercekToplam)}</strong>
-        </p>
-
-        <p>
-            🧾 Aylık taksit:
-            <strong>${paraFormat(aylik)}</strong>
-        </p>
-
-        <p>
-            📅 Taksit sayısı:
-            <strong>${sayi}</strong>
-        </p>
-
-        <p>
-            💸 Taksitli seçenekte toplam fark:
-            <strong>${paraFormat(fark)}</strong>
-        </p>
-
-        <hr>
-
-        <h2>🧠 BİRLEŞTİR KARARI</h2>
-
-        ${skorBar("💰 Peşin",pesinP)}
-
-        ${skorBar("📅 Taksit",taksitP)}
-
-        <p>
-            💡 ${pesin<gercekToplam
-            ?"Peşin ödeme toplam maliyet açısından daha avantajlı."
-            :"Taksit seçeneği toplam maliyet açısından daha düşük görünüyor."}
-        </p>
-    `;
-}
-
-
-/* =========================
-   SEYAHAT
-========================= */
-
-function seyahatHesapla(){
-
-    const ids=[
-        "sA_ulasim","sA_otel","sA_yemek","sA_sehir","sA_gun",
-        "sB_ulasim","sB_otel","sB_yemek","sB_sehir","sB_gun"
-    ];
-
-    const sonuc=document.getElementById("seyahatSonuc");
-
-    for(let id of ids){
-
-        if(document.getElementById(id).value===""){
-
-            hata(sonuc);
-            return;
         }
+
     }
 
-    const A=
-        Number(document.getElementById("sA_ulasim").value)+
-        Number(document.getElementById("sA_otel").value)+
-        Number(document.getElementById("sA_yemek").value)+
-        Number(document.getElementById("sA_sehir").value);
 
-    const B=
-        Number(document.getElementById("sB_ulasim").value)+
-        Number(document.getElementById("sB_otel").value)+
-        Number(document.getElementById("sB_yemek").value)+
-        Number(document.getElementById("sB_sehir").value);
+    if (oncelik === "kalite") {
 
-    const Ag=Number(document.getElementById("sA_gun").value);
-    const Bg=Number(document.getElementById("sB_gun").value);
+        if (aKalite > bKalite) {
 
-    const oncelik=document.getElementById("s_oncelik").value;
+            skorA += 15;
+            skorB -= 15;
 
-    const maliyetA=A<B?100:A>B?0:50;
-    const maliyetB=100-maliyetA;
+        } else {
 
-    const sureA=Ag>Bg?100:Ag<Bg?0:50;
-    const sureB=100-sureA;
+            skorB += 15;
+            skorA -= 15;
 
-    let aP,bP;
+        }
 
-    if(oncelik==="maliyet"){
-
-        aP=maliyetA*.7+sureA*.3;
-        bP=maliyetB*.7+sureB*.3;
-
-    }else if(oncelik==="sure"){
-
-        aP=maliyetA*.3+sureA*.7;
-        bP=maliyetB*.3+sureB*.7;
-
-    }else{
-
-        aP=maliyetA*.5+sureA*.5;
-        bP=maliyetB*.5+sureB*.5;
     }
 
-    aP=Math.round(aP);
-    bP=Math.round(bP);
 
-    const kazanan=aP>bP
-        ?"✈️ SEYAHAT A"
-        :bP>aP
-        ?"✈️ SEYAHAT B"
-        :"⚖️ DENGE";
+    skorA = Math.max(0, Math.min(100, skorA));
+    skorB = Math.max(0, Math.min(100, skorB));
 
-    sonuc.style.display="block";
 
-    sonuc.innerHTML=`
+    let kazanan;
 
-        <h2>🏆 ${kazanan}</h2>
+    if (skorA > skorB) {
 
-        <p>
-            ✈️ Seyahat A:
-            <strong>${paraFormat(A)}</strong>
-        </p>
+        kazanan = "🏠 EV A";
 
-        <p>
-            ✈️ Seyahat B:
-            <strong>${paraFormat(B)}</strong>
-        </p>
+    } else if (skorB > skorA) {
 
-        <p>
-            💰 Toplam maliyet farkı:
-            <strong>${paraFormat(Math.abs(A-B))}</strong>
-        </p>
+        kazanan = "🏠 EV B";
 
-        <p>
-            🌴 Seyahat A:
-            <strong>${Ag} gün</strong>
-        </p>
+    } else {
 
-        <p>
-            🌴 Seyahat B:
-            <strong>${Bg} gün</strong>
-        </p>
+        kazanan = "⚖️ DENGE";
 
-        <hr>
+    }
 
-        <h2>🧠 BİRLEŞTİR KARARI</h2>
 
-        ${skorBar("✈️ Seyahat A",aP)}
+    document.getElementById("e_sonuc").innerHTML = `
 
-        ${skorBar("✈️ Seyahat B",bP)}
+    <div class="result-title">
+    🏆 ${kazanan}
+    </div>
 
-        <p>
-            💡 ${aP>bP
-            ?"Seyahat A senin önceliklerine göre daha avantajlı."
-            :bP>aP
-            ?"Seyahat B senin önceliklerine göre daha avantajlı."
-            :"İki seyahat seçeneği dengede."}
-        </p>
+    <div class="result-line">
+    <span>🏠 Ev A aylık toplam</span>
+    <strong>${formatTL(evA)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>🏠 Ev B aylık toplam</span>
+    <strong>${formatTL(evB)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>💰 Aylık maliyet farkı</span>
+    <strong>${formatTL(Math.abs(evA - evB))}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>⏱️ Aylık ulaşım zamanı farkı</span>
+    <strong>${Math.abs(aZaman - bZaman)} saat</strong>
+    </div>
+
+    <div class="decision">
+
+    <h3>🧠 BİRLEŞTİR KARARI</h3>
+
+    ${skorBar("🏠 Ev A", skorA)}
+
+    ${skorBar("🏠 Ev B", skorB)}
+
+    <div class="explanation">
+
+    💡 Seçtiğin önceliğe göre sonuç hesaplandı.
+    Maliyet, zaman ve kalite birlikte değerlendirildi.
+
+    </div>
+
+    </div>
+
     `;
+
+    temizleSonuc("e_sonuc");
+
 }
+
+
+/* ================= ALIŞVERİŞ ================= */
+
+function hesaplaAlisveris() {
+
+    const aFiyat = sayi("a_fiyat");
+    const aKalite = sayi("a_kalite");
+    const aGaranti = sayi("a_garanti");
+
+    const bFiyat = sayi("b_fiyat");
+    const bKalite = sayi("b_kalite");
+    const bGaranti = sayi("b_garanti");
+
+    const oncelik = document.getElementById("a_oncelik").value;
+
+
+    if (
+        aFiyat === null ||
+        aKalite === null ||
+        aGaranti === null ||
+        bFiyat === null ||
+        bKalite === null ||
+        bGaranti === null
+    ) {
+
+        document.getElementById("a_sonuc").innerHTML = `
+        <div class="warning">
+        ⚠️ Lütfen bütün alanları doldur.
+        </div>
+        `;
+
+        temizleSonuc("a_sonuc");
+
+        return;
+
+    }
+
+
+    let skorA = 50;
+    let skorB = 50;
+
+
+    if (aFiyat < bFiyat) {
+
+        skorA += 20;
+        skorB -= 20;
+
+    } else if (bFiyat < aFiyat) {
+
+        skorB += 20;
+        skorA -= 20;
+
+    }
+
+
+    if (aKalite > bKalite) {
+
+        skorA += 20;
+        skorB -= 20;
+
+    } else if (bKalite > aKalite) {
+
+        skorB += 20;
+        skorA -= 20;
+
+    }
+
+
+    if (aGaranti > bGaranti) {
+
+        skorA += 10;
+        skorB -= 10;
+
+    } else if (bGaranti > aGaranti) {
+
+        skorB += 10;
+        skorA -= 10;
+
+    }
+
+
+    if (oncelik === "para") {
+
+        if (aFiyat < bFiyat) {
+
+            skorA += 15;
+            skorB -= 15;
+
+        } else {
+
+            skorB += 15;
+            skorA -= 15;
+
+        }
+
+    }
+
+
+    if (oncelik === "kalite") {
+
+        if (aKalite > bKalite) {
+
+            skorA += 15;
+            skorB -= 15;
+
+        } else {
+
+            skorB += 15;
+            skorA -= 15;
+
+        }
+
+    }
+
+
+    if (oncelik === "garanti") {
+
+        if (aGaranti > bGaranti) {
+
+            skorA += 15;
+            skorB -= 15;
+
+        } else {
+
+            skorB += 15;
+            skorA -= 15;
+
+        }
+
+    }
+
+
+    skorA = Math.max(0, Math.min(100, skorA));
+    skorB = Math.max(0, Math.min(100, skorB));
+
+
+    let kazanan;
+
+    if (skorA > skorB) {
+
+        kazanan = "🛒 ÜRÜN A";
+
+    } else if (skorB > skorA) {
+
+        kazanan = "🛒 ÜRÜN B";
+
+    } else {
+
+        kazanan = "⚖️ DENGE";
+
+    }
+
+
+    document.getElementById("a_sonuc").innerHTML = `
+
+    <div class="result-title">
+    🏆 ${kazanan}
+    </div>
+
+    <div class="result-line">
+    <span>🛒 Ürün A fiyat</span>
+    <strong>${formatTL(aFiyat)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>🛒 Ürün B fiyat</span>
+    <strong>${formatTL(bFiyat)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>⭐ Ürün A kalite</span>
+    <strong>${aKalite}/10</strong>
+    </div>
+
+    <div class="result-line">
+    <span>⭐ Ürün B kalite</span>
+    <strong>${bKalite}/10</strong>
+    </div>
+
+    <div class="result-line">
+    <span>🛡️ A garanti</span>
+    <strong>${aGaranti} yıl</strong>
+    </div>
+
+    <div class="result-line">
+    <span>🛡️ B garanti</span>
+    <strong>${bGaranti} yıl</strong>
+    </div>
+
+    <div class="decision">
+
+    <h3>🧠 BİRLEŞTİR KARARI</h3>
+
+    ${skorBar("🛒 Ürün A", skorA)}
+
+    ${skorBar("🛒 Ürün B", skorB)}
+
+    <div class="explanation">
+
+    💡 Fiyat, kalite, garanti ve seçtiğin öncelik birlikte değerlendirildi.
+
+    </div>
+
+    </div>
+
+    `;
+
+    temizleSonuc("a_sonuc");
+
+}
+
+
+/* ================= PARA ================= */
+
+function hesaplaPara() {
+
+    const pesin = sayi("p_pesin");
+    const taksit = sayi("p_taksit");
+    const sayiTaksit = sayi("p_sayi");
+
+    const oncelik = document.getElementById("p_oncelik").value;
+
+
+    if (
+        pesin === null ||
+        taksit === null ||
+        sayiTaksit === null
+    ) {
+
+        document.getElementById("p_sonuc").innerHTML = `
+        <div class="warning">
+        ⚠️ Lütfen bütün alanları doldur.
+        </div>
+        `;
+
+        temizleSonuc("p_sonuc");
+
+        return;
+
+    }
+
+
+    const toplamTaksit = taksit * sayiTaksit;
+
+    const fark = Math.abs(toplamTaksit - pesin);
+
+
+    let pesinSkor = 50;
+    let taksitSkor = 50;
+
+
+    if (pesin < toplamTaksit) {
+
+        pesinSkor += 30;
+        taksitSkor -= 30;
+
+    } else if (toplamTaksit < pesin) {
+
+        taksitSkor += 30;
+        pesinSkor -= 30;
+
+    }
+
+
+    if (oncelik === "toplam") {
+
+        if (pesin < toplamTaksit) {
+
+            pesinSkor += 20;
+            taksitSkor -= 20;
+
+        } else {
+
+            taksitSkor += 20;
+            pesinSkor -= 20;
+
+        }
+
+    }
+
+
+    if (oncelik === "aylik") {
+
+        taksitSkor += 20;
+        pesinSkor -= 20;
+
+    }
+
+
+    pesinSkor = Math.max(0, Math.min(100, pesinSkor));
+    taksitSkor = Math.max(0, Math.min(100, taksitSkor));
+
+
+    let kazanan;
+
+    if (pesinSkor > taksitSkor) {
+
+        kazanan = "💰 PEŞİN ÖDEME";
+
+    } else if (taksitSkor > pesinSkor) {
+
+        kazanan = "📅 TAKSİT";
+
+    } else {
+
+        kazanan = "⚖️ DENGE";
+
+    }
+
+
+    document.getElementById("p_sonuc").innerHTML = `
+
+    <div class="result-title">
+    🏆 ${kazanan}
+    </div>
+
+    <div class="result-line">
+    <span>💰 Peşin fiyat</span>
+    <strong>${formatTL(pesin)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>📅 Taksitli toplam</span>
+    <strong>${formatTL(toplamTaksit)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>📅 Aylık taksit</span>
+    <strong>${formatTL(taksit)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>💸 Toplam fark</span>
+    <strong>${formatTL(fark)}</strong>
+    </div>
+
+    <div class="decision">
+
+    <h3>🧠 BİRLEŞTİR KARARI</h3>
+
+    ${skorBar("💰 Peşin", pesinSkor)}
+
+    ${skorBar("📅 Taksit", taksitSkor)}
+
+    <div class="explanation">
+
+    💡 Toplam ödeme ve seçtiğin ödeme önceliği dikkate alındı.
+
+    </div>
+
+    </div>
+
+    `;
+
+    temizleSonuc("p_sonuc");
+
+}
+
+
+/* ================= SEYAHAT ================= */
+
+function hesaplaSeyahat() {
+
+    const aFiyat = sayi("s_a_fiyat");
+    const aGun = sayi("s_a_gun");
+    const aKalite = sayi("s_a_kalite");
+
+    const bFiyat = sayi("s_b_fiyat");
+    const bGun = sayi("s_b_gun");
+    const bKalite = sayi("s_b_kalite");
+
+    const oncelik = document.getElementById("s_oncelik").value;
+
+
+    if (
+        aFiyat === null ||
+        aGun === null ||
+        aKalite === null ||
+        bFiyat === null ||
+        bGun === null ||
+        bKalite === null
+    ) {
+
+        document.getElementById("s_sonuc").innerHTML = `
+        <div class="warning">
+        ⚠️ Lütfen bütün alanları doldur.
+        </div>
+        `;
+
+        temizleSonuc("s_sonuc");
+
+        return;
+
+    }
+
+
+    let skorA = 50;
+    let skorB = 50;
+
+
+    if (aFiyat < bFiyat) {
+
+        skorA += 20;
+        skorB -= 20;
+
+    } else if (bFiyat < aFiyat) {
+
+        skorB += 20;
+        skorA -= 20;
+
+    }
+
+
+    if (aGun > bGun) {
+
+        skorA += 15;
+        skorB -= 15;
+
+    } else if (bGun > aGun) {
+
+        skorB += 15;
+        skorA -= 15;
+
+    }
+
+
+    if (aKalite > bKalite) {
+
+        skorA += 20;
+        skorB -= 20;
+
+    } else if (bKalite > aKalite) {
+
+        skorB += 20;
+        skorA -= 20;
+
+    }
+
+
+    if (oncelik === "para") {
+
+        if (aFiyat < bFiyat) {
+
+            skorA += 15;
+            skorB -= 15;
+
+        } else {
+
+            skorB += 15;
+            skorA -= 15;
+
+        }
+
+    }
+
+
+    if (oncelik === "sure") {
+
+        if (aGun > bGun) {
+
+            skorA += 15;
+            skorB -= 15;
+
+        } else {
+
+            skorB += 15;
+            skorA -= 15;
+
+        }
+
+    }
+
+
+    if (oncelik === "kalite") {
+
+        if (aKalite > bKalite) {
+
+            skorA += 15;
+            skorB -= 15;
+
+        } else {
+
+            skorB += 15;
+            skorA -= 15;
+
+        }
+
+    }
+
+
+    skorA = Math.max(0, Math.min(100, skorA));
+    skorB = Math.max(0, Math.min(100, skorB));
+
+
+    let kazanan;
+
+    if (skorA > skorB) {
+
+        kazanan = "✈️ SEYAHAT A";
+
+    } else if (skorB > skorA) {
+
+        kazanan = "✈️ SEYAHAT B";
+
+    } else {
+
+        kazanan = "⚖️ DENGE";
+
+    }
+
+
+    document.getElementById("s_sonuc").innerHTML = `
+
+    <div class="result-title">
+    🏆 ${kazanan}
+    </div>
+
+    <div class="result-line">
+    <span>✈️ Seyahat A maliyet</span>
+    <strong>${formatTL(aFiyat)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>✈️ Seyahat B maliyet</span>
+    <strong>${formatTL(bFiyat)}</strong>
+    </div>
+
+    <div class="result-line">
+    <span>🌴 Seyahat A</span>
+    <strong>${aGun} gün</strong>
+    </div>
+
+    <div class="result-line">
+    <span>🌴 Seyahat B</span>
+    <strong>${bGun} gün</strong>
+    </div>
+
+    <div class="result-line">
+    <span>⭐ A kalite</span>
+    <strong>${aKalite}/10</strong>
+    </div>
+
+    <div class="result-line">
+    <span>⭐ B kalite</span>
+    <strong>${bKalite}/10</strong>
+    </div>
+
+    <div class="decision">
+
+    <h3>🧠 BİRLEŞTİR KARARI</h3>
+
+    ${skorBar("✈️ Seyahat A", skorA)}
+
+    ${skorBar("✈️ Seyahat B", skorB)}
+
+    <div class="explanation">
+
+    💡 Maliyet, seyahat süresi, kalite ve seçtiğin öncelik birlikte değerlendirildi.
+
+    </div>
+
+    </div>
+
+    `;
+
+    temizleSonuc("s_sonuc");
+
+}
+
 
 </script>
 
 </body>
 
-</html> 
+    </html>
