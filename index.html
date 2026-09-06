@@ -58,7 +58,7 @@ textarea{min-height:90px;resize:vertical}.muted{color:var(--muted)}.small{font-s
 .weight-badge{font-size:12px;color:#c9c1ff;border:1px solid rgba(125,92,255,.25);background:rgba(125,92,255,.08);padding:5px 8px;border-radius:99px}
 .weight-controls{display:grid;grid-template-columns:1fr 85px;gap:8px;margin-bottom:10px}.range{accent-color:var(--purple);width:100%}
 .rating-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.rating{padding:11px;background:#090c14;border:1px solid var(--line);border-radius:13px}.rating-name{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:5px}.rating-name b{color:#fff;font-size:18px}
+.rating{padding:11px;background:#090c14;border:1px solid var(--line);border-radius:13px}.rating input[type=number]{padding:11px;font-size:16px;font-weight:700}.rating-name{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:5px}.rating-name b{color:#fff;font-size:18px}
 .sumline{display:flex;justify-content:space-between;align-items:center;padding:11px 0;color:#cbd2e2}.sumline strong{color:#fff}
 .result{display:none;margin-top:18px}.result.show{display:block}
 .rank-grid{display:grid;gap:10px}.rank{display:grid;grid-template-columns:48px 1fr 95px;gap:12px;align-items:center;padding:15px;border:1px solid var(--line);border-radius:15px;background:#0c1019}
@@ -123,7 +123,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:35px 0;text-alig
 <div class="container">
 <div class="title">
   <h2>🧠 Karar Laboratuvarı</h2>
-  <p>İstersen 2, istersen 5 alternatifi aynı karar içinde karşılaştır.</p>
+  <p>2–5 alternatifi aynı karar içinde karşılaştır. Her kategori kendi ölçüm alanlarını getirir.</p>
 </div>
 
 <div class="card">
@@ -187,7 +187,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:35px 0;text-alig
   <h3 style="margin:0 0 5px">Puanlama</h3>
   <p class="small muted">
     Her alternatif için her kriteri 1–10 arasında değerlendir.
-    1 = çok zayıf, 10 = çok güçlü.
+    TARTI farklı birimleri karşılaştırılabilir skora dönüştürür; 1–10 alanlarda doğrudan puanı kullanır.
   </p>
   <div id="ratingsBox"></div>
 </div>
@@ -348,114 +348,187 @@ const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHA
 /* ---------- CATEGORY ENGINE ---------- */
 const CATEGORIES={
  teknoloji:{
-  icon:"💻",name:"Teknoloji",desc:"Telefon, bilgisayar, cihaz ve teknoloji seçimi.",
-  help:"Teknoloji kararlarında performans, maliyet, dayanıklılık ve kullanım uyumunu öne çıkarır.",
-  criteria:[
-   ["value","💰 Fiyat / Maliyet"],["performance","⚡ Performans"],["quality","⭐ Kalite / Donanım"],
-   ["battery","🔋 Pil / Verimlilik"],["reliability","🛡️ Güvenilirlik"],["fit","❤️ Kullanım Uyumu"],["future","🔮 Gelecek Değeri"]
-  ],
-  examples:["iPhone","Samsung","Xiaomi"]
+  icon:"💻",name:"Teknoloji",desc:"Telefon, bilgisayar ve teknoloji ürünü seçimi.",
+  help:"Fiyat, performans, kalite, pil, garanti ve kullanım ömrünü gerçek sayılarla karşılaştır.",
+  examples:["Telefon A","Telefon B","Telefon C"],
+  metrics:[
+   ["price","💰 Fiyat","TL","currency","low","Ürünün toplam satın alma fiyatı"],
+   ["performance","⚡ Performans Puanı","/10","rating","high","Kendi kullanımına göre 1–10"],
+   ["quality","⭐ Kalite Puanı","/10","rating","high","Malzeme ve genel kalite"],
+   ["battery","🔋 Pil Süresi","saat","number","high","Tek şarjla yaklaşık kullanım"],
+   ["warranty","🛡️ Garanti","yıl","number","high","Garanti süresi"],
+   ["updates","🔄 Güncelleme Desteği","yıl","number","high","Beklenen yazılım desteği"],
+   ["storage","💾 Depolama","GB","number","high","Depolama kapasitesi"]
+  ]
+ },
+ ev:{
+  icon:"🏠",name:"Ev & Gayrimenkul",desc:"Daire, rezidans, villa ve ev seçimi.",
+  help:"Bir ev kararını fiyat, metrekare, oda, bina yaşı, aidat, ulaşım ve güvenlik gibi ölçülebilir verilerle tart.",
+  examples:["Daire","Rezidans","Villa"],
+  metrics:[
+   ["price","💰 Satın Alma Fiyatı","TL","currency","low","Toplam satış fiyatı"],
+   ["area","📐 Net Alan","m²","number","high","Kullanılabilir net alan"],
+   ["rooms","🛏️ Oda Sayısı","oda","number","high","Oda sayısı"],
+   ["age","🏗️ Bina Yaşı","yıl","number","low","Bina yaşı"],
+   ["dues","💳 Aylık Aidat","TL/ay","currency","low","Aylık aidat"],
+   ["distance","🚇 Ulaşıma Mesafe","km","number","low","Önemli ulaşım noktasına yaklaşık mesafe"],
+   ["safety","🛡️ Güvenlik Puanı","/10","rating","high","Bölge ve bina güvenliği"]
+  ]
  },
  kariyer:{
-  icon:"💼",name:"Kariyer",desc:"İş, meslek ve kariyer seçenekleri.",
-  help:"Kariyer kararlarında gelir kadar gelişim, güvence, yaşam dengesi ve uzun vadeli etki önemlidir.",
-  criteria:[
-   ["income","💰 Gelir"],["security","🛡️ İş Güvencesi"],["growth","📈 Kariyer Gelişimi"],
-   ["balance","🧘 Yaşam Dengesi"],["fit","❤️ Kişisel Uyum"],["stress","🧠 Stres Yönetimi"],["future","🔮 Gelecek Potansiyeli"]
-  ],
-  examples:["İş A","İş B","Kendi işim"]
+  icon:"💼",name:"Kariyer",desc:"İş, meslek ve kariyer fırsatı seçimi.",
+  help:"Maaşı tek başına değil; çalışma süresi, yol, gelişim, güvence ve uzun vadeli potansiyelle birlikte değerlendir.",
+  examples:["Kurumsal İş","Startup","Kendi İşim"],
+  metrics:[
+   ["salary","💰 Aylık Net Gelir","TL/ay","currency","high","Eline geçen yaklaşık aylık gelir"],
+   ["hours","⏱️ Haftalık Çalışma","saat","number","low","Haftalık çalışma süresi"],
+   ["commute","🚗 Günlük Ulaşım","dk","number","low","Günlük toplam yol süresi"],
+   ["growth","📈 Gelişim Puanı","/10","rating","high","Öğrenme ve terfi imkanı"],
+   ["security","🛡️ İş Güvencesi","/10","rating","high","İşin sürdürülebilirliği"],
+   ["balance","🧘 Yaşam Dengesi","/10","rating","high","İş-yaşam dengesi"],
+   ["future","🔮 Gelecek Potansiyeli","/10","rating","high","Uzun vadeli kariyer etkisi"]
+  ]
  },
  para:{
-  icon:"💰",name:"Para & Finans",desc:"Tasarruf, yatırım ve finansal tercihler.",
-  help:"Finansal kararlarda getiri beklentisi tek başına yeterli değildir; risk, likidite ve süreyi de düşün.",
-  criteria:[
-   ["return","📈 Getiri Potansiyeli"],["risk","🛡️ Risk"],["liquidity","💧 Likidite"],
-   ["cost","💸 Maliyet"],["time","⏱️ Süre"],["knowledge","🧠 Bilgi / Kontrol"],["fit","❤️ Finansal Uyum"]
-  ],
-  examples:["Seçenek A","Seçenek B","Seçenek C"]
+  icon:"💰",name:"Para & Finans",desc:"Yatırım, tasarruf ve finansal seçenekler.",
+  help:"Getiri, risk, vade, likidite ve maliyeti aynı tabloda karşılaştır.",
+  examples:["Mevduat","Fon","Yatırım Seçeneği"],
+  metrics:[
+   ["capital","💵 Başlangıç Tutarı","TL","currency","low","Başlamak için gereken tutar"],
+   ["return","📈 Beklenen Yıllık Getiri","%","percent","high","Varsayım olarak girdiğin yıllık oran"],
+   ["risk","⚠️ Risk Puanı","/10","rating","low","10 = daha riskli"],
+   ["liquidity","💧 Likidite Puanı","/10","rating","high","Paraya erişim kolaylığı"],
+   ["fee","💸 Yıllık Maliyet","%","percent","low","Komisyon/masraf tahmini"],
+   ["term","📅 Vade","ay","number","low","Paranın bağlı kalacağı süre"],
+   ["control","🧠 Kontrol Puanı","/10","rating","high","Ne kadar kontrol edebildiğin"]
+  ]
  },
  iliski:{
-  icon:"❤️",name:"İlişki",desc:"İlişki, partnerlik ve duygusal kararlar.",
-  help:"İlişki kararlarında güven, iletişim, değer uyumu ve gelecek beklentileri birlikte değerlendirilir.",
-  criteria:[
-   ["trust","🛡️ Güven"],["communication","💬 İletişim"],["loyalty","🤝 Sadakat"],
-   ["values","🧭 Değer Uyumu"],["future","🔮 Gelecek Beklentisi"],["harmony","❤️ Duygusal Uyum"],["conflict","⚡ Çatışma Yönetimi"]
-  ],
-  examples:["Devam etmek","Bitirmek"]
+  icon:"❤️",name:"İlişki",desc:"İlişki ve duygusal kararlar.",
+  help:"Duygusal bir kararı ölçülebilir sorulara böl. 1–10 puanlarını sen ver; TARTI matematiği şeffaf biçimde uygular.",
+  examples:["Devam Etmek","Bir Süre Ara Vermek","Bitirmek"],
+  metrics:[
+   ["trust","🛡️ Güven","/10","rating","high","10 = çok yüksek güven"],
+   ["communication","💬 İletişim","/10","rating","high","İletişim kalitesi"],
+   ["values","🧭 Değer Uyumu","/10","rating","high","Temel değerlerin uyumu"],
+   ["future","🔮 Gelecek Uyumu","/10","rating","high","Gelecek beklentileri"],
+   ["harmony","❤️ Duygusal Uyum","/10","rating","high","Duygusal uyum"],
+   ["conflict","⚡ Çatışma Yönetimi","/10","rating","high","Sorunları çözebilme"],
+   ["effort","🤝 Karşılıklı Emek","/10","rating","high","İki tarafın ilişkiye verdiği emek"]
+  ]
  },
  yasam:{
-  icon:"🏠",name:"Yaşam",desc:"Şehir, ev ve yaşam tarzı kararları.",
-  help:"Yaşam seçimlerinde maliyet, konfor, sosyal çevre, güvenlik ve gelecek etkisini tart.",
-  criteria:[
-   ["cost","💰 Yaşam Maliyeti"],["safety","🛡️ Güvenlik"],["comfort","🏠 Konfor"],
-   ["social","👥 Sosyal Hayat"],["work","💼 İş İmkanı"],["fit","❤️ Yaşam Tarzı Uyumu"],["future","🔮 Uzun Vadeli Uyum"]
-  ],
-  examples:["İstanbul","İzmir","Antalya"]
+  icon:"🌆",name:"Yaşam & Şehir",desc:"Şehir, mahalle ve yaşam tarzı seçimi.",
+  help:"Şehir veya yaşam yeri seçimini kira, gelir, ulaşım, güvenlik, sosyal hayat ve uyumla ölç.",
+  examples:["İstanbul","İzmir","Antalya"],
+  metrics:[
+   ["rent","🏠 Aylık Kira","TL/ay","currency","low","Benzer ev için yaklaşık kira"],
+   ["income","💰 Aylık Gelir İmkanı","TL/ay","currency","high","Tahmini net gelir fırsatı"],
+   ["transport","🚇 Ortalama Ulaşım","dk","number","low","Günlük tek yön yaklaşık süre"],
+   ["safety","🛡️ Güvenlik","/10","rating","high","10 = daha güvenli"],
+   ["social","👥 Sosyal Hayat","/10","rating","high","Sosyal imkanlar"],
+   ["nature","🌿 Doğa / Çevre","/10","rating","high","Çevresel yaşam kalitesi"],
+   ["fit","❤️ Kişisel Uyum","/10","rating","high","Senin yaşam tarzına uyumu"]
+  ]
  },
  egitim:{
-  icon:"🎓",name:"Eğitim",desc:"Okul, bölüm, kurs ve öğrenme kararları.",
-  help:"Eğitim kararlarında kalite, maliyet, kariyer karşılığı ve kişisel uyum birlikte ele alınır.",
-  criteria:[
-   ["quality","⭐ Eğitim Kalitesi"],["cost","💰 Maliyet"],["career","💼 Kariyer Fırsatı"],
-   ["location","📍 Konum"],["network","👥 Çevre / Network"],["fit","❤️ İlgi Uyumu"],["future","🔮 Gelecek Değeri"]
-  ],
-  examples:["Üniversite A","Üniversite B","Üniversite C"]
+  icon:"🎓",name:"Eğitim",desc:"Üniversite, bölüm, kurs ve eğitim seçimi.",
+  help:"Maliyet, eğitim kalitesi, süre, kariyer karşılığı ve kişisel uyumu ölç.",
+  examples:["Üniversite A","Üniversite B","Kurs C"],
+  metrics:[
+   ["cost","💰 Toplam Eğitim Maliyeti","TL","currency","low","Toplam tahmini maliyet"],
+   ["quality","⭐ Eğitim Kalitesi","/10","rating","high","Eğitim kalitesi"],
+   ["duration","📅 Eğitim Süresi","ay","number","low","Tamamlama süresi"],
+   ["career","💼 Kariyer Fırsatı","/10","rating","high","Mezuniyet sonrası fırsat"],
+   ["network","👥 Network","/10","rating","high","Çevre ve bağlantı imkanı"],
+   ["location","📍 Konum Uygunluğu","/10","rating","high","Konumun sana uygunluğu"],
+   ["fit","❤️ İlgi Uyumu","/10","rating","high","İlgi ve hedeflerle uyum"]
+  ]
  },
  seyahat:{
-  icon:"✈️",name:"Seyahat",desc:"Tatil, şehir ve seyahat planları.",
-  help:"Seyahat kararında bütçe, süre, konfor, güvenlik ve deneyim değerini birlikte tart.",
-  criteria:[
-   ["cost","💰 Bütçe"],["experience","✨ Deneyim"],["safety","🛡️ Güvenlik"],
-   ["comfort","🛏️ Konfor"],["time","⏱️ Ulaşım / Süre"],["weather","☀️ Hava / Sezon"],["fit","❤️ Kişisel Uyum"]
-  ],
-  examples:["Antalya","Yunanistan","Gürcistan"]
+  icon:"✈️",name:"Seyahat",desc:"Tatil, şehir ve seyahat planı seçimi.",
+  help:"Toplam bütçe, süre, ulaşım, konfor, güvenlik ve deneyim puanlarını birlikte değerlendir.",
+  examples:["Antalya","Yunanistan","Gürcistan"],
+  metrics:[
+   ["cost","💰 Toplam Bütçe","TL","currency","low","Ulaşım + konaklama + harcama tahmini"],
+   ["days","📅 Seyahat Süresi","gün","number","high","Kaç gün tatil"],
+   ["travelTime","✈️ Ulaşım Süresi","saat","number","low","Toplam yaklaşık yol süresi"],
+   ["hotel","🛏️ Konaklama Kalitesi","/10","rating","high","Konaklama kalitesi"],
+   ["safety","🛡️ Güvenlik","/10","rating","high","10 = daha güvenli"],
+   ["experience","✨ Deneyim","/10","rating","high","Deneyim beklentisi"],
+   ["fit","❤️ Kişisel Uyum","/10","rating","high","Seyahatin sana uygunluğu"]
+  ]
  },
  alisveris:{
-  icon:"🛒",name:"Alışveriş",desc:"Ürün, hizmet ve satın alma kararları.",
-  help:"Satın alma kararında yalnızca fiyatı değil toplam değeri, kaliteyi ve kullanım süresini değerlendir.",
-  criteria:[
-   ["price","💰 Fiyat"],["quality","⭐ Kalite"],["durability","🛡️ Dayanıklılık"],
-   ["performance","⚡ Performans"],["service","🔧 Servis / Garanti"],["fit","❤️ İhtiyaca Uyum"],["resale","🔄 İkinci El Değeri"]
-  ],
-  examples:["Ürün A","Ürün B","Ürün C"]
+  icon:"🛒",name:"Alışveriş",desc:"Ürün veya hizmet satın alma seçimi.",
+  help:"Fiyatı kalite, garanti, kullanım süresi, performans ve servisle birlikte tart.",
+  examples:["Ürün A","Ürün B","Ürün C"],
+  metrics:[
+   ["price","💰 Fiyat","TL","currency","low","Satın alma fiyatı"],
+   ["quality","⭐ Kalite","/10","rating","high","Kalite puanı"],
+   ["warranty","🛡️ Garanti","yıl","number","high","Garanti süresi"],
+   ["life","⏳ Tahmini Kullanım Ömrü","yıl","number","high","Beklenen kullanım süresi"],
+   ["performance","⚡ Performans","/10","rating","high","Performans"],
+   ["service","🔧 Servis / Destek","/10","rating","high","Servis kalitesi"],
+   ["resale","🔄 İkinci El Değeri","/10","rating","high","Satarken değerini koruma"]
+  ]
  },
  is:{
-  icon:"🏢",name:"İş & Girişim",desc:"İş fikri, proje ve girişim seçenekleri.",
-  help:"İş kararlarında gelir potansiyeli kadar sermaye, risk, uygulanabilirlik ve ölçeklenebilirliği tart.",
-  criteria:[
-   ["income","💰 Gelir Potansiyeli"],["capital","💸 Başlangıç Sermayesi"],["risk","🛡️ Risk"],
-   ["demand","📊 Talep"],["execution","⚙️ Uygulanabilirlik"],["scale","📈 Ölçeklenebilirlik"],["fit","❤️ Kişisel Uyum"]
-  ],
-  examples:["Fikir A","Fikir B","Fikir C"]
+  icon:"🏢",name:"İş & Girişim",desc:"İş fikri, proje ve girişim karşılaştırması.",
+  help:"Sermaye, gelir, talep, risk, uygulanabilirlik ve ölçeklenebilirliği ölç.",
+  examples:["E-ticaret","Dijital Ürün","Hizmet İşletmesi"],
+  metrics:[
+   ["capital","💸 Başlangıç Sermayesi","TL","currency","low","İlk yatırım ihtiyacı"],
+   ["income","💰 Aylık Gelir Potansiyeli","TL/ay","currency","high","Tahmini aylık potansiyel"],
+   ["demand","📊 Talep","/10","rating","high","Pazar talebi"],
+   ["risk","⚠️ Risk","/10","rating","low","10 = daha riskli"],
+   ["execution","⚙️ Uygulanabilirlik","/10","rating","high","Başlama kolaylığı"],
+   ["scale","📈 Ölçeklenebilirlik","/10","rating","high","Büyütme potansiyeli"],
+   ["fit","❤️ Kişisel Uyum","/10","rating","high","Yetenek ve hedeflerle uyum"]
+  ]
  },
  ulasim:{
-  icon:"🚗",name:"Ulaşım",desc:"Araç, ulaşım yöntemi ve günlük hareketlilik.",
-  help:"Ulaşım kararında satın alma maliyeti kadar yakıt, bakım, süre, güvenlik ve kullanım uygunluğu önemlidir.",
-  criteria:[
-   ["cost","💰 Toplam Maliyet"],["time","⏱️ Zaman"],["safety","🛡️ Güvenlik"],
-   ["comfort","🛋️ Konfor"],["reliability","🔧 Güvenilirlik"],["efficiency","⛽ Verimlilik"],["fit","❤️ Kullanım Uyumu"]
-  ],
-  examples:["Araba","Motosiklet","Toplu taşıma"]
+  icon:"🚗",name:"Ulaşım",desc:"Araç veya ulaşım yöntemi seçimi.",
+  help:"Satın alma/abonelik maliyeti, süre, güvenlik, tüketim ve konforu birlikte değerlendir.",
+  examples:["Otomobil","Motosiklet","Toplu Taşıma"],
+  metrics:[
+   ["cost","💰 Satın Alma / Aylık Maliyet","TL","currency","low","Karşılaştırma dönemindeki maliyet"],
+   ["fuel","⛽ Yakıt / Enerji Tüketimi","L/100km","number","low","Düşük olması genelde avantajlı"],
+   ["time","⏱️ Ortalama Yol Süresi","dk","number","low","Günlük ulaşım süresi"],
+   ["safety","🛡️ Güvenlik","/10","rating","high","10 = daha güvenli"],
+   ["comfort","🛋️ Konfor","/10","rating","high","Konfor"],
+   ["reliability","🔧 Güvenilirlik","/10","rating","high","Arıza ve bakım açısından"],
+   ["range","🔋 Menzil","km","number","high","Tek dolum/şarjla yaklaşık menzil"]
+  ]
  },
  saglik:{
-  icon:"🏋️",name:"Yaşam & Sağlık",desc:"Günlük yaşam, spor ve iyi yaşam tercihleri.",
-  help:"Bu alan tıbbi tanı vermez; günlük tercihleri karşılaştırmak için karar çerçevesi sunar.",
-  criteria:[
-   ["benefit","✨ Beklenen Fayda"],["cost","💰 Maliyet"],["effort","⏱️ Efor / Zaman"],
-   ["sustainability","🔄 Sürdürülebilirlik"],["safety","🛡️ Güvenlik"],["fit","❤️ Kişisel Uyum"],["future","🔮 Uzun Vadeli Etki"]
-  ],
-  examples:["Spor salonu","Evde spor","Açık hava"]
+  icon:"🏋️",name:"Yaşam & Sağlık",desc:"Spor, rutin ve iyi yaşam tercihi.",
+  help:"Bu bölüm tıbbi tanı koymaz. Günlük yaşam tercihlerini maliyet, zaman, sürdürülebilirlik ve kişisel uyumla karşılaştırır.",
+  examples:["Spor Salonu","Evde Spor","Açık Hava"],
+  metrics:[
+   ["cost","💰 Aylık Maliyet","TL/ay","currency","low","Aylık maliyet"],
+   ["time","⏱️ Haftalık Zaman","saat","number","low","Haftalık ayıracağın süre"],
+   ["benefit","✨ Beklenen Fayda","/10","rating","high","Beklenen fayda"],
+   ["safety","🛡️ Güvenlik","/10","rating","high","10 = daha güvenli"],
+   ["sustainability","🔄 Sürdürülebilirlik","/10","rating","high","Devam ettirebilme olasılığı"],
+   ["fit","❤️ Kişisel Uyum","/10","rating","high","Sana uygunluğu"],
+   ["effort","💪 Efor","/10","rating","low","10 = daha zor/yorucu"]
+  ]
  },
  diger:{
-  icon:"🧩",name:"Diğer",desc:"Kategoriye uymayan her türlü karar.",
-  help:"Kendi kriterlerini tanımlayabileceğin esnek karar alanı.",
-  criteria:[
-   ["importance","🎯 Önem"],["cost","💰 Maliyet"],["time","⏱️ Zaman"],
-   ["quality","⭐ Kalite"],["risk","🛡️ Risk"],["fit","❤️ Uyum"],["future","🔮 Gelecek Etkisi"]
-  ],
-  examples:["Seçenek A","Seçenek B","Seçenek C"]
- }
-};
+  icon:"🧩",name:"Diğer",desc:"Her türlü özel karar.",
+  help:"Kendi kararını kur. Ölçülebilen alanlarda rakam, öznel alanlarda 1–10 puan kullan.",
+  examples:["Seçenek A","Seçenek B","Seçenek C"],
+  metrics:[
+   ["cost","💰 Maliyet","TL","currency","low","Maliyet"],
+   ["time","⏱️ Zaman","saat","number","low","Harcanan zaman"],
+   ["quality","⭐ Kalite","/10","rating","high","Kalite"],
+   ["risk","⚠️ Risk","/10","rating","low","10 = daha riskli"],
+   ["fit","❤️ Uyum","/10","rating","high","Kişisel uyum"],
+   ["future","🔮 Gelecek Etkisi","/10","rating","high","Uzun vadeli etki"],
+   ["importance","🎯 Genel Önem","/10","rating","high","Senin için genel değer"]
+  ]
+}};
 
 let currentCategory="teknoloji";
 let alternatives=[];
@@ -495,8 +568,7 @@ function applyCategory(key){
  document.getElementById("categorySelect").value=key;
  document.getElementById("categoryHelp").textContent=c.help;
  renderCategories();
- alternatives=[];
- c.examples.slice(0,3).forEach(x=>alternatives.push(x));
+ alternatives=[...c.examples];
  renderAlternatives();
  renderCriteria();
  renderRatings();
@@ -513,9 +585,11 @@ function renderAlternatives(){
  box.innerHTML=alternatives.map((name,i)=>`
  <div class="alt-row">
    <div class="alt-num">${String.fromCharCode(65+i)}</div>
-   <input value="${escapeAttr(name)}" oninput="alternatives[${i}]=this.value" placeholder="Alternatif ${String.fromCharCode(65+i)}">
+   <input value="${escapeAttr(name)}" data-alt-index="${i}" placeholder="Alternatif ${String.fromCharCode(65+i)}">
    <button class="remove" onclick="removeAlternative(${i})" ${alternatives.length<=2?"disabled":""}>×</button>
  </div>`).join("");
+ /* GitHub/browser-safe correction for the inline handler generated above */
+ box.querySelectorAll("input").forEach((el,i)=>el.oninput=()=>{alternatives[i]=el.value;renderRatings();});
 }
 function addAlternative(){
  if(alternatives.length>=5){toast("En fazla 5 alternatif ekleyebilirsin.");return}
@@ -530,23 +604,25 @@ function getAltNames(){
  return alternatives.map((x,i)=>x.trim()||`Seçenek ${String.fromCharCode(65+i)}`);
 }
 
-/* ---------- CRITERIA / WEIGHTS ---------- */
+/* ---------- METRICS / WEIGHTS ---------- */
 let weights={};
 function renderCriteria(){
- const c=CATEGORIES[currentCategory];
- const count=c.criteria.length;
+ const metrics=CATEGORIES[currentCategory].metrics;
  weights={};
- c.criteria.forEach(x=>weights[x[0]]=Math.round(100/count));
- normalizeWeightsTo100();
+ metrics.forEach(m=>weights[m[0]]=100/metrics.length);
+ updateWeightUI();
  const box=document.getElementById("criteriaBox");
- box.innerHTML=c.criteria.map(([key,name])=>`
+ box.innerHTML=metrics.map(([key,name,unit,type,better,help])=>`
  <div class="criterion">
-   <div class="criterion-top"><strong>${name}</strong><span class="weight-badge" id="wb_${key}">Ağırlık ${weights[key]}%</span></div>
-   <div class="weight-controls">
-     <input class="range" id="wr_${key}" type="range" min="0" max="100" value="${weights[key]}" oninput="setWeight('${key}',this.value)">
-     <input type="number" min="0" max="100" value="${weights[key]}" id="wn_${key}" oninput="setWeight('${key}',this.value)">
+   <div class="criterion-top">
+     <strong>${name}</strong>
+     <span class="weight-badge" id="wb_${key}">Ağırlık ${weights[key].toFixed(1)}%</span>
    </div>
-   <div class="small muted">Bu kriterin senin kararındaki göreli önemi.</div>
+   <div class="weight-controls">
+     <input class="range" id="wr_${key}" type="range" min="0" max="100" step="1" value="${Math.round(weights[key])}" oninput="setWeight('${key}',this.value)">
+     <input type="number" min="0" max="100" step="1" value="${Math.round(weights[key])}" id="wn_${key}" oninput="setWeight('${key}',this.value)">
+   </div>
+   <div class="small muted">${help} · ${better==="high"?"Yüksek değer avantajlı":"Düşük değer avantajlı"} · Birim: ${unit}</div>
  </div>`).join("");
  updateWeightUI();
 }
@@ -554,63 +630,91 @@ function setWeight(key,val){
  weights[key]=Math.max(0,Math.min(100,Number(val)||0));
  normalizeWeightsTo100();
  updateWeightUI();
+ renderRatings(false);
 }
 function normalizeWeightsTo100(){
- const keys=Object.keys(weights);
- const total=keys.reduce((a,k)=>a+weights[k],0);
- if(!total){
-  const each=100/Math.max(1,keys.length);
-  keys.forEach(k=>weights[k]=each);
-  return;
- }
+ const keys=Object.keys(weights),total=keys.reduce((a,k)=>a+weights[k],0);
+ if(!total){keys.forEach(k=>weights[k]=100/keys.length);return}
  keys.forEach(k=>weights[k]=weights[k]/total*100);
 }
 function resetWeights(){
  const keys=Object.keys(weights),each=100/keys.length;
  keys.forEach(k=>weights[k]=each);
- updateWeightUI();
+ updateWeightUI();renderRatings(false);
 }
 function updateWeightUI(){
  let total=0;
  Object.keys(weights).forEach(k=>{
-   const v=Number(weights[k]);
-   total+=v;
+   const v=Number(weights[k]);total+=v;
    const r=document.getElementById("wr_"+k),n=document.getElementById("wn_"+k),b=document.getElementById("wb_"+k);
-   if(r)r.value=Math.round(v*10)/10;
-   if(n)n.value=Math.round(v*10)/10;
-   if(b)b.textContent="Ağırlık "+(Math.round(v*10)/10)+"%";
+   if(r)r.value=Math.round(v);
+   if(n)n.value=Math.round(v);
+   if(b)b.textContent="Ağırlık "+v.toFixed(1)+"%";
  });
- document.getElementById("weightTotal").textContent=Math.round(total*10)/10+"%";
+ const wt=document.getElementById("weightTotal");if(wt)wt.textContent=total.toFixed(1)+"%";
 }
 
-/* ---------- RATINGS ---------- */
-let ratings={};
-function renderRatings(){
- const c=CATEGORIES[currentCategory];
- ratings={};
- c.criteria.forEach(([key])=>{
-   ratings[key]=alternatives.map(()=>5);
+/* ---------- NUMERIC METRIC INPUTS ---------- */
+let metricValues={};
+function renderRatings(preserve=true){
+ const metrics=CATEGORIES[currentCategory].metrics;
+ const old=metricValues;
+ metricValues={};
+ metrics.forEach(([key])=>{
+   metricValues[key]=alternatives.map((_,i)=>{
+     if(preserve && old[key] && old[key][i]!==undefined)return old[key][i];
+     return defaultMetricValue(key);
+   });
  });
  const box=document.getElementById("ratingsBox");
- box.innerHTML=c.criteria.map(([key,name])=>`
+ box.innerHTML=metrics.map(([key,name,unit,type,better,help])=>`
  <div class="criterion" style="margin-top:12px">
-  <div class="criterion-top"><strong>${name}</strong><span class="weight-badge">${Math.round(weights[key]*10)/10}%</span></div>
-  <div class="rating-grid">
-   ${alternatives.map((alt,i)=>`
-    <div class="rating">
-      <div class="rating-name"><span>${escapeHtml(getAltNames()[i])}</span><b id="rv_${key}_${i}">5</b></div>
-      <input class="range" type="range" min="1" max="10" value="5" oninput="setRating('${key}',${i},this.value)">
-    </div>`).join("")}
+  <div class="criterion-top">
+    <strong>${name}</strong>
+    <span class="weight-badge">${weights[key].toFixed(1)}%</span>
   </div>
+  <div class="rating-grid">
+   ${alternatives.map((alt,i)=>{
+     const v=metricValues[key][i];
+     return `<div class="rating">
+       <div class="rating-name"><span>${escapeHtml(getAltNames()[i])}</span><b>${unit}</b></div>
+       <div style="display:grid;grid-template-columns:1fr auto;gap:7px;align-items:center">
+         <input type="number" min="${type==="rating"?"1":"0"}" ${type==="rating"?'max="10"':''} step="${type==="currency"?"100":type==="percent"?"0.1":"0.1"}"
+          value="${v}" oninput="setMetric('${key}',${i},this.value)">
+         <span class="muted small">${unit}</span>
+       </div>
+     </div>`;
+   }).join("")}
+  </div>
+  <div class="small muted" style="margin-top:8px">
+    ${better==="high"?"↑ Yüksek değer daha iyi":"↓ Düşük değer daha iyi"} · ${help}
+   </div>
  </div>`).join("");
 }
-function setRating(key,i,val){
- ratings[key][i]=Number(val);
- const el=document.getElementById(`rv_${key}_${i}`);if(el)el.textContent=val;
+function defaultMetricValue(key){
+ const defaults={
+  price:10000,performance:7,quality:7,battery:8,warranty:2,updates:4,storage:256,
+  area:100,rooms:3,age:5,dues:3000,distance:5,safety:7,
+  salary:40000,hours:40,commute:45,growth:7,security:7,balance:7,future:7,
+  capital:10000,return:10,risk:5,liquidity:7,fee:1,term:12,control:7,
+  trust:7,communication:7,values:7,effort:7,harmony:7,
+  rent:20000,income:40000,transport:45,social:7,nature:7,fit:7,
+  cost:20000,quality:7,duration:24,career:7,network:7,location:7,
+  days:7,travelTime:4,hotel:7,experience:8,
+  life:5,performance:7,service:7,resale:6,
+  demand:7,execution:7,scale:7,
+  fuel:7,time:45,comfort:7,reliability:7,range:500,
+  benefit:7,sustainability:7,effort:6,
+  importance:7
+ };
+ return defaults[key]??5;
+}
+function setMetric(key,i,val){
+ const n=Number(val);
+ metricValues[key][i]=Number.isFinite(n)?n:0;
 }
 function calculate(){
- const names=getAltNames();
- const title=document.getElementById("decisionTitle").value.trim();
+ const names=getAltNames(),title=document.getElementById("decisionTitle").value.trim();
  if(!title){toast("Önce kararının başlığını yaz.");document.getElementById("decisionTitle").focus();return}
  if(names.some(x=>!x.trim())){toast("Her alternatifin bir adı olmalı.");return}
  const result=calculateScores(names);
@@ -618,27 +722,37 @@ function calculate(){
   category:currentCategory,title,goal:document.getElementById("goal").value.trim(),
   extra:document.getElementById("extraInfo").value.trim(),
   alternatives:names,weights:JSON.parse(JSON.stringify(weights)),
-  ratings:JSON.parse(JSON.stringify(ratings)),scores:result.scores,
+  metrics:JSON.parse(JSON.stringify(metricValues)),scores:result.scores,
   normalized:result.normalized,createdAt:new Date().toISOString()
  };
  renderResult(lastResult);
 }
 function calculateScores(names){
- const keys=Object.keys(weights);
- const scores=names.map(()=>0);
- const contributions={};
- keys.forEach(key=>{
-  contributions[key]=[];
-  names.forEach((_,i)=>{
-    const value=(ratings[key]?.[i]||5)/10;
-    const contribution=value*(weights[key]/100)*100;
-    contributions[key][i]=contribution;
-    scores[i]+=contribution;
-  });
+ const metrics=CATEGORIES[currentCategory].metrics;
+ const scores=names.map(()=>0),normalized={},contributions={};
+ metrics.forEach(([key,,unit,type,better])=>{
+   const vals=metricValues[key].map(v=>Number(v)||0);
+   const min=Math.min(...vals),max=Math.max(...vals);
+   normalized[key]=[];
+   contributions[key]=[];
+   vals.forEach((v,i)=>{
+     let n;
+     if(type==="rating"){
+       n=Math.max(0,Math.min(1,v/10));
+     }else if(max===min){
+       n=0.5;
+     }else if(better==="high"){
+       n=(v-min)/(max-min);
+     }else{
+       n=(max-v)/(max-min);
+     }
+     normalized[key][i]=n;
+     contributions[key][i]=n*(weights[key]/100)*100;
+     scores[i]+=contributions[key][i];
+   });
  });
- return {scores:scores.map(x=>Number(x.toFixed(2))),normalized:contributions};
+ return {scores:scores.map(x=>Number(x.toFixed(2))),normalized,contributions};
 }
-
 /* ---------- RESULT ANALYSIS ---------- */
 function renderResult(r){
  const order=r.scores.map((score,i)=>({score,i})).sort((a,b)=>b.score-a.score);
@@ -682,7 +796,7 @@ function findDriver(r){
  const w=order[0].i,s=order[1].i;
  let best={impact:-1,key:"",diff:0};
  Object.keys(r.weights).forEach(key=>{
-  const diff=Math.abs((r.ratings[key][w]||5)-(r.ratings[key][s]||5));
+  const diff=Math.abs((r.normalized[key][w]||5)-(r.normalized[key][s]||5));
   const impact=diff*r.weights[key];
   if(impact>best.impact)best={impact,key,diff};
  });
@@ -694,7 +808,7 @@ function findSensitivity(r){
  const w=order[0].i,s=order[1].i;
  let best={swing:0,key:""};
  Object.keys(r.weights).forEach(key=>{
-  const diff=Math.abs((r.ratings[key][w]||5)-(r.ratings[key][s]||5));
+  const diff=Math.abs((r.normalized[key][w]||5)-(r.normalized[key][s]||5));
   const swing=diff*r.weights[key];
   if(swing>best.swing)best={swing,key};
  });
@@ -706,7 +820,7 @@ function findRobust(r,order){
  let count=0,total=0;
  Object.keys(r.weights).forEach(key=>{
   total+=r.weights[key];
-  if((r.ratings[key][w]||5)>=(Math.max(...r.alternatives.map((_,i)=>r.ratings[key][i]||5))))count+=r.weights[key];
+  if((r.normalized[key][w]||5)>=(Math.max(...r.alternatives.map((_,i)=>r.normalized[key][i]||5))))count+=r.weights[key];
  });
  return `Lider seçenek, kriterlerin yaklaşık %${Math.round(count)} ağırlığında en yüksek puana sahip. Bu onun en sağlam tarafını gösteriyor.`;
 }
@@ -714,7 +828,7 @@ function findChangePoint(r,order){
  const w=order[0].i,s=order[1].i,gap=r.scores[w]-r.scores[s];
  let candidate=null;
  Object.keys(r.weights).forEach(key=>{
-  const delta=(r.ratings[key][w]||5)-(r.ratings[key][s]||5);
+  const delta=(r.normalized[key][w]||5)-(r.normalized[key][s]||5);
   const effect=Math.abs(delta)*r.weights[key]/10;
   if(!candidate||effect>candidate.effect)candidate={key,delta,effect};
  });
@@ -728,7 +842,7 @@ function renderBreakdown(r,order){
  let html=`<div class="break-row" style="color:#8f98ad;font-size:12px"><div>Kriter / ağırlık</div>${order.slice(0,2).map(x=>`<div style="text-align:right">${escapeHtml(names[x.i])}</div>`).join("")}</div>`;
  Object.keys(r.weights).forEach(key=>{
   const c=CATEGORIES[r.category].criteria.find(x=>x[0]===key);
-  const contrib=r.normalized[key];
+  const contrib=r.normalized[key].map((n,i)=>n*r.weights[key]);
   html+=`<div class="break-row"><div><strong>${c?c[1]:key}</strong><div class="barmini"><i style="width:${Math.min(100,r.weights[key])}%"></i></div><span class="small muted">%${r.weights[key].toFixed(1)} ağırlık</span></div>`;
   order.slice(0,2).forEach(x=>html+=`<div style="text-align:right">${contrib[x.i].toFixed(1)}</div>`);
   html+=`</div>`;
@@ -743,30 +857,29 @@ function runAdvanced(){
  const w=order[0].i,s=order[1].i;
  let strongest={key:"",impact:-1};
  Object.keys(r.weights).forEach(key=>{
-  const diff=Math.abs(r.ratings[key][w]-r.ratings[key][s]);
+  const diff=Math.abs((r.normalized[key][w]||0)-(r.normalized[key][s]||0));
   const impact=diff*r.weights[key];
   if(impact>strongest.impact)strongest={key,impact};
  });
- const criterion=CATEGORIES[r.category].criteria.find(x=>x[0]===strongest.key);
+ const criterion=CATEGORIES[r.category].metrics.find(x=>x[0]===strongest.key);
  const altered={...r.weights};
  altered[strongest.key]=Math.max(0,altered[strongest.key]-10);
  const total=Object.values(altered).reduce((a,b)=>a+b,0);
  Object.keys(altered).forEach(k=>altered[k]=altered[k]/total*100);
- const testScores=r.alternatives.map((_,i)=>Object.keys(altered).reduce((sum,k)=>sum+(r.ratings[k][i]/10)*altered[k],0));
+ const testScores=r.alternatives.map((_,i)=>Object.keys(altered).reduce((sum,k)=>sum+(r.normalized[k][i]||0)*altered[k],0));
  const testWinner=testScores.indexOf(Math.max(...testScores));
  const currentGap=r.scores[w]-r.scores[s];
  document.getElementById("advancedWeight").textContent=
-  `${criterion?criterion[1]:"En etkili kriter"} ağırlığı 10 puan azaltılarak diğerleri normalize edildiğinde lider: ${r.alternatives[testWinner]}.`;
+  `${criterion?criterion[1]:"En etkili kriter"} ağırlığı 10 puan azaltılıp diğerleri normalize edildiğinde lider: ${r.alternatives[testWinner]}.`;
  document.getElementById("advancedSensitivity").textContent=
-  `Mevcut lider ${r.alternatives[w]}. İkinci seçenekle fark ${currentGap.toFixed(1)} puan. Fark küçüldükçe karar daha hassastır.`;
+  `Mevcut lider ${r.alternatives[w]}. İkinci seçenekle fark ${currentGap.toFixed(1)} puan. Objektif sayılar değiştiğinde TARTI sonucu yeniden normalize eder.`;
  document.getElementById("advancedOpportunity").textContent=
-  `${r.alternatives[s]} seçilmediğinde ortaya çıkan göreceli skor farkı ${currentGap.toFixed(1)} puandır. Bu parasal kayıp değildir; karar farkıdır.`;
+  `${r.alternatives[s]} seçilmediğinde ortaya çıkan göreceli skor farkı ${currentGap.toFixed(1)} puandır. Bu bir TL kaybı değildir; alternatifler arasındaki karar farkıdır.`;
  document.getElementById("advancedDecision").textContent=
-  currentGap<5?"Karar sınırda. Dış koşulları ve puanlarını yeniden kontrol etmen mantıklı.":`Mevcut varsayımlarla ${r.alternatives[w]} önde. Yine de sonucu belirleyen kriterleri gözden geçir.`;
+  currentGap<5?"Karar sınırda. Girdiğin gerçek rakamları ve kriter ağırlıklarını tekrar kontrol et.":`Mevcut verilerle ${r.alternatives[w]} önde. Kararı değiştirebilecek kriterleri ayrıca kontrol et.`;
  document.getElementById("advanced").style.display="block";
  document.getElementById("advanced").scrollIntoView({behavior:"smooth",block:"center"});
 }
-
 /* ---------- LOCAL HISTORY ---------- */
 function saveLocal(){
  if(!lastResult){toast("Önce bir karar hesapla.");return}
