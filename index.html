@@ -431,55 +431,59 @@ a {
 
 function hesapla() {
 
-    const yakit =
-        Number(document.getElementById("yakit").value);
-
-    const otopark =
-        Number(document.getElementById("otopark").value);
-
-    const bakim =
-        Number(document.getElementById("bakim").value);
-
-    const topluTasima =
-        Number(document.getElementById("topluTasima").value);
-
+    const yakitInput = document.getElementById("yakit");
+    const otoparkInput = document.getElementById("otopark");
+    const bakimInput = document.getElementById("bakim");
+    const topluTasimaInput = document.getElementById("topluTasima");
+    const sonuc = document.getElementById("sonuc");
 
     if (
-    document.getElementById("yakit").value === "" ||
-    document.getElementById("otopark").value === "" ||
-    document.getElementById("bakim").value === "" ||
-    document.getElementById("topluTasima").value === ""
-) {
+        yakitInput.value === "" ||
+        otoparkInput.value === "" ||
+        bakimInput.value === "" ||
+        topluTasimaInput.value === ""
+    ) {
 
-    alert("Lütfen bütün alanları doldur.");
+        sonuc.style.display = "block";
 
-    return;
-}
-        alert("Lütfen geçerli değerler gir.");
+        sonuc.innerHTML = `
+            <h2>⚠️ Eksik bilgi</h2>
+            <p>Lütfen bütün alanları doldur.</p>
+        `;
 
         return;
     }
 
+    const yakit = Number(yakitInput.value);
+    const otopark = Number(otoparkInput.value);
+    const bakim = Number(bakimInput.value);
+    const topluTasima = Number(topluTasimaInput.value);
 
-    const araba =
-        yakit + otopark + bakim;
+    if (
+        yakit < 0 ||
+        otopark < 0 ||
+        bakim < 0 ||
+        topluTasima < 0
+    ) {
 
+        sonuc.style.display = "block";
 
-    const fark =
-        araba - topluTasima;
+        sonuc.innerHTML = `
+            <h2>⚠️ Geçersiz değer</h2>
+            <p>Negatif değer kullanma.</p>
+        `;
 
+        return;
+    }
 
-    const sonuc =
-        document.getElementById("sonuc");
-
+    const araba = yakit + otopark + bakim;
+    const fark = araba - topluTasima;
 
     sonuc.style.display = "block";
-
 
     if (araba > topluTasima) {
 
         sonuc.innerHTML = `
-
             <h2>🚌 Toplu taşıma daha ekonomik.</h2>
 
             <p>
@@ -496,13 +500,11 @@ function hesapla() {
                 Aylık fark:
                 <strong>${fark.toLocaleString("tr-TR")} TL</strong>
             </p>
-
         `;
 
     } else if (araba < topluTasima) {
 
         sonuc.innerHTML = `
-
             <h2>🚗 Araba daha ekonomik.</h2>
 
             <p>
@@ -519,27 +521,22 @@ function hesapla() {
                 Aylık fark:
                 <strong>${Math.abs(fark).toLocaleString("tr-TR")} TL</strong>
             </p>
-
         `;
 
     } else {
 
         sonuc.innerHTML = `
-
             <h2>⚖️ Maliyetler aynı.</h2>
 
             <p>
                 Her iki seçenek de yaklaşık
                 <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>.
             </p>
-
         `;
-
     }
-
 }
 
-        </script>
+</script>
 </body>
 
 </html>
