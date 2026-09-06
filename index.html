@@ -8,7 +8,17 @@
 
 <meta name="description" content="BİRLEŞTİR, seçeneklerini maliyet, zaman, kalite ve önceliklerine göre karşılaştırır.">
 <meta name="theme-color" content="#0b1020">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const SUPABASE_URL = "https://ccsmdgeytthszsemplzf.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_ymUk0_RRlGoQH28sMTrkRg_jlBgHGyx";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+</script>
 <style>
 
 :root{
