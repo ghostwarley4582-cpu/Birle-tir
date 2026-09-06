@@ -431,17 +431,18 @@ a {
 
 function hesapla() {
 
-    const yakitInput = document.getElementById("yakit");
-    const otoparkInput = document.getElementById("otopark");
-    const bakimInput = document.getElementById("bakim");
-    const topluTasimaInput = document.getElementById("topluTasima");
+    const yakit = Number(document.getElementById("yakit").value);
+    const otopark = Number(document.getElementById("otopark").value);
+    const bakim = Number(document.getElementById("bakim").value);
+    const topluTasima = Number(document.getElementById("topluTasima").value);
+
     const sonuc = document.getElementById("sonuc");
 
     if (
-        yakitInput.value === "" ||
-        otoparkInput.value === "" ||
-        bakimInput.value === "" ||
-        topluTasimaInput.value === ""
+        document.getElementById("yakit").value === "" ||
+        document.getElementById("otopark").value === "" ||
+        document.getElementById("bakim").value === "" ||
+        document.getElementById("topluTasima").value === ""
     ) {
 
         sonuc.style.display = "block";
@@ -453,11 +454,6 @@ function hesapla() {
 
         return;
     }
-
-    const yakit = Number(yakitInput.value);
-    const otopark = Number(otoparkInput.value);
-    const bakim = Number(bakimInput.value);
-    const topluTasima = Number(topluTasimaInput.value);
 
     if (
         yakit < 0 ||
@@ -477,63 +473,144 @@ function hesapla() {
     }
 
     const araba = yakit + otopark + bakim;
-    const fark = araba - topluTasima;
+
+    const aylikFark = Math.abs(araba - topluTasima);
+
+    const yillikAraba = araba * 12;
+
+    const yillikTopluTasima = topluTasima * 12;
+
+    const yillikFark = aylikFark * 12;
 
     sonuc.style.display = "block";
 
     if (araba > topluTasima) {
 
         sonuc.innerHTML = `
+
             <h2>🚌 Toplu taşıma daha ekonomik.</h2>
 
             <p>
-                Araba:
+                🚗 Araba:
                 <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>
             </p>
 
             <p>
-                Toplu taşıma:
+                🚌 Toplu taşıma:
                 <strong>${topluTasima.toLocaleString("tr-TR")} TL/ay</strong>
             </p>
 
             <p>
-                Aylık fark:
-                <strong>${fark.toLocaleString("tr-TR")} TL</strong>
+                💰 Aylık tasarruf:
+                <strong>${aylikFark.toLocaleString("tr-TR")} TL</strong>
             </p>
+
+            <p>
+                📅 Yıllık araba maliyeti:
+                <strong>${yillikAraba.toLocaleString("tr-TR")} TL</strong>
+            </p>
+
+            <p>
+                📅 Yıllık toplu taşıma maliyeti:
+                <strong>${yillikTopluTasima.toLocaleString("tr-TR")} TL</strong>
+            </p>
+
+            <p>
+                💸 Yıllık tasarruf:
+                <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
+            </p>
+
+            <hr>
+
+            <h2>🧠 BİRLEŞTİR KARARI</h2>
+
+            <p>
+                Bu hesaplamaya göre toplu taşımayı seçmek
+                yılda yaklaşık
+                <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
+                tasarruf ettiriyor.
+            </p>
+
         `;
 
     } else if (araba < topluTasima) {
 
         sonuc.innerHTML = `
+
             <h2>🚗 Araba daha ekonomik.</h2>
 
             <p>
-                Araba:
+                🚗 Araba:
                 <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>
             </p>
 
             <p>
-                Toplu taşıma:
+                🚌 Toplu taşıma:
                 <strong>${topluTasima.toLocaleString("tr-TR")} TL/ay</strong>
             </p>
 
             <p>
-                Aylık fark:
-                <strong>${Math.abs(fark).toLocaleString("tr-TR")} TL</strong>
+                💰 Aylık tasarruf:
+                <strong>${aylikFark.toLocaleString("tr-TR")} TL</strong>
             </p>
+
+            <p>
+                📅 Yıllık araba maliyeti:
+                <strong>${yillikAraba.toLocaleString("tr-TR")} TL</strong>
+            </p>
+
+            <p>
+                📅 Yıllık toplu taşıma maliyeti:
+                <strong>${yillikTopluTasima.toLocaleString("tr-TR")} TL</strong>
+            </p>
+
+            <p>
+                💸 Yıllık tasarruf:
+                <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
+            </p>
+
+            <hr>
+
+            <h2>🧠 BİRLEŞTİR KARARI</h2>
+
+            <p>
+                Bu hesaplamaya göre araba kullanmak
+                yılda yaklaşık
+                <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
+                daha ekonomik.
+            </p>
+
         `;
 
     } else {
 
         sonuc.innerHTML = `
+
             <h2>⚖️ Maliyetler aynı.</h2>
 
             <p>
                 Her iki seçenek de yaklaşık
                 <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>.
             </p>
+
+            <p>
+                📅 Yıllık maliyet:
+                <strong>${yillikAraba.toLocaleString("tr-TR")} TL</strong>
+            </p>
+
+            <hr>
+
+            <h2>🧠 BİRLEŞTİR KARARI</h2>
+
+            <p>
+                💡 Sadece maliyet açısından bakıldığında
+                iki seçenek arasında fark yok.
+            </p>
+
         `;
+
     }
+
 }
 
 </script>
