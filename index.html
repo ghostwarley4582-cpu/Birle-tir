@@ -425,24 +425,22 @@ a {
     id="topluZaman"
     placeholder="Örn: 35"
 >
-        <button onclick="hesapla()">
-            KARŞILAŞTIR
-        </button>
-        <div id="sonuc"></div>
+        
+        <label>Senin için hangisi daha önemli?</label>
 
-    </div>
+<select id="oncelik">
+    <option value="para">💰 Para</option>
+    <option value="zaman">⏱️ Zaman</option>
+    <option value="denge">⚖️ İkisi de eşit</option>
+</select>
+<br>
 
-</section>
-</section>
+<button onclick="hesapla()">
+    KARŞILAŞTIR
+</button>
 
-        <footer>
-
-            BİRLEŞTİR © 2026
-
-        </footer>
-
-    </div>
-<script>
+<div id="sonuc"></div>
+        <script>
 
 function hesapla() {
 
@@ -450,10 +448,16 @@ function hesapla() {
     const otoparkInput = document.getElementById("otopark");
     const bakimInput = document.getElementById("bakim");
     const topluTasimaInput = document.getElementById("topluTasima");
+
     const arabaZamanInput = document.getElementById("arabaZaman");
     const topluZamanInput = document.getElementById("topluZaman");
 
+    const oncelikInput = document.getElementById("oncelik");
+
     const sonuc = document.getElementById("sonuc");
+
+
+    /* BOŞ ALAN KONTROLÜ */
 
     if (
         yakitInput.value === "" ||
@@ -474,6 +478,9 @@ function hesapla() {
         return;
     }
 
+
+    /* DEĞERLERİ AL */
+
     const yakit = Number(yakitInput.value);
     const otopark = Number(otoparkInput.value);
     const bakim = Number(bakimInput.value);
@@ -481,6 +488,9 @@ function hesapla() {
 
     const arabaZaman = Number(arabaZamanInput.value);
     const topluZaman = Number(topluZamanInput.value);
+
+
+    /* NEGATİF DEĞER KONTROLÜ */
 
     if (
         yakit < 0 ||
@@ -501,24 +511,126 @@ function hesapla() {
         return;
     }
 
+
+    /* MALİYET HESAPLA */
+
     const araba = yakit + otopark + bakim;
 
     const aylikFark = Math.abs(araba - topluTasima);
 
     const yillikAraba = araba * 12;
+
     const yillikTopluTasima = topluTasima * 12;
+
     const yillikFark = aylikFark * 12;
 
+
+    /* ZAMAN HESAPLA */
+
     const zamanFarki = Math.abs(arabaZaman - topluZaman);
+
     const yillikZamanFarki = zamanFarki * 12;
+
+
+    /* MALİYET PUANI */
+
+    let arabaParaPuani;
+    let topluParaPuani;
+
+    if (araba === topluTasima) {
+
+        arabaParaPuani = 50;
+        topluParaPuani = 50;
+
+    } else if (araba < topluTasima) {
+
+        arabaParaPuani = 100;
+        topluParaPuani = 0;
+
+    } else {
+
+        arabaParaPuani = 0;
+        topluParaPuani = 100;
+    }
+
+
+    /* ZAMAN PUANI */
+
+    let arabaZamanPuani;
+    let topluZamanPuani;
+
+    if (arabaZaman === topluZaman) {
+
+        arabaZamanPuani = 50;
+        topluZamanPuani = 50;
+
+    } else if (arabaZaman < topluZaman) {
+
+        arabaZamanPuani = 100;
+        topluZamanPuani = 0;
+
+    } else {
+
+        arabaZamanPuani = 0;
+        topluZamanPuani = 100;
+    }
+
+
+    /* KULLANICININ ÖNCELİĞİ */
+
+    const oncelik = oncelikInput.value;
+
+    let arabaGenelPuan;
+    let topluGenelPuan;
+
+
+    if (oncelik === "para") {
+
+        arabaGenelPuan =
+            (arabaParaPuani * 0.70) +
+            (arabaZamanPuani * 0.30);
+
+        topluGenelPuan =
+            (topluParaPuani * 0.70) +
+            (topluZamanPuani * 0.30);
+
+    } else if (oncelik === "zaman") {
+
+        arabaGenelPuan =
+            (arabaParaPuani * 0.30) +
+            (arabaZamanPuani * 0.70);
+
+        topluGenelPuan =
+            (topluParaPuani * 0.30) +
+            (topluZamanPuani * 0.70);
+
+    } else {
+
+        arabaGenelPuan =
+            (arabaParaPuani * 0.50) +
+            (arabaZamanPuani * 0.50);
+
+        topluGenelPuan =
+            (topluParaPuani * 0.50) +
+            (topluZamanPuani * 0.50);
+    }
+
+
+    arabaGenelPuan = Math.round(arabaGenelPuan);
+
+    topluGenelPuan = Math.round(topluGenelPuan);
+
+
+    /* SONUCU GÖSTER */
 
     sonuc.style.display = "block";
 
-    if (araba > topluTasima) {
+
+    if (arabaGenelPuan > topluGenelPuan) {
 
         sonuc.innerHTML = `
 
-            <h2>🚌 Toplu taşıma daha ekonomik.</h2>
+            <h2>🚗 Araba senin için daha mantıklı.</h2>
 
             <p>
                 🚗 Araba:
@@ -531,12 +643,12 @@ function hesapla() {
             </p>
 
             <p>
-                💰 Aylık tasarruf:
+                💰 Aylık maliyet farkı:
                 <strong>${aylikFark.toLocaleString("tr-TR")} TL</strong>
             </p>
 
             <p>
-                📅 Yıllık tasarruf:
+                📅 Yıllık maliyet farkı:
                 <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
             </p>
 
@@ -555,27 +667,27 @@ function hesapla() {
             <h2>🧠 BİRLEŞTİR KARARI</h2>
 
             <p>
-                Bu hesaplamaya göre
-                <strong>toplu taşıma</strong>
-                yılda yaklaşık
-                <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
-                tasarruf ettiriyor.
+                🚗 Araba puanı:
+                <strong>${arabaGenelPuan}/100</strong>
             </p>
 
             <p>
-                Ancak zaman açısından iki seçenek arasında
-                aylık
-                <strong>${zamanFarki.toLocaleString("tr-TR")} saat</strong>
-                fark var.
+                🚌 Toplu taşıma puanı:
+                <strong>${topluGenelPuan}/100</strong>
+            </p>
+
+            <p>
+                ⭐ Genel karar:
+                <strong>🚗 ARABA</strong>
             </p>
 
         `;
 
-    } else if (araba < topluTasima) {
+    } else if (topluGenelPuan > arabaGenelPuan) {
 
         sonuc.innerHTML = `
 
-            <h2>🚗 Araba daha ekonomik.</h2>
+            <h2>🚌 Toplu taşıma senin için daha mantıklı.</h2>
 
             <p>
                 🚗 Araba:
@@ -588,12 +700,12 @@ function hesapla() {
             </p>
 
             <p>
-                💰 Aylık tasarruf:
+                💰 Aylık maliyet farkı:
                 <strong>${aylikFark.toLocaleString("tr-TR")} TL</strong>
             </p>
 
             <p>
-                📅 Yıllık tasarruf:
+                📅 Yıllık maliyet farkı:
                 <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
             </p>
 
@@ -612,16 +724,18 @@ function hesapla() {
             <h2>🧠 BİRLEŞTİR KARARI</h2>
 
             <p>
-                Bu hesaplamaya göre
-                <strong>araba</strong>
-                yılda yaklaşık
-                <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
-                daha ekonomik.
+                🚗 Araba puanı:
+                <strong>${arabaGenelPuan}/100</strong>
             </p>
 
             <p>
-                Zaman açısından aylık fark:
-                <strong>${zamanFarki.toLocaleString("tr-TR")} saat</strong>.
+                🚌 Toplu taşıma puanı:
+                <strong>${topluGenelPuan}/100</strong>
+            </p>
+
+            <p>
+                ⭐ Genel karar:
+                <strong>🚌 TOPLU TAŞIMA</strong>
             </p>
 
         `;
@@ -630,21 +744,16 @@ function hesapla() {
 
         sonuc.innerHTML = `
 
-            <h2>⚖️ Maliyetler aynı.</h2>
+            <h2>⚖️ İki seçenek de dengede.</h2>
 
             <p>
-                Her iki seçenek de yaklaşık
-                <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>.
+                🚗 Araba:
+                <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>
             </p>
 
             <p>
-                📅 Yıllık maliyet:
-                <strong>${yillikAraba.toLocaleString("tr-TR")} TL</strong>
-            </p>
-
-            <p>
-                ⏱️ Aylık zaman farkı:
-                <strong>${zamanFarki.toLocaleString("tr-TR")} saat</strong>
+                🚌 Toplu taşıma:
+                <strong>${topluTasima.toLocaleString("tr-TR")} TL/ay</strong>
             </p>
 
             <hr>
@@ -652,14 +761,16 @@ function hesapla() {
             <h2>🧠 BİRLEŞTİR KARARI</h2>
 
             <p>
-                💡 Maliyet açısından iki seçenek arasında fark yok.
+                💡 Para ve zaman açısından iki seçenek
+                birbirine çok yakın.
             </p>
 
         `;
     }
+
 }
 
-</script>
+        </script>
 </body>
 
 </html>
