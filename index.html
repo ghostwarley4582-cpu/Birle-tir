@@ -434,13 +434,13 @@ a {
     <option value="denge">⚖️ İkisi de eşit</option>
 </select>
 <br>
-
 <button onclick="hesapla()">
     KARŞILAŞTIR
 </button>
 
 <div id="sonuc"></div>
-        <script>
+
+<script>
 
 function hesapla() {
 
@@ -456,9 +456,6 @@ function hesapla() {
 
     const sonuc = document.getElementById("sonuc");
 
-
-    /* BOŞ ALAN KONTROLÜ */
-
     if (
         yakitInput.value === "" ||
         otoparkInput.value === "" ||
@@ -467,19 +464,13 @@ function hesapla() {
         arabaZamanInput.value === "" ||
         topluZamanInput.value === ""
     ) {
-
         sonuc.style.display = "block";
-
         sonuc.innerHTML = `
             <h2>⚠️ Eksik bilgi</h2>
             <p>Lütfen bütün alanları doldur.</p>
         `;
-
         return;
     }
-
-
-    /* DEĞERLERİ AL */
 
     const yakit = Number(yakitInput.value);
     const otopark = Number(otoparkInput.value);
@@ -489,9 +480,6 @@ function hesapla() {
     const arabaZaman = Number(arabaZamanInput.value);
     const topluZaman = Number(topluZamanInput.value);
 
-
-    /* NEGATİF DEĞER KONTROLÜ */
-
     if (
         yakit < 0 ||
         otopark < 0 ||
@@ -500,277 +488,202 @@ function hesapla() {
         arabaZaman < 0 ||
         topluZaman < 0
     ) {
-
         sonuc.style.display = "block";
-
         sonuc.innerHTML = `
             <h2>⚠️ Geçersiz değer</h2>
             <p>Negatif değer kullanma.</p>
         `;
-
         return;
     }
-
-
-    /* MALİYET HESAPLA */
 
     const araba = yakit + otopark + bakim;
 
     const aylikFark = Math.abs(araba - topluTasima);
-
     const yillikAraba = araba * 12;
-
     const yillikTopluTasima = topluTasima * 12;
-
     const yillikFark = aylikFark * 12;
 
-
-    /* ZAMAN HESAPLA */
-
     const zamanFarki = Math.abs(arabaZaman - topluZaman);
-
     const yillikZamanFarki = zamanFarki * 12;
-
-
-    /* MALİYET PUANI */
 
     let arabaParaPuani;
     let topluParaPuani;
 
     if (araba === topluTasima) {
-
         arabaParaPuani = 50;
         topluParaPuani = 50;
-
     } else if (araba < topluTasima) {
-
         arabaParaPuani = 100;
         topluParaPuani = 0;
-
     } else {
-
         arabaParaPuani = 0;
         topluParaPuani = 100;
     }
-
-
-    /* ZAMAN PUANI */
 
     let arabaZamanPuani;
     let topluZamanPuani;
 
     if (arabaZaman === topluZaman) {
-
         arabaZamanPuani = 50;
         topluZamanPuani = 50;
-
     } else if (arabaZaman < topluZaman) {
-
         arabaZamanPuani = 100;
         topluZamanPuani = 0;
-
     } else {
-
         arabaZamanPuani = 0;
         topluZamanPuani = 100;
     }
 
-
-    /* KULLANICININ ÖNCELİĞİ */
-
-    const oncelik = oncelikInput.value;
-
     let arabaGenelPuan;
     let topluGenelPuan;
 
-
-    if (oncelik === "para") {
-
-        arabaGenelPuan =
-            (arabaParaPuani * 0.70) +
-            (arabaZamanPuani * 0.30);
-
-        topluGenelPuan =
-            (topluParaPuani * 0.70) +
-            (topluZamanPuani * 0.30);
-
-    } else if (oncelik === "zaman") {
+    if (oncelikInput.value === "para") {
 
         arabaGenelPuan =
-            (arabaParaPuani * 0.30) +
-            (arabaZamanPuani * 0.70);
+            arabaParaPuani * 0.70 +
+            arabaZamanPuani * 0.30;
 
         topluGenelPuan =
-            (topluParaPuani * 0.30) +
-            (topluZamanPuani * 0.70);
+            topluParaPuani * 0.70 +
+            topluZamanPuani * 0.30;
+
+    } else if (oncelikInput.value === "zaman") {
+
+        arabaGenelPuan =
+            arabaParaPuani * 0.30 +
+            arabaZamanPuani * 0.70;
+
+        topluGenelPuan =
+            topluParaPuani * 0.30 +
+            topluZamanPuani * 0.70;
 
     } else {
 
         arabaGenelPuan =
-            (arabaParaPuani * 0.50) +
-            (arabaZamanPuani * 0.50);
+            arabaParaPuani * 0.50 +
+            arabaZamanPuani * 0.50;
 
         topluGenelPuan =
-            (topluParaPuani * 0.50) +
-            (topluZamanPuani * 0.50);
+            topluParaPuani * 0.50 +
+            topluZamanPuani * 0.50;
     }
 
-
     arabaGenelPuan = Math.round(arabaGenelPuan);
-
     topluGenelPuan = Math.round(topluGenelPuan);
-
-
-    /* SONUCU GÖSTER */
 
     sonuc.style.display = "block";
 
+    let karar;
+    let aciklama;
 
     if (arabaGenelPuan > topluGenelPuan) {
-
-        sonuc.innerHTML = `
-
-            <h2>🚗 Araba senin için daha mantıklı.</h2>
-
-            <p>
-                🚗 Araba:
-                <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>
-            </p>
-
-            <p>
-                🚌 Toplu taşıma:
-                <strong>${topluTasima.toLocaleString("tr-TR")} TL/ay</strong>
-            </p>
-
-            <p>
-                💰 Aylık maliyet farkı:
-                <strong>${aylikFark.toLocaleString("tr-TR")} TL</strong>
-            </p>
-
-            <p>
-                📅 Yıllık maliyet farkı:
-                <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
-            </p>
-
-            <p>
-                ⏱️ Aylık zaman farkı:
-                <strong>${zamanFarki.toLocaleString("tr-TR")} saat</strong>
-            </p>
-
-            <p>
-                ⏱️ Yıllık zaman farkı:
-                <strong>${yillikZamanFarki.toLocaleString("tr-TR")} saat</strong>
-            </p>
-
-            <hr>
-
-            <h2>🧠 BİRLEŞTİR KARARI</h2>
-
-            <p>
-                🚗 Araba puanı:
-                <strong>${arabaGenelPuan}/100</strong>
-            </p>
-
-            <p>
-                🚌 Toplu taşıma puanı:
-                <strong>${topluGenelPuan}/100</strong>
-            </p>
-
-            <p>
-                ⭐ Genel karar:
-                <strong>🚗 ARABA</strong>
-            </p>
-
-        `;
-
+        karar = "🚗 ARABA";
+        aciklama = "Senin için araba daha mantıklı.";
     } else if (topluGenelPuan > arabaGenelPuan) {
-
-        sonuc.innerHTML = `
-
-            <h2>🚌 Toplu taşıma senin için daha mantıklı.</h2>
-
-            <p>
-                🚗 Araba:
-                <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>
-            </p>
-
-            <p>
-                🚌 Toplu taşıma:
-                <strong>${topluTasima.toLocaleString("tr-TR")} TL/ay</strong>
-            </p>
-
-            <p>
-                💰 Aylık maliyet farkı:
-                <strong>${aylikFark.toLocaleString("tr-TR")} TL</strong>
-            </p>
-
-            <p>
-                📅 Yıllık maliyet farkı:
-                <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
-            </p>
-
-            <p>
-                ⏱️ Aylık zaman farkı:
-                <strong>${zamanFarki.toLocaleString("tr-TR")} saat</strong>
-            </p>
-
-            <p>
-                ⏱️ Yıllık zaman farkı:
-                <strong>${yillikZamanFarki.toLocaleString("tr-TR")} saat</strong>
-            </p>
-
-            <hr>
-
-            <h2>🧠 BİRLEŞTİR KARARI</h2>
-
-            <p>
-                🚗 Araba puanı:
-                <strong>${arabaGenelPuan}/100</strong>
-            </p>
-
-            <p>
-                🚌 Toplu taşıma puanı:
-                <strong>${topluGenelPuan}/100</strong>
-            </p>
-
-            <p>
-                ⭐ Genel karar:
-                <strong>🚌 TOPLU TAŞIMA</strong>
-            </p>
-
-        `;
-
+        karar = "🚌 TOPLU TAŞIMA";
+        aciklama = "Senin için toplu taşıma daha mantıklı.";
     } else {
-
-        sonuc.innerHTML = `
-
-            <h2>⚖️ İki seçenek de dengede.</h2>
-
-            <p>
-                🚗 Araba:
-                <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>
-            </p>
-
-            <p>
-                🚌 Toplu taşıma:
-                <strong>${topluTasima.toLocaleString("tr-TR")} TL/ay</strong>
-            </p>
-
-            <hr>
-
-            <h2>🧠 BİRLEŞTİR KARARI</h2>
-
-            <p>
-                💡 Para ve zaman açısından iki seçenek
-                birbirine çok yakın.
-            </p>
-
-        `;
+        karar = "⚖️ DENGE";
+        aciklama = "İki seçenek senin için dengede.";
     }
 
+    sonuc.innerHTML = `
+        <h2>${karar}</h2>
+
+        <p>${aciklama}</p>
+
+        <hr>
+
+        <p>
+            🚗 Araba:
+            <strong>${araba.toLocaleString("tr-TR")} TL/ay</strong>
+        </p>
+
+        <p>
+            🚌 Toplu taşıma:
+            <strong>${topluTasima.toLocaleString("tr-TR")} TL/ay</strong>
+        </p>
+
+        <p>
+            💰 Aylık fark:
+            <strong>${aylikFark.toLocaleString("tr-TR")} TL</strong>
+        </p>
+
+        <p>
+            📅 Yıllık araba maliyeti:
+            <strong>${yillikAraba.toLocaleString("tr-TR")} TL</strong>
+        </p>
+
+        <p>
+            📅 Yıllık toplu taşıma maliyeti:
+            <strong>${yillikTopluTasima.toLocaleString("tr-TR")} TL</strong>
+        </p>
+
+        <p>
+            💰 Yıllık fark:
+            <strong>${yillikFark.toLocaleString("tr-TR")} TL</strong>
+        </p>
+
+        <p>
+            ⏱️ Aylık zaman farkı:
+            <strong>${zamanFarki.toLocaleString("tr-TR")} saat</strong>
+        </p>
+
+        <p>
+            ⏱️ Yıllık zaman farkı:
+            <strong>${yillikZamanFarki.toLocaleString("tr-TR")} saat</strong>
+        </p>
+
+        <hr>
+
+        <h2>🧠 BİRLEŞTİR KARARI</h2>
+
+        <p>
+            🚗 Araba puanı:
+            <strong>${arabaGenelPuan}/100</strong>
+        </p>
+
+        <div style="
+            background:#333;
+            border-radius:20px;
+            height:14px;
+            margin:8px 0 20px;
+        ">
+            <div style="
+                width:${arabaGenelPuan}%;
+                background:#fff;
+                height:14px;
+                border-radius:20px;
+            "></div>
+        </div>
+
+        <p>
+            🚌 Toplu taşıma puanı:
+            <strong>${topluGenelPuan}/100</strong>
+        </p>
+
+        <div style="
+            background:#333;
+            border-radius:20px;
+            height:14px;
+            margin:8px 0 20px;
+        ">
+            <div style="
+                width:${topluGenelPuan}%;
+                background:#888;
+                height:14px;
+                border-radius:20px;
+            "></div>
+        </div>
+
+        <p>
+            💡 ${aciklama}
+        </p>
+    `;
 }
 
-        </script>
+    </script>
+
 </body>
 
 </html>
