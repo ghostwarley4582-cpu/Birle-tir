@@ -54,7 +54,7 @@ textarea{min-height:90px;resize:vertical}.muted{color:var(--muted)}.small{font-s
 .alt-num{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#171c2b;border:1px solid var(--line);color:#c9c1ff;font-weight:800}
 .remove{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:#0b0e16;color:#ff899b}
 .criteria{display:grid;gap:13px}.criterion{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
-.criterion-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}.criterion-top strong{font-size:15px}
+.criterion-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}.criterion-top strong{font-size:15px}
 .weight-badge{font-size:12px;color:#c9c1ff;border:1px solid rgba(125,92,255,.25);background:rgba(125,92,255,.08);padding:5px 8px;border-radius:99px}
 .weight-controls{display:grid;grid-template-columns:1fr 85px;gap:8px;margin-bottom:10px}.range{width:100%}
 .rating-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -78,14 +78,22 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:35px 0;text-alig
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.features{grid-template-columns:1fr 1fr}.insights{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.rating-grid{grid-template-columns:1fr}.whatif-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.nav{min-height:64px}.logo{font-size:21px}.nav-actions .btn{font-size:12px;padding:9px 10px}.hero{padding-top:52px}.hero h1{font-size:49px}.grid{grid-template-columns:1fr 1fr}.features{grid-template-columns:1fr}.card{padding:17px}.step{gap:9px}.alt-row{grid-template-columns:37px 1fr 37px}.alt-num,.remove{width:37px;height:40px}.rank{grid-template-columns:40px 1fr 80px}.break-row{grid-template-columns:1fr 58px 58px}}
 
-.compact-metrics{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:14px}
-.metric-table{min-width:620px;width:100%;border-collapse:collapse}
-.metric-table th,.metric-table td{padding:9px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;font-size:12px}
-.metric-table th{color:#dce1ee;background:#151a29;position:sticky;top:0}
-.metric-table td:first-child,.metric-table th:first-child{position:sticky;left:0;background:#101521;z-index:2}
-.metric-table input{padding:9px;min-width:78px;font-size:14px}
-.metric-unit{color:#8f98ad;font-size:11px}
-.mobile-note{font-size:11px;color:#8f98ad;margin-top:7px}
+.compact-metrics{width:100%;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.metric-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.metric-table th,.metric-table td{padding:7px 5px;border-bottom:1px solid rgba(255,255,255,.06);text-align:center;font-size:11px}
+.metric-table th{color:#dce1ee;background:#151a29;font-size:11px}
+.metric-table th:first-child,.metric-table td:first-child{text-align:left;width:30%;background:#101521}
+.metric-table input{width:100%;padding:8px 4px;min-width:0;height:38px;font-size:14px;font-weight:750;text-align:center}
+.metric-unit{color:#8f98ad;font-size:9px;display:block;margin-top:2px}
+.alt-key{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:7px;background:#242a3c;border:1px solid #353d56;color:#cfc8ff;font-weight:900}
+.alt-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:10px;color:#8f98ad}
+.alt-legend span{padding:4px 7px;border:1px solid var(--line);border-radius:7px;background:#0d111b}
+.mobile-note{font-size:10px;color:#8f98ad;margin-top:7px}
+@media(max-width:380px){
+ .metric-table th,.metric-table td{padding:6px 3px}
+ .metric-table th:first-child,.metric-table td:first-child{width:27%}
+ .metric-table input{font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -175,7 +183,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:35px 0;text-alig
 <div style="width:100%">
   <div class="alt-head">
     <h3>Kriterlerin</h3>
-    <button class="btn" onclick="resetWeights()">↺ Dengeli dağıt</button>
+    <button class="btn" style="font-size:11px;padding:8px 10px" onclick="resetWeights()">↺ Dengeli</button>
   </div>
   <p class="small muted">
     Kriter ağırlığı “bu kriter benim için ne kadar önemli?” demektir.
@@ -619,19 +627,14 @@ function renderCriteria(){
  const metrics=CATEGORIES[currentCategory].metrics;
  weights={};
  metrics.forEach(m=>weights[m[0]]=100/metrics.length);
- updateWeightUI();
  const box=document.getElementById("criteriaBox");
- box.innerHTML=metrics.map(([key,name,unit,type,better,help])=>`
- <div class="criterion">
-   <div class="criterion-top">
-     <strong>${name}</strong>
-     <span class="weight-badge" id="wb_${key}">Ağırlık ${weights[key].toFixed(1)}%</span>
-   </div>
-   <div class="weight-controls">
-     <input type="number" min="0" max="100" step="1" value="${Math.round(weights[key])}" id="wn_${key}" oninput="setWeight('${key}',this.value)" placeholder="Örn. 20">
-   </div>
-   <div class="small muted">${help} · ${better==="high"?"Yüksek değer avantajlı":"Düşük değer avantajlı"} · Birim: ${unit}</div>
- </div>`).join("");
+ let table=`<div class="compact-metrics"><table class="metric-table"><thead><tr><th>Kriter</th><th style="width:24%">Önem %</th></tr></thead><tbody>`;
+ metrics.forEach(([key,name,,type,better,help])=>{
+   table+=`<tr><td><strong>${name}</strong><span class="metric-unit">${better==="high"?"↑ yüksek":"↓ düşük"} · ${help}</span></td>
+   <td><input type="number" min="0" max="100" step="1" value="${Math.round(weights[key])}" id="wn_${key}" oninput="setWeight('${key}',this.value)" aria-label="${escapeAttr(name)} önem ağırlığı"></td></tr>`;
+ });
+ table+=`</tbody></table></div>`;
+ box.innerHTML=table;
  updateWeightUI();
 }
 function setWeight(key,val){
@@ -675,20 +678,21 @@ function renderRatings(preserve=true){
    });
  });
  const names=getAltNames();
- const box=document.getElementById("ratingsBox");
  let table=`<div class="compact-metrics"><table class="metric-table"><thead><tr><th>Ölçüm</th>`;
- names.forEach(n=>table+=`<th>${escapeHtml(n)}</th>`);
+ names.forEach((n,i)=>table+=`<th><span class="alt-key">${String.fromCharCode(65+i)}</span></th>`);
  table+=`</tr></thead><tbody>`;
- metrics.forEach(([key,name,unit,type,better,help])=>{
-   table+=`<tr><td><strong>${name}</strong><br><span class="metric-unit">${unit} · ${better==="high"?"↑ yüksek":"↓ düşük"}</span></td>`;
+ metrics.forEach(([key,name,unit,type,better])=>{
+   table+=`<tr><td><strong>${name}</strong><span class="metric-unit">${unit} · ${better==="high"?"↑":"↓"}</span></td>`;
    alternatives.forEach((alt,i)=>{
      const v=metricValues[key][i];
      table+=`<td><input type="number" min="${type==="rating"?"1":"0"}" ${type==="rating"?'max="10"':''} step="${type==="currency"?"100":type==="percent"?"0.1":"0.1"}" value="${v}" oninput="setMetric('${key}',${i},this.value)" aria-label="${escapeAttr(name)} - ${escapeAttr(names[i])}"></td>`;
    });
    table+=`</tr>`;
  });
- table+=`</tbody></table></div><div class="mobile-note">↔ Tabloyu yana kaydırarak tüm alternatifleri görebilirsin. Rakamları doğrudan yaz.</div>`;
- box.innerHTML=table;
+ table+=`</tbody></table></div>`;
+ table+=`<div class="alt-legend">${names.map((n,i)=>`<span><b>${String.fromCharCode(65+i)}</b> ${escapeHtml(n)}</span>`).join("")}</div>`;
+ table+=`<div class="mobile-note">↑ yüksek değer avantajlı · ↓ düşük değer avantajlı · Rakamları doğrudan yaz.</div>`;
+ document.getElementById("ratingsBox").innerHTML=table;
 }
 function defaultMetricValue(key){
  const defaults={
